@@ -159,13 +159,13 @@ En principio en la Blockchain del Padron Federal se implementará un único Chai
 
 Las funciones de actualización tendrán un mecanismo de control de acceso (ACL) basado en el identificador MSP de la aplicación que genera la transacción.
 
-La especificación de la interfase del chaincode está disponible en https://github.com/padfed/padfed-doc/chaincode/README.md
+La especificación de la interfase del chaincode está disponible en https://github.com/padfed/padfed-doc/tree/master/chaincode
 
 ## Modelo de Datos
 
 El chaincode ``padfedcc`` mantiene actualizado un registro por cada componente de una persona. Esta desagregación por componentes permite generan transacciones mas pequeñas conteniendo solamente los componentes que sufren algun cambio en cada transacción. Cada registro contiene un key y un value en formato json.
 
-La especificación del modelo de datos está disponible en https://github.com/padfed/padfed-doc/model/README.md
+La especificación del modelo de datos está disponible en https://github.com/padfed/padfed-doctree/master/model
 
 ## Aplicaciones desarrolladas por AFIP
 
