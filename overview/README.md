@@ -118,9 +118,9 @@ Todos los componentes ejecutables de una Red Fabric están dockerizados. Inclusi
 
 | Componente | Descripcion |
 | --- | --- |
-| Organizaciones con Aplicaciones Clientes | Potencialmente 26: AFIP, COMARB y 24 ARPs |
+| Organizaciones con aplicaciones clientes | Potencialmente 26: AFIP, COMARB y 24 ARPs |
 | Cantidad de organizaciones corriendo nodos Peers | Inicialmente entre 3 y 5: AFIP, COMARB, ARBA, ???  |
-| Cantidad de Nosdos Peers | Inicialmente entre 6 y 10 (dos por organización que corra Peers) |
+| Cantidad de nodos Peers | Inicialmente entre 6 y 10 (dos por cada organización que corra Peers) |
 | Nodos Orderer | Inicialmente un solo nodo corriendo en AFIP (Configurado en modo Solo). |
 | Channel | Inicialmente un solo channel, denominado ``padfedchannel`` |
 | Chaincode | Inicialmente un solo chaincode, denominado ``padfedcc`` |
@@ -175,7 +175,7 @@ Las aplicaciones son agnósticas al negocio. Pueden utilizarse en cualquier red 
 
 | Aplicación | Descripción |
 | --- | --- |
-| block-consumer | Lee y procesa bloques de un determinado Channel de una Blockchain. Desde cada bloque procesado extrae las transacciones que contiene y los datos modificados (writeSet) y guarda la información en una base de datos Oracle o PostgreSQL. Las organizaciones podrán utilizar este componente para mantener actualizada su propia de base de datos de Padrón. Disponible en https://cloud.docker.com/u/padfed/repository/docker/padfed/block-consumer |
+| block-consumer | Lee y procesa bloques de un determinado channel de una Blockchain. Desde cada bloque procesado extrae las transacciones que contiene y los datos modificados (writeSet) y guarda la información en una base de datos Oracle o PostgreSQL. Las organizaciones podrán utilizar este componente para mantener actualizada su propia de base de datos de Padrón. Disponible en https://cloud.docker.com/u/padfed/repository/docker/padfed/block-consumer |
 | hlf-proxy | Expone como API Rest un método que permite invocar a las funciones del chaincode. Disponible en https://cloud.docker.com/u/padfed/repository/docker/padfed/bc-proxy |
 
 [Ver Diagrama](https://www.lucidchart.com/documents/embeddedchart/d93d7832-62da-404e-986f-83051b878a01)
