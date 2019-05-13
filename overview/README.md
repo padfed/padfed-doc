@@ -121,11 +121,11 @@ Todos los componentes ejecutables de una Red Fabric están dockerizados. Inclusi
 | Organizaciones con aplicaciones clientes | Potencialmente 26: AFIP, COMARB y 24 ARPs |
 | Cantidad de organizaciones corriendo nodos Peers | Inicialmente entre 3 y 5: AFIP, COMARB, ARBA, ???  |
 | Cantidad de nodos Peers | Inicialmente entre 6 y 10 (dos por cada organización que corra Peers) |
-| Nodos Orderer | Inicialmente un solo nodo corriendo en AFIP (Configurado en modo Solo). |
+| Nodos Orderer | Inicialmente un solo nodo corriendo en AFIP (configurado en modo Solo). |
 | Channel | Inicialmente un solo channel, denominado ``padfedchannel`` |
 | Chaincode | Inicialmente un solo chaincode, denominado ``padfedcc`` |
 | Política de Respaldo de Transacciones | A definir por el consorcio. |
-| CA Raices | Dos para cada organización que corra nodos. Una para emitir los certificados que MSP y la otra TLS. Las organizaciones que solamente corren Aplicaciones comparten un mismo par de CA Raíces gestionada por AFIP (organizacion ficticia MORG "Multi Organismos" |
+| CA Raices | Dos para cada organización que corra nodos. Una para emitir los certificados que MSP y la otra TLS. Las organizaciones que solamente corren aplicaciones comparten un mismo par de CA Raíces gestionada por AFIP (organización ficticia MORG "Multi Organismos" |
 | Testnet | Para el ciclo de desarrollo y pruebas se requiere  implementar una Testnet que debe tener por lo menos: 2 Organizaciones, 4 Peers y un Orderer 
 
 [Ver Diagrama](https://www.lucidchart.com/documents/embeddedchart/9dbda4f3-e60a-4071-a6db-faa10945d8b8)
