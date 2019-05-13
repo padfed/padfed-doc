@@ -4,19 +4,19 @@ Documentación del proyecto PADFED.
 
 ---
 
-[Vision General](https://github.com/padfed/doc/overview/README.md)
+[Vision General](https://github.com/padfed/padfed-doc/overview/README.md)
 
 ---
 
-[Modelo de Datos](https://github.com/padfed/model/README.md)
+[Modelo de Datos](https://github.com/padfed/padfed-doc/model/README.md)
 
 ---
 
-[Testnet](https://github.com/padfed/testnet-network-setup/README.md)
+[Testnet](https://github.com/padfed/padfed-doc/testnet-network-setup/README.md)
 
 ---
 
-[Chaincode](https://github.com/padfed/chaincode/README.md)
+[Chaincode](https://github.com/padfed/padfed-doc/README.md)
 
 ---
 

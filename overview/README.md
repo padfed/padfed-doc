@@ -159,24 +159,13 @@ En principio en la Blockchain del Padron Federal se implementará un único Chai
 
 Las funciones de actualización tendrán un mecanismo de control de acceso (ACL) basado en el identificador MSP de la aplicación que genera la transacción.
 
-Las funciones disponibles ``padfedcc v0.4.3`` son:
+La especificación de la interfase del chaincode está disponible en https://github.com/padfed/padfed-doc/chaincode/README.md
 
-| Función | Descripción | 
-| --- | --- |
-| putPersona | Actualiza los datos de un persona física o jurídica. Esta función puede ser ejecutada exlusivamente por AFIP. |
-| putPersonas | Permite actualizar en una misma transacción datos de distintas personas. Esta función fue prevista para el setup de la red, con el objetivo de reducir el tiempo de la carga inicial de datos. |
-| getPersona | Recupera el estado actual de una persona con todos sus componentes representada en un objeto Json. |
-| queryPersona | Recupera un resultset con un registro para cada componentes de una persona. |
-| queryByKey| Recupera el valor que corresponde a una key registrada en el State |
-| queryByKeyRange | Recupera un resultset con un registro para cada componentes registrado en el State cuyas key estan comprendidas en el rango |
-| queryHistory | Recupera un la historia de cambios de una key |
-| version | Recuperala version del chaincode
-
-## Modelo de Datos registrado por el chaincode
+## Modelo de Datos
 
 El chaincode ``padfedcc`` mantiene actualizado un registro por cada componente de una persona. Esta desagregación por componentes permite generan transacciones mas pequeñas conteniendo solamente los componentes que sufren algun cambio en cada transacción. Cada registro contiene un key y un value en formato json.
 
-La especificación del modelo de datos está disponible en https://github.com/padfed/model/README.md
+La especificación del modelo de datos está disponible en https://github.com/padfed/padfed-doc/model/README.md
 
 ## Aplicaciones desarrolladas por AFIP
 
