@@ -19,7 +19,7 @@ Especificación del modelo de datos de la implementación basada en blockchain d
 
 ## Registro de cambios
 
-| Author         | Date       | Comment                                                    |
+| Autor         | Fecha       | Comentario                                                    |
 | -------------- | ---------- | ---------------------------------------------------------- |
 | Pablo Lalloni  | 2019-05-08 | Revisión de máximos, mínimos y ajustes generales           |
 | Fabian Varisco | 2019-04-30 | Versión inicial                                            |
