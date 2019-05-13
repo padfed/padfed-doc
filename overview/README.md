@@ -165,7 +165,7 @@ La especificación de la interfase del chaincode está disponible en https://git
 
 El chaincode ``padfedcc`` mantiene actualizado un registro por cada componente de una persona. Esta desagregación por componentes permite generan transacciones mas pequeñas conteniendo solamente los componentes que sufren algun cambio en cada transacción. Cada registro contiene un key y un value en formato json.
 
-La especificación del modelo de datos está disponible en https://github.com/padfed/padfed-doctree/master/model
+La especificación del modelo de datos está disponible en https://github.com/padfed/padfed-doc/tree/master/model
 
 ## Aplicaciones desarrolladas por AFIP
 

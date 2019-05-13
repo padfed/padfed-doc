@@ -4,7 +4,7 @@ Documentación del proyecto PADFED.
 
 ---
 
-[Vision General](https://github.com/padfed/padfed-doc/tree/overview)
+[Vision General](https://github.com/padfed/padfed-doc/tree/master/overview)
 
 ---
 
