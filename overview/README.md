@@ -167,7 +167,7 @@ El chaincode ``padfedcc`` mantiene actualizado un registro por cada componente d
 
 La especificación del modelo de datos está disponible en https://github.com/padfed/padfed-doc/tree/master/model
 
-## Aplicaciones de Integraciónn desarrolladas por AFIP
+## Aplicaciones de Integración desarrolladas por AFIP
 
 El equipo de Blockchain de AFIP desarrolló dos aplicaciones que facilitan la integracion entre los sistemas informaticos de las organizaciones y los servicios de la Blockchain. Las imágenes de las aplicaciones están disponibles en Docker Hub para que puedan ser descargadas y utilizadas opcionalmente por las organizaciones miembros de la red. 
 
