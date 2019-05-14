@@ -1,18 +1,3 @@
----
-html:
-  embed_local_images: true
-  embed_svg: true
-  offline: true
-  toc: true
-export_on_save:
-  html: true
-toc:
-  depth_from: 2
-  depth_to: 10
-  ordered: false
-print_background: false
----
-
 # PADFED - Blockchain - Modelo de Datos
 
 Especificación del modelo de datos de la implementación basada en blockchain de Padrón Federal.
