@@ -1,18 +1,3 @@
----
-html:
-  embed_local_images: true
-  embed_svg: true
-  offline: true
-  toc: true
-export_on_save:
-  html: true
-toc:
-  depth_from: 2
-  depth_to: 10
-  ordered: false
-print_background: false
----
-
 # PADFED - Blockchain - Modelo de Datos
 
 Especificación del modelo de datos de la implementación basada en blockchain de Padrón Federal.
@@ -21,19 +6,18 @@ Especificación del modelo de datos de la implementación basada en blockchain d
 
 | Autor         | Fecha       | Comentario                                                    |
 | -------------- | ---------- | ---------------------------------------------------------- |
-| Pablo Lalloni  | 2019-05-08 | Revisión de máximos, mínimos y ajustes generales           |
-| Fabian Varisco | 2019-04-30 | Versión inicial                                            |
+| Fabian Varisco | 2019-05-17 | Cambios en domicilio y actividades, se agrego org. Mas ejemplos. | 
+| Pablo Lalloni  | 2019-05-08 | Revisión de máximos, mínimos y ajustes generales |
+| Fabian Varisco | 2019-04-30 | Versión inicial |
 
 ## Convenciones generales
 
-### Campos
-
 - **min** y **max**: Para los strings son longitudes y para los integers son valores.
 - **ds**: Fecha de la más reciente modificación del registro en la base de datos de AFIP.
-- **org**: Es el código de organismo. `1` es AFIP.
 
 ### Formatos
 
+- **#organismo**: Es el código de organismo que puede ser `1` AFIP, `900` COMARB, `901` AGIP, `902` ARBA, etc.
 - **#fecha**: Es la representación textual de una fecha con formato `YYYY-MM-DD` y los valores de `DD`, `MM` y `YYYY` deben cumplir las reglas de fechas de calendario estándar.
 - Períodos:
   - **#periodomensual**: Formato `YYYYMM`, donde `MM` debe estar en rango [`00`, `12`] e `YYYY` debe estar en el rango [`1000`,`9999`].
@@ -132,7 +116,7 @@ Objeto:
 
 Key:
 
-    per:30120013439
+    per:30120013439#per
 
 Objeto:
 
@@ -160,22 +144,14 @@ Objeto:
 | ---------------- | --------------- | ------------------ | ------ | ------ | --- |
 | impuesto         | integer         |                    | 1      | 9999   | x   |
 | estado           | string          | AC, NA, BD, BP, EX |        |        | x   |
-| periodo          | #periodomensual |                    | 100000 | 999912 | x   |
+| periodo          | #periodomensual |                    |        |        | x   |
 | dia              | integer         |                    | 1      | 31     |     |
-| motivo :warning: | #motivo         |                    | 1      | 999999 |     |
+| motivo :new:     | object          |                    |        |        |     | 
+| motivo.id        | integer         |                    | 1      | 999999 | x   |
+| motivo.desde     | #fecha          |                    |        |        |     |
+| motivo.hasta     | #fecha          |                    |        |        |     |  
 | inscripcion      | #fecha          |                    |        |        |     |
 | ds               | #fecha          |                    |        |        |     |
-
-Aclaraciones:
-
-- **#motivo**: pendiente cambiar por objeto con estructura como:
-
-```json
-{
-    "id": "xxxxxx",
-    "desde":"2015-02-24"
-}
-```
 
 Key:
 
@@ -183,7 +159,7 @@ Key:
 
 ### Ejemplos
 
-#### Impuesto Activo (estado AC) {ignore=true}
+#### Impuesto Activo (estado AC) 
 
 Key:
 
@@ -197,13 +173,16 @@ Objeto:
     "periodo": 200504,
     "estado": "AC",
     "dia": 19,
-    "motivo": 44,
+    "motivo": {
+        "id": 44, 
+        "desde":"2005-04-20"
+        },
     "inscripcion": "2005-04-20",
     "ds": "2015-12-30"
 }
 ```
 
-#### Impuesto con baja definitiva (estado BD) {ignore=true}
+#### Impuesto con baja definitiva (estado BD)
 
 Key:
 
@@ -217,7 +196,10 @@ Objeto:
     "periodo": 201807,
     "estado": "BD",
     "dia": 31,
-    "motivo": 557,
+    "motivo": {
+        "id": 44, 
+        "desde":"2018-04-20"
+        },
     "inscripcion": "2018-06-07",
     "ds": "2018-07-10"
 }
@@ -225,8 +207,11 @@ Objeto:
 
 ## Colección: Persona - Domicilio
 
+> 2018-05-17: Se agregó `org`. En esta colección se persisten los domicilios de AFIP (`org 1`) y los jurisdiccionales (`org != 1`)
+
 | name           | type             | enum | min | max     | req |
 | -------------- | ---------------- | ---- | --- | ------- | --- |
+| org :new:      | #organismo       |      |     |         | x   |
 | tipo           | integer          |      | 1   | 3       | x   |
 | orden          | integer          |      | 1   | 9999    | x   |
 | estado         | integer          |      | 1   | 99      |     |
@@ -246,8 +231,8 @@ Objeto:
 | adicional.tipo | integer          |      | 1   | 99      | x   |
 | adicional.dato | string           |      |     | 200     | x   |
 | baja           | #fecha           |      |     |         |     |
-| partido :new:  | integer          |      | 1   | 999     |     |
-| partida :new:  | integer          |      | 1   | 9999999 |     |
+| partido        | integer          |      | 1   | 999     |     |
+| partida        | integer          |      | 1   | 9999999 |     |
 | ds             | #fecha           |      |     |         |     |
 
 Aclaraciones:
@@ -256,22 +241,27 @@ Aclaraciones:
 - **nombre** es "Nombre de Fantasia"
 - **partido** es el código del partido provincial
 - **partida** es el número de partida inmobiliaria
+- **tipo** indica el tipo de domicilio para AFIP. Una persona puede tener solamente un domcilio con tipo `1` (Fiscal para AFIP), un solo domcilio con tipo `2` (Real para AFIP) y 0 a n domicilios tipo `3`; Los domicilios jurisdiccionales (`org != 1`) siempre tienen `tipo` `3`
+- **orden** comienza desde `1` para cada `org` y `tipo` 
 
 ### Key
 
-    per:<id>#dom:<tipo>.<orden>
+    per:<id>#dom:<org>.<tipo>.<orden>
 
 ### Ejemplos
 
+#### Domicilio Fiscal para AFIP
+
 Key:
 
-    per:20000000168#dom:3.1
+    per:20000000168#dom:1.1.1
 
 Objeto:
 
 ```json
 {
-    "tipo": 3,
+    "org": 1,
+    "tipo": 1,
     "orden": 1,
     "estado": 1,
     "provincia": 1,
@@ -286,6 +276,39 @@ Objeto:
     },
     "nombre": "XX XXXXXX XXXXXX",
     "ds": "2008-01-18"
+}
+```
+## Colección: Persona - Domicilio - Rol
+
+| name            | type       | enum | min | max  | req |
+| --------------- | -------    | ---- | --- | ---- | --- |
+| org             | #organismo |      | 1   | 924  | x   |
+| tipo            | integer    |      | 1   | 3    | x   |
+| orden           | integer    |      | 1   | 9999 | x   |
+| rol             | integer    |      | 1   | 99   | x   |
+| ds              | #fecha     |      |     |      |     |
+
+### Key
+
+    per:<id>#dor:<org>.<tipo>.<orden>.<rol>
+
+### Ejemplo
+
+#### Rol "Fiscal Jurisdiccional" asignado por DGR Córdoba al domicilio orden 20.
+
+Key:
+
+    per:20000000168#dor:904.3.20.3
+
+Objeto:
+
+```json
+{
+    "org": 906,
+    "tipo": 3,
+    "orden": 20,
+    "rol": 3,
+    "ds":"2019-05-15"
 }
 ```
 
@@ -358,13 +381,16 @@ Objeto:
 
 ## Colección: Persona - Actividad
 
+> 2018-05-17: Se agregó `org`. En esta colección se persisten los actividades de AFIP (`org 1`) y las jurisdiccionales (`org != 1` )
+
 | name           | type    | pattern            | min | max | req |
 | -------------- | ------- | ------------------ | --- | --- | --- |
+| org :new:      | #organismo |                 |     |     | x   |
 | actividad      | string  | "^883-[0-9]{3,8}$" |     |     | x   |
 | orden          | integer |                    | 1   | 999 | x   |
 | desde          | #fecha  |                    |     |     | x   |
 | hasta          | #fecha  |                    |     |     |     |
-| articulo :new: | integer |                    | 1   | 999 |     |
+| articulo       | integer |                    | 1   | 999 |     |
 | ds             | #fecha  |                    |     |     |     |
 
 Aclaraciones:
@@ -373,20 +399,21 @@ Aclaraciones:
 
 ### Key
 
-    per:<id>#act:<actividad>
+    per:<id>#act:<org>.<actividad>
 
 ### Ejemplos
 
-#### Actividad primaria (orden 1) {ignore=true}
+#### Actividad primaria (orden 1) para AFIP 
 
 Key:
 
-    per:20000000168#act:883-772099
+    per:20000000168#act:1.883-772099
 
 Objeto:
 
 ```json
 {
+    "org": 1,
     "actividad": "883-772099",
     "orden": 1,
     "desde": 201805,
@@ -394,16 +421,17 @@ Objeto:
 }
 ```
 
-#### Actividad secundaria (orden > 1) {ignore=true}
+#### Actividad secundaria (orden > 1) para AFIP
 
 Key:
 
-    per:20000000168#act:883-131300
+    per:20000000168#act:1.883-131300
 
 Objeto:
 
 ```json
 {
+    "org": 1,
     "actividad": "883-131300",
     "orden": 3,
     "desde": 201507,
@@ -545,11 +573,11 @@ Objeto:
 }
 ```
 
-## Colección: Persona - Jurisdiccion :new:
+## Colección: Persona - Jurisdiccion
 
 | name      | type    | enum | min | max | req |
 | --------- | ------- | ---- | --- | --- | --- |
-| org       | integer |      | 900 | 924 | x   |
+| org       | #organizacion |      |  |  | x   |
 | provincia | integer |      | 0   | 24  | x   |
 | desde     | #fecha  |      |     |     | x   |
 | hasta     | #fecha  |      |     |     |     |
@@ -557,18 +585,33 @@ Objeto:
 
 ### Key
 
-    per:<id>#jur#<org>.<provincia>
+    per:<id>#jur:<org>.<provincia>
 
-Ejemplo:
+### Ejemplos
 
-    per:30120013439#jur:901.0
+#### Jurisdiccon CABA informada por COMARB
 
-## Colección: Persona - Sede Convenio Multilateral :new:
+Key:
+
+    per:30120013439#jur:900.0
+
+Objeto:
+
+```json
+{
+    "org": 900,
+    "provincia": 0,
+    "desde": "2019-03-01",
+    "ds": "2019-05-15"
+}
+```
+
+## Colección: Persona - Sede Convenio Multilateral
 
 | name      | type    | enum | min | max | req |
 | --------- | ------- | ---- | --- | --- | --- |
-| provincia | integer |      | 0   | 24  | 🗸  |
-| desde     | #fecha  |      |     |     | 🗸  |
+| provincia | integer |      | 0   | 24  | x   |
+| desde     | #fecha  |      |     |     | x   |
 | hasta     | #fecha  |      |     |     |     |
 | ds        | #fecha  |      |     |     |     |
 
@@ -576,99 +619,22 @@ Ejemplo:
 
     per:<id>#cms:<provincia>
 
-Ejemplo:
-
-    per:30120013439#cms:3
-
-## Colección: Persona - Actividad Jurisdiccional :soon:
-
-| name      | type    | pattern                   | min | max | req |
-| --------- | ------- | ------------------------- | --- | --- | --- |
-| org       | integer |                           | 900 | 924 | x   |
-| actividad | string  | `^[0-9]{1,3}-[0-9]{3,8}$` |     |     | x   |
-| orden     | integer |                           | 1   | 999 | x   |
-| desde     | #fecha  |                           |     |     | x   |
-| hasta     | #fecha  |                           |     |     |     |
-| articulo  | integer |                           | 1   | 999 |     |
-| ds        | #fecha  |                           |     |     |     |
-
-### Key
-
-    per:<id>#acj:<org>.<actividad>
-
-Ejemplo:
-
-    per:20000000168#acj:900.900-12345
-
-## Colección: Persona - Domicilio Jurisdiccional :soon:
-
-| name           | type             | enum | min | max     | req |
-| -------------- | ---------------- | ---- | --- | ------- | --- |
-| org            | integer          |      | 900 | 924     | x   |
-| tipo           | integer          |      | 1   | 3       | x   |
-| orden          | integer          |      | 1   | 9999    | x   |
-| estado         | integer          |      | 1   | 99      |     |
-| calle          | string           |      |     | 200     |     |
-| numero         | integer          |      | 1   | 999999  |     |
-| piso           | string           |      |     | 5       |     |
-| sector         | string           |      |     | 200     |     |
-| manzana        | string           |      |     | 200     |     |
-| torre          | string           |      |     | 200     |     |
-| unidad         | string           |      |     | 5       |     |
-| provincia      | integer          |      | 0   | 24      |     |
-| localidad      | string           |      |     | 200     |     |
-| cp             | string           |      |     | 8       |     |
-| nomenclador    | string :warning: |      |     | 9       |     |
-| nombre         | string           |      |     | 200     |     |
-| adicional      | object           |      |     |         |     |
-| adicional.tipo | integer          |      | 1   | 99      | x   |
-| adicional.dato | string           |      |     | 200     | x   |
-| baja           | #fecha           |      |     |         |     |
-| partido :new:  | integer          |      | 1   | 999     |     |
-| partida :new:  | integer          |      | 1   | 9999999 |     |
-| ds             | #fecha           |      |     |         |     |
-
-Aclaraciones:
-
-- **tipo**: Todos los domicilios jurisdiccionales tendran tipo `3`
-
-Cambios :soon::
-
-- **numero**: cambiaremos a tipo string para permitir adicionar descripciones no numéricas
-
-### Key
-
-    per:<id>#doj:<org>.<tipo>.<orden>
-
-Ejemplo:
-
-    per:20000000168#doj:900.3.20
-
-## Colección: Persona - Domicilio - Rol :soon:
-
-| name            | type    | enum | min | max  | req |
-| --------------- | ------- | ---- | --- | ---- | --- |
-| org             | integer |      | 1   | 924  | x   |
-| tipo            | integer |      | 1   | 3    | x   |
-| orden           | integer |      | 1   | 9999 | x   |
-| rol             | integer |      | 1   | 99   | x   |
-| desde :warning: | #fecha  |      |     |      | x   |
-| hasta :warning: | #fecha  |      |     |      |     |
-| ds              | #fecha  |      |     |      |     |
-
-### Key
-
-    per:<id>#dor:<org>.<tipo>.<orden>.<rol>
-
 ### Ejemplos
-
-#### Rol "Fiscal Jurisdiccional" {ignore=true}
-
-Rol "Fiscal Jurisdiccional" asignado por Córdoba al domicilio con orden 1.
 
 Key:
 
-    per:20000000168#dor:904.1.20.3
+    per:30120013439#cms:3
+
+Objecto:
+
+```json
+{
+    "provincia": 3,
+    "desde": "2019-06-23",
+    "hasta": "2019-04-14",
+    "ds": "2019-04-14"
+}
+```
 
 ## Colección: Persona - Archivo :soon:
 
