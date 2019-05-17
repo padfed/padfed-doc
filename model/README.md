@@ -386,7 +386,7 @@ Objeto:
 | name           | type    | pattern            | min | max | req |
 | -------------- | ------- | ------------------ | --- | --- | --- |
 | org :new:      | #organismo |                 |     |     | x   |
-| actividad      | string  | "^883-[0-9]{3,8}$" |     |     | x   |
+| actividad      | string  | `^[0-9]{1,3}-[0-9]{3,8}$` |     |     | x   |
 | orden          | integer |                    | 1   | 999 | x   |
 | desde          | #fecha  |                    |     |     | x   |
 | hasta          | #fecha  |                    |     |     |     |
