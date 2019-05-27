@@ -169,7 +169,7 @@ La especificación del modelo de datos está disponible en https://github.com/pa
 
 ## Aplicaciones de Integración desarrolladas por AFIP
 
-El equipo de Blockchain de AFIP desarrolló dos aplicaciones que facilitan la integracion entre los sistemas informaticos de las organizaciones y los servicios de la Blockchain. Las imágenes de las aplicaciones están disponibles en Docker Hub para que puedan ser descargadas y utilizadas opcionalmente por las organizaciones miembros de la red. 
+El equipo de Blockchain de AFIP desarrolló dos aplicaciones que facilitan la integración entre los sistemas informáticos de las organizaciones y los servicios de la Blockchain. Las imágenes de las aplicaciones están disponibles en Docker Hub para que puedan ser descargadas y utilizadas opcionalmente por las organizaciones miembros de la red. 
 
 Las aplicaciones son agnósticas al negocio. Pueden utilizarse en cualquier red Fabric.
 

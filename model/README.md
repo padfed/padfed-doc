@@ -2,14 +2,6 @@
 
 Especificación del modelo de datos de la implementación basada en blockchain de Padrón Federal.
 
-## Registro de cambios
-
-| Autor         | Fecha       | Comentario                                                    |
-| -------------- | ---------- | ---------------------------------------------------------- |
-| Fabian Varisco | 2019-05-17 | Cambios en domicilio y actividades, se agrego org. Mas ejemplos. | 
-| Pablo Lalloni  | 2019-05-08 | Revisión de máximos, mínimos y ajustes generales |
-| Fabian Varisco | 2019-04-30 | Versión inicial |
-
 ## Convenciones generales
 
 - **min** y **max**: Para los strings son longitudes y para los integers son valores.
@@ -24,6 +16,18 @@ Especificación del modelo de datos de la implementación basada en blockchain d
   - **#periododiario**: Formato `YYYYMMDD`, donde `MM` debe estar en rango [`00`, `12`] y `DD` puede debe ser `00` si el `MM` es `00` o bien estar en el rango [`01`,`NN`] donde `NN` es la cantidad de días correspondiente al mes `MM` e `YYYY` debe estar en el rango [`1000`,`9999`].
 
 ## Objeto: Persona - Persona
+
+### Cantidad de registros
+
+| tipo de clave  | cantidad |
+| --- | ---: |
+| Personas con CUIT (contribuyentes) | 15.4M |
+| Personas sin CUIT, relacionadas con sociedades | 221.000 | 
+
+| tipo de persona  | cantidad |
+| --- | ---: |
+| Físicas | 14M |
+| Jurídicas | 1.5M | 
 
 ### Datos comunes
 
