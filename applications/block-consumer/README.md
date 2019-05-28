@@ -97,7 +97,7 @@ where bt = max_bt and is_delete is null
 -- + cantidad de inscripciones en impuestos
 --
 select 
-count(distinct substr(key, 5, 15)) as personas,
+count(distinct substr(key, 5, 11)) as personas,
 count(*) as personas_impuestos
 from 
 (
@@ -170,7 +170,7 @@ count(distinct key) as personas_domicilios
 from 
 (
 select key, 
-substr(key, 5, 15) as persona,
+substr(key, 5, 11) as persona,
 substr(key, 21, 3) as org,
 is_delete,
 block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt 
