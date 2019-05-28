@@ -189,7 +189,7 @@ from
 select key, is_delete, 
 block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt 
 from hlf.bc_valid_tx_write_set
-where key like 'per:___________#dom:900.%'
+where key like 'per:___________#dom:_.%'
 and   regexp_like(value, '^\{.{0,}"provincia":3(,.{1,}|\})$')
 )
 where bt = max_bt and is_delete is null
