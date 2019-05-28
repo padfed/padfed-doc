@@ -27,7 +27,7 @@ order by block desc, txseq desc
 ``` 
 
 ``` sql
--- Txs de inválidas
+-- Txs inválidas
 --
 select * from 
 hlf.bc_invalid_tx tx
@@ -41,7 +41,7 @@ Por lo general las queries propuestas utilizan condiciones con `LIKE` (o `REGEXP
 
 Para aplicar condiciones sobre `HLF.BC_VALID_TX_WRITE_SET.KEY` es importante entender el patrón con el que se construyen las key: 
 
-    per:{persona-id}#{tag}\[:{item-id}\]
+    per:{persona-id}#{tag}[:{item-id}]
 
 donde:
 
@@ -73,7 +73,7 @@ Para una misma key existe un registro por cada vez que su value es modificado. P
 
 #### Keys eliminadas 
 
-Las keys eliminadas quedan marcadas con `HLF.BC_VALID_TX_WRITE_SET.IS_DELETE='T'`. Las queries una vez que recuperan la versión vigente de la key verifican que la key no este eliminada mediante la condicion `IS_DELETE IS NULL`.
+Las keys eliminadas quedan marcadas con `HLF.BC_VALID_TX_WRITE_SET.IS_DELETE='T'`. Las queries una vez que recuperan la versión vigente de una key verifican que no esté eliminada mediante la condición `IS_DELETE IS NULL`.
 
 #### Ejemplos
 
@@ -164,19 +164,22 @@ where bt = max_bt and is_delete is null
 -- 1.......10........20....`
 --
 select 
-case substr(key, 21, 1) when '9' then substr(key, 21, 3) else '1' end as org,
-count(distinct substr(key, 5, 15)) as personas, 
+case substr(org, 1, 1) when '9' then org else '1' end as org,
+count(distinct persona) as personas, 
 count(distinct key) as personas_domicilios
 from 
 (
-select key, is_delete, 
+select key, 
+substr(key, 5, 15) as persona,
+substr(key, 21, 3) as org,
+is_delete,
 block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt 
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#dom:%'
 )
 where bt = max_bt and is_delete is null
 group by 
-case substr(key, 21, 1) when '9' then substr(key, 21, 3) else '1' end
+case substr(org, 1, 1) when '9' then org else '1' end
 ```
 
 ``` sql
