@@ -2,40 +2,9 @@
 
 ## Queries sobre la base de datos que carga el Block-Consumer 
 
-### Queries de monitoreo
-
-``` sql
--- Ultimos 50 bloques procesados
---
-with max_block as 
-(
-select max(block) as mb from hlf.bc_block
-) 
-select *
-from   hlf.bc_block, max_block
-where  block between max_block.mb-50 and max_block.mb
-order by block desc
-```
-
-``` sql
--- Txs de deploy de chaincode
---
-select * from 
-hlf.bc_valid_tx tx
-where chaincode='lscc'
-order by block desc, txseq desc
-``` 
-
-``` sql
--- Txs inválidas
---
-select * from 
-hlf.bc_invalid_tx tx
-order by block desc, txseq desc
-``` 
 ### Queries de negocio
 
-Por lo general las queries propuestas utilizan condiciones con `LIKE` (o `REGEXP_LIKE` si requieren mayor precisión) aplicadas sobre las `KEY` y/o los `VALUE` registrados en la tabla `HLF.BC_VALID_TX_WRITE_SET`.
+Las queries propuestas utilizan condiciones con `LIKE` (o `REGEXP_LIKE` cuando requieren mayor precisión) aplicadas sobre las `KEY` y/o los `VALUE` registrados en la tabla `HLF.BC_VALID_TX_WRITE_SET`.
 
 #### Estructura de las keys
 
@@ -49,31 +18,33 @@ donde:
 - {tag} identifica al tipo de componente, formato STRING(3) 
 - {item-id} identifica al ítem dentro del tipo de componente, compuesto por valores de las propiedades que conforman la clave primaria del ítem separados por punto.
 
-{tag} | entidad
---- | ---
-per | Persona
-act | Actividades
-imp | Impuestos
-dom | Domicilios
-dor | DomiciliosRoles
-tel | Telefonos
-jur | Jurisdicciones
-ema | Emails
-arc | Archivos
-cat | Categorias
-eti | Etiquetas
-con | Contribuciones
-rel | Relaciones
-cms | CMSedes
-wit | Testigo (witness)
+{tag} | entidad         | ejemplo
+--- | ---               | ---
+`per` | Persona           | `per:20123456780#per`
+`act` | Actividades       | `per:20123456780#act:1.883-123456`
+`imp` | Impuestos         | `per:20123456780#per:20`
+`dom` | Domicilios        | `per:20123456780#per:1.1.1`
+`dor` | DomiciliosRoles   | `per:20123456780#per:1.1.1.1`
+`tel` | Telefonos         | `per:20123456780#per:1`
+`jur` | Jurisdicciones    | `per:20123456780#per:900`
+`ema` | Emails            | `per:20123456780#per:1`
+`arc` | Archivos          | :soon:
+`cat` | Categorias        | `per:20123456780#cat:20.12`
+`eti` | Etiquetas         | `per:20123456780#eti:329`
+`con` | Contribuciones    | `per:20123456780#con:5244.21`
+`rel` | Relaciones        | `per:20123456780#rel:20077799975.3.15`
+`cms` | CMSedes           | `per:20123456780#cms:3`
+`wit` | Testigo (witness) | `per:20123456780#wit`
 
 #### Versiones vigentes de las keys 
 
-Para una misma key existe un registro por cada vez que su value es modificado. Para recuperar la versión vigente de una key las queries utilizan la función analítica `MAX(block*100000+txseq) OVER(partition by key)`.
+Para una misma key se guarda un registro cada vez que su value es modificado. 
+Para recuperar la versión vigente de una key las queries utilizan la función analítica `MAX(block*100000+txseq) OVER(partition by key)` seleccionado el registro que tenga el mayor `block*100000+txseq`.
 
 #### Keys eliminadas 
 
-Las keys eliminadas quedan marcadas con `HLF.BC_VALID_TX_WRITE_SET.IS_DELETE='T'`. Las queries una vez que recuperan la versión vigente de una key verifican que no esté eliminada mediante la condición `IS_DELETE IS NULL`.
+Las keys eliminadas quedan marcadas con `HLF.BC_VALID_TX_WRITE_SET.IS_DELETE='T'`. 
+Las queries, una vez que recuperan la versión vigente de una key, verifican que no haya sido eliminada mediante la condición `IS_DELETE IS NULL`.
 
 #### Ejemplos
 
@@ -83,8 +54,8 @@ Las keys eliminadas quedan marcadas con `HLF.BC_VALID_TX_WRITE_SET.IS_DELETE='T'
 select count(*)
 from
 (
-select key, is_delete, 
-block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt 
+select key, 
+block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, is_delete 
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#per'
 )
@@ -101,15 +72,15 @@ count(distinct substr(key, 5, 11)) as personas,
 count(*) as personas_impuestos
 from 
 (
-select key, is_delete, 
-block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt 
+select key, 
+block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, is_delete 
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#imp:%'
 )
 where bt = max_bt and is_delete is null
 ```
 
-Los componentes de tipo `domicilio` y `actividad` puede tener ítems nacionales (org:1) o jurisdiccionales (org entre 900 y 924). Para discriminar entre ítem nacionales o jurisdiccionales se introduce el id del org en el patrón del `LIKE`.
+Los componentes de tipo `domicilio` y `actividad` puede tener ítems nacionales (org 1) o jurisdiccionales (org entre 900 y 924). Para discriminar entre ítem nacionales o jurisdiccionales se introduce el id del org en el patrón del `LIKE`.
 
 ``` sql
 -- Actividades nacionales (org 1)
@@ -118,10 +89,11 @@ select
 count(*)
 from 
 (
-select key, is_delete, 
-block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt 
+select key, 
+block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, is_delete 
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#act:_.%'
+or    key like 'per:___________#act:883-%' /* registros guardados en la testner con versiones del chaincode anteiores a 0.5.x */   
 )
 where bt = max_bt and is_delete is null
 ```
@@ -133,8 +105,8 @@ select
 count(*)
 from 
 (
-select key, is_delete, 
-block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt 
+select key,  
+block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, is_delete 
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#dom:9%'
 )
@@ -148,8 +120,8 @@ select
 count(*)
 from 
 (
-select key, is_delete, 
-block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt 
+select key,  
+block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, is_delete 
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#dom:900.%'
 )
@@ -158,7 +130,7 @@ where bt = max_bt and is_delete is null
 
 ``` sql
 -- Domicilios agrupados por provincia
--- + para extraer la cuit/cuil desde la key: substr(key, 5, 11) as persona
+-- + para extraer la cuit/cuil desde la key: substr(key, 5, 11)
 -- + para extrear la provincia desde el value se utiliza una regexp 
 --
 select 
@@ -173,17 +145,15 @@ from
 (
 select key, 
 substr(key, 5, 11) as persona,
-is_delete,
-block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, 
-regexp_replace(value, '^(\{.{0,})("provincia":)([0-9]{1,2})(,.{1,}|\})$', '\3') as provincia
+regexp_replace(value, '^(\{.{0,})("provincia":)([0-9]{1,2})(,.{1,}|\})$', '\3') as provincia,
+block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, is_delete
 from hlf.bc_valid_tx_write_set
-where key like 'per:___________#dom%' 
+where key like 'per:___________#dom:%' 
 )
 where bt = max_bt and is_delete is null
 )
 group by provincia
 order by provincia
-/
 ```
 
 ``` sql
@@ -193,8 +163,9 @@ select
 count(*)
 from 
 (
-select key, is_delete, 
-block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt 
+select key,  
+block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, 
+is_delete
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#dom:_.%'
 and   regexp_like(value, '^\{.{0,}"provincia":3(,.{1,}|\})$')
@@ -229,3 +200,36 @@ using (block, txseq)
 where i.key like 'per:20000021629#per'
 order by block desc, txseq desc
 ```
+---
+
+### Queries para monitoreo
+
+``` sql
+-- Ultimos 50 bloques procesados
+--
+with max_block as 
+(
+select max(block) as mb from hlf.bc_block
+) 
+select *
+from   hlf.bc_block, max_block
+where  block between max_block.mb-50 and max_block.mb
+order by block desc
+```
+
+``` sql
+-- Txs de deploy de chaincode
+--
+select * from 
+hlf.bc_valid_tx tx
+where chaincode='lscc'
+order by block desc, txseq desc
+``` 
+
+``` sql
+-- Txs inválidas
+--
+select * from 
+hlf.bc_invalid_tx tx
+order by block desc, txseq desc
+``` 
