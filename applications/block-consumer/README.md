@@ -157,29 +157,33 @@ where bt = max_bt and is_delete is null
 ```
 
 ``` sql
--- Domicilios agrupados por jurisdiccion
---
--- per:___________#dom:901.%
--- 123456789012345678901234`
--- 1.......10........20....`
+-- Domicilios agrupados por provincia
+-- + para extraer la cuit/cuil desde la key: substr(key, 5, 11) as persona
+-- + para extrear la provincia desde el value se utiliza una regexp 
 --
 select 
-case substr(org, 1, 1) when '9' then org else '1' end as org,
-count(distinct persona) as personas, 
-count(distinct key) as personas_domicilios
-from 
+provincia,
+count(distinct persona) as personas,
+count(*) as domicilios
+from
+(
+select key, persona,
+case when provincia between '0' and '24' then to_number(provincia) else -1 end as provincia
+from
 (
 select key, 
 substr(key, 5, 11) as persona,
-substr(key, 21, 3) as org,
 is_delete,
-block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt 
+block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, 
+regexp_replace(value, '^(\{.{0,})("provincia":)([0-9]{1,2})(,.{1,}|\})$', '\3') as provincia
 from hlf.bc_valid_tx_write_set
-where key like 'per:___________#dom:%'
+where key like 'per:___________#dom%' 
 )
 where bt = max_bt and is_delete is null
-group by 
-case substr(org, 1, 1) when '9' then org else '1' end
+)
+group by provincia
+order by provincia
+/
 ```
 
 ``` sql
