@@ -208,7 +208,7 @@ block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_
 from hlf.bc_valid_tx_write_set i
 where key like 'per:20000021629#%'
 and   key not like '%#wit' -- descarta el testigo
-)
+) as a
 where bt = max_bt and is_delete is null
 order by length(key), key
 ```
