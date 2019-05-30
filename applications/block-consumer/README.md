@@ -4,7 +4,7 @@
 
 ### Queries de negocio
 
-Las queries propuestas utilizan condiciones con `LIKE` (o `REGEXP_LIKE` cuando requieren mayor precisión) aplicadas sobre las `KEY` y/o los `VALUE` registrados en la tabla `HLF.BC_VALID_TX_WRITE_SET`.
+Las queries propuestas utilizan condiciones con `LIKE` (o `REGEXP_LIKE` o `REGEXP_REPLACE` cuando requieren mayor precisión) aplicadas sobre las `KEY` y/o los `VALUE` registrados en la tabla `HLF.BC_VALID_TX_WRITE_SET`.
 
 #### Estructura de las keys
 
@@ -49,6 +49,25 @@ Las queries, una vez que recuperan la versión vigente de una key, verifican que
 #### Ejemplos
 
 ``` sql
+-- Cantidad de keys agrupadas por tag
+--
+select tag, 
+sum(case is_delete when 'T' then 0 else 1 end) as count_no_deleted,
+sum(case is_delete when 'T' then 1 else 0 end) as count_deleted
+from 
+(
+select key,
+substr(key, 17, 3) as tag,
+block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, is_delete 
+from hlf.bc_valid_tx_write_set
+where key like 'per:___________#___%'
+)
+where bt = max_bt 
+group by tag
+order by tag
+```
+
+``` sql
 -- Cantidad de personas
 --
 select count(*)
@@ -64,20 +83,27 @@ where bt = max_bt and is_delete is null
 
 ``` sql
 -- Impuestos: 
--- + cantidad de personas inscriptas en algun impuesto
--- + cantidad de inscripciones en impuestos
+-- + cantidad de personas inscriptas en el impuesto
+-- + cantidad de inscripciones en el impuestos
 --
-select 
+-- + para extraer la cuit/cuil desde la key: substr(key, 5, 11)
+-- + para extrear el impuesto desde el value se utiliza una regexp 
+--
+select
+impuesto, 
 count(distinct substr(key, 5, 11)) as personas,
 count(*) as personas_impuestos
 from 
 (
-select key, 
+select key,
+to_number(regexp_replace(value, '^(\{.{0,})("impuesto":)([0-9]{1,4})(,.{1,}|\})$', '\3')) as impuesto,
 block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, is_delete 
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#imp:%'
 )
 where bt = max_bt and is_delete is null
+group by impuesto
+order by impuesto
 ```
 
 Los componentes de tipo `domicilio` y `actividad` puede tener ítems nacionales (org 1) o jurisdiccionales (org entre 900 y 924). Para discriminar entre ítem nacionales o jurisdiccionales se introduce el id del org en el patrón del `LIKE`.
@@ -93,7 +119,7 @@ select key,
 block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, is_delete 
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#act:_.%'
-or    key like 'per:___________#act:883-%' /* registros guardados en la testner con versiones del chaincode anteiores a 0.5.x */   
+or    key like 'per:___________#act:883-%' /* registros guardados en la testnet con versiones del chaincode anteriores a 0.5.x */   
 )
 where bt = max_bt and is_delete is null
 ```
@@ -130,8 +156,6 @@ where bt = max_bt and is_delete is null
 
 ``` sql
 -- Domicilios agrupados por provincia
--- + para extraer la cuit/cuil desde la key: substr(key, 5, 11)
--- + para extrear la provincia desde el value se utiliza una regexp 
 --
 select 
 provincia,
