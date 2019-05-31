@@ -61,7 +61,7 @@ substr(key, 17, 3) as tag,
 block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, is_delete 
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#___%'
-)
+) x
 where bt = max_bt 
 group by tag
 order by tag
@@ -77,7 +77,7 @@ select key,
 block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, is_delete 
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#per'
-)
+) x
 where bt = max_bt and is_delete is null
 ```
 
@@ -100,7 +100,7 @@ to_number(regexp_replace(value, '^(\{.{0,})("impuesto":)([0-9]{1,4})(,.{1,}|\})$
 block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, is_delete 
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#imp:%'
-)
+) x
 where bt = max_bt and is_delete is null
 group by impuesto
 order by impuesto
@@ -120,7 +120,7 @@ block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#act:_.%'
 or    key like 'per:___________#act:883-%' /* registros guardados en la testnet con versiones del chaincode anteriores a 0.5.x */   
-)
+) x
 where bt = max_bt and is_delete is null
 ```
 
@@ -135,7 +135,7 @@ select key,
 block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, is_delete 
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#dom:9%'
-)
+) x
 where bt = max_bt and is_delete is null
 ```
 
@@ -150,7 +150,7 @@ select key,
 block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, is_delete 
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#dom:900.%'
-)
+) x
 where bt = max_bt and is_delete is null
 ```
 
@@ -173,9 +173,9 @@ regexp_replace(value, '^(\{.{0,})("provincia":)([0-9]{1,2})(,.{1,}|\})$', '\3') 
 block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt, is_delete
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#dom:%' 
-)
+) x
 where bt = max_bt and is_delete is null
-)
+) x2
 group by provincia
 order by provincia
 ```
@@ -193,7 +193,7 @@ is_delete
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#dom:_.%'
 and   regexp_like(value, '^\{.{0,}"provincia":3(,.{1,}|\})$')
-)
+) x
 where bt = max_bt and is_delete is null
 ```
 
@@ -208,7 +208,7 @@ block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_
 from hlf.bc_valid_tx_write_set i
 where key like 'per:20000021629#%'
 and   key not like '%#wit' -- descarta el testigo
-)
+) x
 where bt = max_bt and is_delete is null
 order by length(key), key
 ```
