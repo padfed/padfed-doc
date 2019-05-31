@@ -164,7 +164,33 @@ count(*) as domicilios
 from
 (
 select key, persona,
-case when provincia between '0' and '24' then to_number(provincia) else -1 end as provincia
+case provincia   
+when '0'  then 'CABA'
+when '1'  then 'BUENOS AIRES'
+when '2'  then 'CATAMARCA'
+when '3'  then 'CORDOBA'
+when '4'  then 'CORRIENTES'
+when '5'  then 'ENTRE RIOS'
+when '6'  then 'JUJUY'
+when '7'  then 'MENDOZA'
+when '8'  then 'LA RIOJA'
+when '9'  then 'SALTA'
+when '10' then 'SAN JUAN'
+when '11' then 'SAN LUIS'
+when '13' then 'SANTIAGO DEL ESTERO'
+when '12' then 'SANTA FE'
+when '14' then 'TUCUMAN'
+when '16' then 'CHACO'
+when '17' then 'CHUBUT'
+when '18' then 'FORMOSA'
+when '19' then 'MISIONES'
+when '20' then 'NEUQUEN'
+when '21' then 'LA PAMPA'
+when '22' then 'RIO NEGRO'
+when '23' then 'SANTA CRUZ'
+when '24' then 'TIERRA DEL FUEGO'
+else '#sin provincia'
+end as provincia
 from
 (
 select key, 
@@ -177,7 +203,7 @@ where key like 'per:___________#dom:%'
 where bt = max_bt and is_delete is null
 ) x2
 group by provincia
-order by provincia
+order by personas desc
 ```
 
 ``` sql
