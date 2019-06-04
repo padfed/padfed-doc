@@ -30,12 +30,12 @@ Las keys de los registros de una persona cumplen con el siguiente patrón:
 
 donde    
       
-- {id} es la clave que identifica a la persona, formato #cuit. 
-- {tag} identificador del tipo de registro, formato string(3) 
-- {item-id} identifica al ítem dentro del tipo de registro, compuesto por valores de las propiedades que conforman la clave primaria del ítem, separados por punto.
+- `{id}` es la clave que identifica a la persona, formato #cuit. 
+- `{tag}` identificador del tipo de registro, formato string(3) 
+- `{item-id}` identifica al ítem dentro del tipo de registro, compuesto por valores de las propiedades que conforman la clave primaria del ítem, separados por punto.
 
 
-| \#  | nombre                 | desc                                           | tipo      | key tag | key ejemmplo | req
+| \#  | nombre                 | desc                                           | tipo      | key tag | key ejemplo | req
 | --- | ---                   | ---                                            | ---       | ---   | --- | :---: |
 |     | id                    | id de la persona                               | #cuit     |       | | x |
 |   1 | persona               | datos identificatorios de la persona           | objeto    | `per` | `per:20123412340#per` | x |
@@ -427,7 +427,7 @@ En esta colección se persisten los actividades de AFIP (`org 1`) y las jurisdic
 
 #### Estrucura de los ítems
 
-| nombre         | tipo    | pattern            | min | max | req |
+| nombre         | tipo    | regexp pattern     | min | max | req |
 | -------------- | ------- | ------------------ | --- | --- | --- |
 | org            | #organismo |                 |     |     | x   |
 | actividad      | string  | `^[0-9]{1,3}-[0-9]{3,8}$` |     |     | x   |
@@ -439,7 +439,7 @@ En esta colección se persisten los actividades de AFIP (`org 1`) y las jurisdic
 
 Aclaraciones:
 
-- **actividad**: compuesto por codigo de nomenclador y codigo de actividad
+- **actividad**: compuesto por codigo de nomenclador y codigo de actividad, seprados por guión medio.
 
 #### Ejemplo: Actividad primaria (orden 1) para AFIP 
 
