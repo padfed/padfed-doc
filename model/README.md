@@ -30,9 +30,9 @@ Las keys de los registros de una persona cumplen con el siguiente patrón:
 
 donde    
       
-    - {id} es la clave que identifica a la persona, formato #cuit. 
-    - {tag} identificador del tipo de registro, formato string(3) 
-    - {item-id} identifica al ítem dentro del tipo de registro, compuesto por valores de las propiedades que conforman la clave primaria del ítem, separados por punto.
+- {id} es la clave que identifica a la persona, formato #cuit. 
+- {tag} identificador del tipo de registro, formato string(3) 
+- {item-id} identifica al ítem dentro del tipo de registro, compuesto por valores de las propiedades que conforman la clave primaria del ítem, separados por punto.
 
 
 | \#  | nombre                 | desc                                           | tipo      | key tag | key ejemmplo | req
@@ -577,7 +577,7 @@ Aclaraciones:
 
 #### Cantidad de registros
 
-:question:
+:soon:
 
 #### Estructura de la key
 
