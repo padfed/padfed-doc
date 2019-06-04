@@ -2,8 +2,13 @@
 
 Especificación del modelo de datos de la implementación basada en blockchain de Padrón Federal.
 
+El Padrón Federal mantiene registros de contribuyentes (personas físicas o jurídica) y de personas físicas que sin ser contribuyentes están relacionados con un contribuyente. 
+
+Los registros se identifican por una key y se persisten en formato json. 
+
 ## Convenciones generales
 
+- **key**: clave que identifica a un registro. La estructura de las keys respetan patrones establecidos. En la especificación de estos patrones sus componentes variables están encerrados entre llaves `{}`. 
 - **min** y **max**: Para los strings son longitudes y para los integers son valores.
 - **ds**: Fecha de la más reciente modificación del registro en la base de datos de AFIP.
 
@@ -15,23 +20,63 @@ Especificación del modelo de datos de la implementación basada en blockchain d
   - **#periodomensual**: Formato `YYYYMM`, donde `MM` debe estar en rango [`00`, `12`] e `YYYY` debe estar en el rango [`1000`,`9999`].
   - **#periododiario**: Formato `YYYYMMDD`, donde `MM` debe estar en rango [`00`, `12`] y `DD` puede debe ser `00` si el `MM` es `00` o bien estar en el rango [`01`,`NN`] donde `NN` es la cantidad de días correspondiente al mes `MM` e `YYYY` debe estar en el rango [`1000`,`9999`].
 
-## Objeto: Persona - Persona
+## Registros de una Persona
 
-### Cantidad de registros
+Los datos correspondiente a una persona se persisten en un conjunto de registros de distintos tipos. 
 
-| tipo de clave  | cantidad |
-| --- | ---: |
-| Personas con CUIT (contribuyentes) | 15.4M |
-| Personas sin CUIT, relacionadas con sociedades | 221.000 | 
+Las keys de los registros de una persona cumplen con el siguiente patrón:
+   
+    per:{id}#{tag}[:{item-id}]
 
-| tipo de persona  | cantidad |
-| --- | ---: |
-| Físicas | 14M |
-| Jurídicas | 1.5M | 
+donde    
+      
+    - {id} es la clave que identifica a la persona, formato #cuit. 
+    - {tag} identificador del tipo de registro, formato string(3) 
+    - {item-id} identifica al ítem dentro del tipo de registro, compuesto por valores de las propiedades que conforman la clave primaria del ítem, separados por punto.
 
-### Datos comunes
 
-| name     | type     | enum       | min | max | req |
+| \#  | nombre                 | desc                                           | tipo      | key tag | key ejemmplo | req
+| --- | ---                   | ---                                            | ---       | ---   | --- | :---: |
+|     | id                    | id de la persona                               | #cuit     |       | | x |
+|   1 | persona               | datos identificatorios de la persona           | objeto    | `per` | `per:20123412340#per` | x |
+|   2 | impuestos             | inscripciones en impuestos                     | colección | `imp` | `per:20123412340#imp:20` |  | 
+|   3 | domicilios            | domicilios                                     | colección | `dom` | `per:20123412340#dom:900.3.4` |  |
+|   4 | domisroles            | roles de los domicilios                        | colección | `dor` | `per:20123412340#dor:900.3.4.3` | |  
+|   5 | categorias            | categorias de monotributo y autonomos          | colección | `cat` | `per:20123412340#cat:20.1` | |  
+|   6 | contribmunis          | contribuciones municipales                     | colección | `con` | `per:20123412340#con:5244.98` | |  
+|   7 | actividades           | actividades económicas                         | colección | `act` | `per:20123412340#act:1.883-123456` | |  
+|   8 | etiquetas             | caracterizaciones                              | colección | `eti` | `per:20123412340#eti:160` | |  
+|   9 | telefonos             | telefonos                                      | colección | `tel` | `per:20123412340#tel:5` | |  
+|  10 | emails                | emails                                         | colección | `ema` | `per:20123412340#ema:2` | |
+|  11 | relaciones            | relaciones con otras personas                  | colección | `rel` | `per:20123412340#rel:20012531001.3.4` | |
+|  12 | jurisdicciones        | jurisdicciones                                 | colección | `jur` | `per:20123412340#jur:900.0` | |
+|  13 | cmsedes               | provincias sedes para el convenio multilateral | colección | `cms` | `per:20123412340#cms:3` | |
+|  14 | archivos :soon:       | archivos digitalizados                         | colección | | | |
+|  15 | fusiones :soon:       | fusiones de sociedades                         | colección | | | |
+|  16 | transferencias :soon: | transferencias de sociedades                   | colección | | | | 
+|  17 | escisiones :soon:     | escisiones de sociedades                       | colección | | | |
+
+---
+### Objeto persona.persona
+
+#### Cantidad de registros
+
+    Total 15.5 millones
+
+    - Contribuyentes: 15.4 millones
+    - No contribuyentes: 221.000  
+    - Personas físicas: 14 millones 
+    - Personas jurídicas: 1.5 millones 
+
+#### Estructura de la key
+
+    per:{id}#per
+
+#### Estructura del objeto
+
+##### Datos comunes
+
+| nombre   | tipo     | enum       | min | max | req |
 | -------- | -------- | ---------- | --- | --- | --- |
 | id       | #cuit    |            |     |     | x   |
 | tipoid   | string   | C, E, I, L |     |     | x   |
@@ -47,9 +92,9 @@ Aclaraciones:
 - **activoid**: nueva cuit que se le asignó a la persona
 - **ch**: array de nombres de campos cuyos valores fueron modificados en la mas reciente tx
 
-### Datos de personas físicas
+##### Datos de personas físicas
 
-| name             | type    | enum | min | max | req |
+| nombre           | tipo    | enum | min | max | req |
 | ---------------- | ------- | ---- | --- | --- | --- |
 | apellido         | string  |      | 1   | 200 | x   |
 | nombre           | string  |      | 1   | 200 |     |
@@ -65,9 +110,9 @@ Aclaraciones:
 
 - **materno**: apellido materno
 
-### Datos de personas jurídicas
+##### Datos de personas jurídicas
 
-| name                 | type    | enum | min | max          | req |
+| nombre               | tipo    | enum | min | max          | req |
 | -------------------- | ------- | ---- | --- | ------------ | --- |
 | razonsocial          | string  |      | 1   | 200          | x   |
 | formajuridica        | integer |      | 1   | 999          |     |
@@ -80,21 +125,11 @@ Aclaraciones:
 
 Aclaraciones:
 
-- **inscripcion**：puede ser en IGJ (registro:1) o en otro registro público de sociedades
+- **inscripcion**：puede ser en IGJ (registro 1) o en otro registro público de sociedades
 
-### Key
-
-    per:<id>#per
-
-### Ejemplos
-
-#### Persona Física
-
-Key:
+#### Ejemplo: Persona física
 
     per:20000000168#per
-
-Objeto:
 
 ```json
 {
@@ -115,14 +150,9 @@ Objeto:
     "ds": "2010-02-14"
 }
 ```
-
-#### Persona Jurídica
-
-Key:
+#### Ejemplo: Persona jurídica
 
     per:30120013439#per
-
-Objeto:
 
 ```json
 {
@@ -141,10 +171,20 @@ Objeto:
     "ds": "2008-01-21"
 }
 ```
+---
+### Colección persona.impuestos
 
-## Colección: Persona - Impuesto
+#### Cantidad de registros
 
-| name             | type            | enum               | min    | max    | req |
+    22.6 millones
+
+#### Estrucuta de la key
+
+    per:{id}#imp:{impuesto}
+
+#### Estrucuta de los ítems
+
+| nombre           | tipo            | enum               | min    | max    | req |
 | ---------------- | --------------- | ------------------ | ------ | ------ | --- |
 | impuesto         | integer         |                    | 1      | 9999   | x   |
 | estado           | string          | AC, NA, BD, BP, EX |        |        | x   |
@@ -157,19 +197,9 @@ Objeto:
 | inscripcion      | #fecha          |                    |        |        |     |
 | ds               | #fecha          |                    |        |        |     |
 
-Key:
-
-    per:<id>#imp:<impuesto>
-
-### Ejemplos
-
-#### Impuesto Activo (estado AC) 
-
-Key:
+#### Ejemplo: Impuesto activo (estado AC) 
 
     per:20000000168#imp:20
-
-Objeto:
 
 ```json
 {
@@ -185,14 +215,9 @@ Objeto:
     "ds": "2015-12-30"
 }
 ```
-
-#### Impuesto con baja definitiva (estado BD)
-
-Key:
+#### Ejemplo: Impuesto con baja definitiva (estado BD)
 
     per:20000000168#imp:5243
-
-Objeto:
 
 ```json
 {
@@ -208,14 +233,24 @@ Objeto:
     "ds": "2018-07-10"
 }
 ```
+---
+### Colección persona.domicilios
 
-## Colección: Persona - Domicilio
+En esta colección se persisten los domicilios de AFIP (`org 1`) y los jurisdiccionales (`org` entre `900` y `924`)
 
-> 2018-05-17: Se agregó `org`. En esta colección se persisten los domicilios de AFIP (`org 1`) y los jurisdiccionales (`org != 1`)
+#### Cantidad de registros
 
-| name           | type             | enum | min | max     | req |
+    Domicilios registrados en AFIP: 76.3 millones
+
+#### Estrucura de la key
+
+    per:{id}#dom:{org}.{tipo}.{orden}
+
+#### Estrucura de los ítems
+
+| nombre         | tipo             | enum | min | max     | req |
 | -------------- | ---------------- | ---- | --- | ------- | --- |
-| org :new:      | #organismo       |      |     |         | x   |
+| org            | #organismo       |      |     |         | x   |
 | tipo           | integer          |      | 1   | 3       | x   |
 | orden          | integer          |      | 1   | 9999    | x   |
 | estado         | integer          |      | 1   | 99      |     |
@@ -248,19 +283,9 @@ Aclaraciones:
 - **tipo** indica el tipo de domicilio para AFIP. Una persona puede tener solamente un domcilio con tipo `1` (Fiscal para AFIP), un solo domcilio con tipo `2` (Real para AFIP) y 0 a n domicilios tipo `3`; Los domicilios jurisdiccionales (`org != 1`) siempre tienen `tipo` `3`
 - **orden** comienza desde `1` para cada `org` y `tipo` 
 
-### Key
-
-    per:<id>#dom:<org>.<tipo>.<orden>
-
-### Ejemplos
-
-#### Domicilio Fiscal para AFIP
-
-Key:
+#### Ejemplo: Domicilio fiscal para AFIP
 
     per:20000000168#dom:1.1.1
-
-Objeto:
 
 ```json
 {
@@ -282,9 +307,20 @@ Objeto:
     "ds": "2008-01-18"
 }
 ```
-## Colección: Persona - Domicilio - Rol
+---
+### Colección persona.domisroles
 
-| name            | type       | enum | min | max  | req |
+#### Cantidad de registros
+
+:question:
+
+#### Estructura de la key
+
+    per:{id}#dor:{org}.{tipo}.{orden}.{rol}
+
+#### Estrucura de los ítems
+
+| nombre          | tipo       | enum | min | max  | req |
 | --------------- | -------    | ---- | --- | ---- | --- |
 | org             | #organismo |      | 1   | 924  | x   |
 | tipo            | integer    |      | 1   | 3    | x   |
@@ -292,19 +328,9 @@ Objeto:
 | rol             | integer    |      | 1   | 99   | x   |
 | ds              | #fecha     |      |     |      |     |
 
-### Key
-
-    per:<id>#dor:<org>.<tipo>.<orden>.<rol>
-
-### Ejemplo
-
-#### Rol "Fiscal Jurisdiccional" asignado por DGR Córdoba al domicilio orden 20.
-
-Key:
+#### Ejemplo: Rol "Fiscal Jurisdiccional" asignado por DGR Córdoba al domicilio orden 20.
 
     per:20000000168#dor:904.3.20.3
-
-Objeto:
 
 ```json
 {
@@ -315,10 +341,20 @@ Objeto:
     "ds":"2019-05-15"
 }
 ```
+---
+### Colección persona.categorias
 
-## Colección: Persona - Categoría
+#### Cantidad de registros
 
-| name      | type            | enum   | min    | max    | req |
+    16 millones
+
+#### Estructura de la key
+
+    per:{id}#cat:{impuesto}.{categoria}
+
+#### Estrucura de los ítems
+
+| nombre    | tipo            | enum   | min    | max    | req |
 | --------- | --------------- | ------ | ------ | ------ | --- |
 | impuesto  | integer         |        | 1      | 9999   | x   |
 | categoria | integer         |        | 1      | 999    | x   |
@@ -327,17 +363,9 @@ Objeto:
 | motivo    | #motivo         |        | 1      | 999999 |     |
 | ds        | #fecha          |        |        |        |     |
 
-### Key
-
-    per:<id>#cat:<impuesto>.<categoria>
-
-### Ejemplos
-
-Key:
+#### Ejemplo
 
     per:20000000168#cat:20.1
-
-Objeto:
 
 ```json
 {
@@ -348,10 +376,20 @@ Objeto:
     "ds": "2003-04-14"
 }
 ```
+---
+## Colección persona.contribmunis
 
-## Colección: Persona - Contribución Municipal
+#### Cantidad de registros
 
-| name      | type    | enum | min | max  | req |
+    Mínimo 600.000
+
+#### Estructura de la key
+
+    per:{id}#con:{impuesto}.{municipio}
+
+#### Estrucura de los ítems
+
+| nombre    | tipo    | enum | min | max  | req |
 | --------- | ------- | ---- | --- | ---- | --- |
 | impuesto  | integer |      | 1   | 9999 | x   |
 | municipio | integer |      | 1   | 9999 | x   |
@@ -360,17 +398,9 @@ Objeto:
 | hasta     | #fecha  |      |     |      |
 | ds        | #fecha  |      |     |      |
 
-### Key
-
-    per:<id>#con:<impuesto>.<municipio>
-
-### Ejemplos
-
-Key:
+#### Ejemplo
 
     per:20000000168#con:5244.98
-
-Objeto:
 
 ```json
 {
@@ -382,14 +412,24 @@ Objeto:
     "ds": "2018-07-10"
 }
 ```
+---
+### Colección persona.actividades
 
-## Colección: Persona - Actividad
+En esta colección se persisten los actividades de AFIP (`org 1`) y las jurisdiccionales (`org` entre `900` y `924`)
 
-> 2018-05-17: Se agregó `org`. En esta colección se persisten los actividades de AFIP (`org 1`) y las jurisdiccionales (`org != 1` )
+#### Cantidad de registros
 
-| name           | type    | pattern            | min | max | req |
+    Actividades registradas en AFIP: 12.7 millones
+
+#### Estructura de la key
+
+    per:{id}#act:{org}.{actividad}
+
+#### Estrucura de los ítems
+
+| nombre         | tipo    | pattern            | min | max | req |
 | -------------- | ------- | ------------------ | --- | --- | --- |
-| org :new:      | #organismo |                 |     |     | x   |
+| org            | #organismo |                 |     |     | x   |
 | actividad      | string  | `^[0-9]{1,3}-[0-9]{3,8}$` |     |     | x   |
 | orden          | integer |                    | 1   | 999 | x   |
 | desde          | #fecha  |                    |     |     | x   |
@@ -401,19 +441,9 @@ Aclaraciones:
 
 - **actividad**: compuesto por codigo de nomenclador y codigo de actividad
 
-### Key
-
-    per:<id>#act:<org>.<actividad>
-
-### Ejemplos
-
-#### Actividad primaria (orden 1) para AFIP 
-
-Key:
+#### Ejemplo: Actividad primaria (orden 1) para AFIP 
 
     per:20000000168#act:1.883-772099
-
-Objeto:
 
 ```json
 {
@@ -425,13 +455,9 @@ Objeto:
 }
 ```
 
-#### Actividad secundaria (orden > 1) para AFIP
-
-Key:
+#### Ejemplo: Actividad secundaria (orden > 1) para AFIP
 
     per:20000000168#act:1.883-131300
-
-Objeto:
 
 ```json
 {
@@ -442,29 +468,29 @@ Objeto:
     "ds": "2015-07-22"
 }
 ```
+---
+## Colección persona.etiquetas
 
-## Colección: Persona - Etiqueta
+#### Cantidad de registros
 
-Se asimila a la *Caracterización* de AFIP.
+    3.7 millones
 
-| name     | type           | enum   | min      | max      | req |
+#### Estructura de la key
+
+    per:{id}#eti:{etiqueta}
+
+#### Estrucura de los ítems
+
+| nombre   | tipo           | enum   | min      | max      | req |
 | -------- | -------------- | ------ | -------- | -------- | --- |
 | etiqueta | integer        |        | 1        | 9999     | x   |
 | periodo  | #periododiario |        | 10000000 | 99991231 | x   |
 | estado   | string         | AC, BD |          |          | x   |
 | ds       | #fecha         |        |          |          |     |
 
-### Key
-
-    per:<id>#eti:<etiqueta>
-
-### Ejemplos
-
-Key:
+#### Ejemplo
 
     per:20000000168#eti:160
-
-Objeto:
 
 ```json
 {
@@ -474,10 +500,20 @@ Objeto:
     "ds": "2003-04-11"
 }
 ```
+---
+## Colección persona.telefonos
 
-## Colección: Persona - Teléfono
+#### Cantidad de registros 
 
-| name   | type    | enum | min | max             | req |
+    8.7 millones
+
+#### Estructura de la key
+
+    per:{id}#tel:{orden}
+
+#### Estrucura de los ítems
+
+| nombre | tipo    | enum | min | max             | req |
 | ------ | ------- | ---- | --- | --------------- | --- |
 | orden  | integer |      | 1   | 999999          | x   |
 | pais   | integer |      | 1   | 9999            |     |
@@ -487,11 +523,7 @@ Objeto:
 | linea  | integer |      | 1   | 999             |     |
 | ds     | #fecha  |      |     |                 |     |
 
-### Key
-
-    per:<id>#tel:<orden>
-
-Ejemplo:
+#### Ejemplo
 
     per:20000000168#tel:1
 
@@ -506,10 +538,20 @@ Ejemplo:
     "ds": "2013-12-16"
 }
 ```
+---
+## Coleccción persona.emails
 
-## Coleccción: Persona - Email
+#### Cantidad de registros
 
-| name      | type    | enum | min | max | req |
+    6.2 millones
+
+#### Estructura de la key
+
+    per:{id}#ema:{orden}
+
+#### Estrucura de los ítems
+
+| nombre    | tipo    | enum | min | max | req |
 | --------- | ------- | ---- | --- | --- | --- |
 | orden     | integer |      | 1   | 999 | x   |
 | direccion | string  |      |     | 100 | x   |
@@ -517,17 +559,9 @@ Ejemplo:
 | estado    | integer |      | 1   | 99  |     |
 | ds        | #fecha  |      |     |     |     |
 
-### Key
-
-    per:<id>#ema:<orden>
-
-### Ejemplos
-
-Key:
+#### Ejemplo
 
     per:20000000168#ema:1
-
-Objeto:
 
 ```json
 {
@@ -538,10 +572,20 @@ Objeto:
     "ds": "2016-10-20"
 }
 ```
+---
+### Colección persona.relaciones
 
-## Colección: Persona - Relación
+#### Cantidad de registros
 
-| name    | type    | enum | min | max | req |
+:question:
+
+#### Estructura de la key
+
+    per:{id}#rel:{persona}.{tipo}.{subtipo}
+
+#### Estrucura de los ítems
+
+| nombre  | tipo    | enum | min | max | req |
 | ------- | ------- | ---- | --- | --- | --- |
 | persona | #cuit   |      |     |     | x   |
 | tipo    | integer |      | 1   | 999 | x   |
@@ -551,21 +595,11 @@ Objeto:
 
 Aclaraciones:
 
-- **tipo**: Inicialmente será siempre `3` que son relaciones societarias.
+- **tipo**: Inicialmente siempre `3` que son relaciones societarias.
 
-### Key
-
-    per:<id>#rel:<persona>.<tipo>.<subtipo>
-
-### Ejemplos
-
-Socio de una Sociedad Anónima.
-
-Key:
+#### Ejemplo: Socio de una Sociedad Anónima.
 
     per:30120013439#rel:20012531001.3.4
-
-Objeto:
 
 ```json
 {
@@ -576,10 +610,20 @@ Objeto:
     "ds": "2014-04-30"
 }
 ```
+---
+### Colección persona.jurisdicciones
 
-## Colección: Persona - Jurisdiccion
+#### Cantidad de registros
 
-| name      | type    | enum | min | max | req |
+:question:
+
+#### Estructura de la key
+
+    per:{id}#jur:{org}.{provincia}
+
+#### Estrucura de los ítems
+
+| nombre    | tipo    | enum | min | max | req |
 | --------- | ------- | ---- | --- | --- | --- |
 | org       | #organizacion |      |  |  | x   |
 | provincia | integer |      | 0   | 24  | x   |
@@ -587,19 +631,9 @@ Objeto:
 | hasta     | #fecha  |      |     |     |     |
 | ds        | #fecha  |      |     |     |     |
 
-### Key
-
-    per:<id>#jur:<org>.<provincia>
-
-### Ejemplos
-
-#### Jurisdiccon CABA informada por COMARB
-
-Key:
+#### Ejemplo: Jurisdiccon CABA informada por COMARB
 
     per:30120013439#jur:900.0
-
-Objeto:
 
 ```json
 {
@@ -609,27 +643,29 @@ Objeto:
     "ds": "2019-05-15"
 }
 ```
+---
+### Colección persona.cmsedes
 
-## Colección: Persona - Sede Convenio Multilateral
+#### Cantidad de registros
 
-| name      | type    | enum | min | max | req |
+:question:
+
+#### Estructura de la key
+
+    per:{id}#cms:{provincia}
+
+#### Estrucura de los ítems
+
+| nombre    | tipo    | enum | min | max | req |
 | --------- | ------- | ---- | --- | --- | --- |
 | provincia | integer |      | 0   | 24  | x   |
 | desde     | #fecha  |      |     |     | x   |
 | hasta     | #fecha  |      |     |     |     |
 | ds        | #fecha  |      |     |     |     |
 
-### Key
-
-    per:<id>#cms:<provincia>
-
-### Ejemplos
-
-Key:
+#### Ejemplo
 
     per:30120013439#cms:3
-
-Objecto:
 
 ```json
 {
@@ -639,19 +675,3 @@ Objecto:
     "ds": "2019-04-14"
 }
 ```
-
-## Colección: Persona - Archivo :soon:
-
-Representará registro de archivos documentales almacenados en los sistemas de AFIP.
-
-## Colección: Persona - Fusion :soon:
-
-Represantará datos de fusiones empresarias en las cuales la persona tuvo participación.
-
-## Colección: Persona - Transferencia :soon:
-
-Represantará datos de transferencias de empresas en las cuales la persona tuvo participación.
-
-## Colección: Persona - Escision :soon:
-
-Represantará datos de esciciones empresarias en las cuales la persona tuvo participación.
