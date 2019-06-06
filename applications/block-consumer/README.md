@@ -20,12 +20,12 @@ Una organización que corre nodos de la Blockchain, puede conectar el Block-Cons
 1. DOCKER-COMPOSE 1.23.1 o superior
 1. Archivos de configuración ubicados en ${PWD}/conf/
 1. Instancia de base de datos Oracle o PostgreSQL
-1. En la base de darfos, esquema HLF y usuario BC_APP 
+1. En la base de datos: esquema HLF y usuario BC_APP 
 
 ## Como ejecutarlo:
 
 ``` sh
-docker run --rm --name block-consumer -v ${PWD}/conf:/conf -d block-consumer:latest
+docker run --rm --name block-consumer -d -v ${PWD}/conf:/conf -e TZ=America/Argentina/Buenos_Aires --tmpfs /tmp:exec -d padfed/block-consumer:latest
 ```
 ## Archivos de configuración (Ejemplos)
 
