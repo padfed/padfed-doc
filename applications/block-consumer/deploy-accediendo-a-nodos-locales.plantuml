@@ -1,0 +1,40 @@
+@startuml
+
+title Block-Consumer accediendo a nodos locales
+
+note as N1
+Esquema de deploy para organizaciones 
+que corren nodos de la Blockchain.
+
+El BlockConsumer se conecta a los nodos locales.
+Opcionalmente, para lograr alta disponibilidad,
+se puede conectar mediante internet a nodos remotos.
+end note
+
+package "Blockchain\npeers remotos" as remotos {
+    [peer0.yyy]
+    [peer1.yyy]
+    [peer0.zzz]
+    [peer1.zzz]
+} 
+
+package DataCenter {
+    component [BlockConsumer] 
+    database "Oracle o\nPostgreSQL\n" as db
+    package "Blockchain\npeers propios" as locales {
+    [peer0.xxxx]
+    [peer1.xxxx]
+} 
+} 
+
+cloud internet
+
+BlockConsumer ..> locales : gRPCs (read)
+BlockConsumer ..> internet 
+BlockConsumer ..> db : jdbc (write)
+internet ..> remotos : gRPCs (read)
+locales .. remotos : gRPCs (read)
+
+DataCenter -[hidden]left- remotos
+
+@enduml

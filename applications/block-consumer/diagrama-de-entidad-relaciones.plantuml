@@ -1,0 +1,73 @@
+@startuml diagrama-de-entidad-relaciones
+
+!define primary_key(x) <u>x</u>
+
+hide circle
+hide methods
+
+class BC_BLOCK { 
+	  primary_key(block): Integer
+      channel: String
+	  peer: String
+	  consuming_time: Date
+	  valid_system_txs: Integer
+	  invalid_system_txs: Integer
+	  valid_user_txs: Integer
+	  invalid_user_txs: Integer
+} 
+
+class BC_VALID_TX { 
+	  primary_key(block): Integer 
+	  primary_key(txseq): Integer 
+	  txid: String  
+	  org_name: String  
+	  timestamp: Date    
+	  chaincode: String  
+	  function: String  
+} 
+
+class BC_INVALID_TX { 
+      primary_key(block): Integer 
+	  primary_key(txseq): Integer 
+	  txid: String  
+	  org_name: String  
+	  timestamp: Date    
+	  chaincode: String  
+	  function: String  
+	  error: String  
+	  } 
+ 
+class BC_VALID_TX_WRITE_SET { 
+      primary_key(block): Integer 
+	  primary_key(txseq): Integer 
+	  primary_key(item):  Integer 
+	  key: String  
+	  value: String  
+	  is_delete: Char    
+} 
+
+class BC_INVALID_TX_SET { 
+      primary_key(block): Integer 
+	  primary_key(txseq): Integer 
+	  primary_key(item):  Integer 
+	  {field} type: Char (R | W)   
+	  key: String  
+	  value: String  
+	  version: String  
+	  {field} type: is_delete: Char (T | null)    
+}
+
+BC_VALID_TX "0..n" --up> "1" BC_BLOCK : < has
+BC_INVALID_TX "0..n" --up> "1" BC_BLOCK : < has
+BC_INVALID_TX_SET "0..n" --up> "1" BC_INVALID_TX : < has
+BC_VALID_TX_WRITE_SET "0..n" --up> "1" BC_VALID_TX : < has
+
+note "UK(txid)" as NOTE_UK_TXID
+NOTE_UK_TXID ..up> BC_VALID_TX
+NOTE_UK_TXID ..up> BC_INVALID_TX
+
+note "Index(key)" as NOTE_INDEX_KEY
+NOTE_INDEX_KEY ..up> BC_VALID_TX_WRITE_SET
+NOTE_INDEX_KEY ..up> BC_INVALID_TX_SET
+
+@enduml
