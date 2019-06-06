@@ -1,6 +1,6 @@
 # PADFED docs
 
-Documentación del proyecto PADFED.
+Documentación del proyecto de Blockchain del Padrón Federal.
 
 ---
 
@@ -20,9 +20,9 @@ Documentación del proyecto PADFED.
 
 ---
 
-Aplicaciones de Integración:
+## Aplicaciones de Integración:
 
-- [hlf-proxy](https://cloud.docker.com/u/padfed/repository/docker/padfed/block-consumer)
+- [HLF-proxy](https://cloud.docker.com/u/padfed/repository/docker/padfed/block-consumer)
 
-- [block-consumer](https://cloud.docker.com/u/padfed/repository/docker/padfed/bc-proxy)
+- [Block-Consumer](applications/block-consumer/README.md)
 
