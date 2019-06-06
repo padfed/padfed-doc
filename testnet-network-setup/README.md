@@ -55,7 +55,7 @@ Estos directorios deben ser distribudos a cada uno de los nodos.
 
 ## Generación de certificados para MSP y TLS
 
-create.network.sh utiliza el binario cryptogen para generar certificados y pks para MSP y TLS. No requiere gestionar certificados con ninguna CA.
+create.network.sh utiliza el binario `cryptogen` provisto por HLF para generar certificados y pks para MSP y TLS. No requiere gestionar certificados con ninguna CA.
 
 ##  Objetivos de la Testnet
 
@@ -74,7 +74,7 @@ Queda fuera del alcance de este instructivo la configuración de las aplicacione
 | HLF     | Hyperledger Fabric |
 | $INSTALL_HOME     | Directorio donde se copio el entregable network-setup-X.Y.Z.jar |
 | RN     | Release Notes |
-| ``<chaincode-version>``     | Versión del chaincode indicada en el RN |
+| `<chaincode-version>`     | Versión del chaincode indicada en el RN |
 
 ### Nodos:
 
@@ -104,10 +104,44 @@ Queda fuera del alcance de este instructivo la configuración de las aplicacione
 | SW | Equipo |
 | -------- | -------- |
 | RHEL, Ubuntu, Debian     | Todos los equipos  |
-| DOCKER 18.09 o superior     | Todos los equipos  |
-| DOCKER-COMPOSE 1.23.1 o superior     | Todos los equipos  |
-| cURL     | AFIP.PEER0 y AFIP.PEER1  |
-| md5sum     | AFIP.PEER0 y AFIP.PEER1  |
+| DOCKER 18.09 o superior     | Nodos PEERs u ORDERER  |
+| DOCKER-COMPOSE 1.23.1 o superior | Nodos PEERs u ORDERER  |
+| cURL     | Nodos PEERs de AFIP  |
+| md5sum     | Nodos PEERs de AFIP  |
+| binarios HLF cryptogen y configtxgen | Equipo de AFIP donde se ejecta la tara `[Generación de configuraciones en AFIP]`  
+| imagen Docker HLF fabric-tool | Nodos PEERs y ORDERER
+| imagen Docker HLF fabric-orderer | Nodo ORDERER
+| imagen Docker HLF fabric-peer | Nodos PEERs
+| imagen Docker HLF fabric-ccenv | Nodos PEERs
+
+#### Binarios HLF v1.4.0: cryptogen y configtxgen
+
+Solamente se requieren en el equipo de AFIP donde se ejecute la tarea `[Generación de configuraciones en AFIP]`, explicada mas adelante en este doc.
+
+Para obtener los binarios específicos de la plataforma se puede ejecutar:
+
+```
+$ $INSTALL_HOME/bin/hlf-1.4.0/bootstrap.sh -d -s
+```
+
+El script obtiene los binarrios desde el repositorio https://nexus.hyperledger.org
+
+Ambos binarios deben quedar instalados en `$INSTALL_HOME/bin/hlf-1.4.0` y `$INSTALL_HOME/bin/hlf-1.4.0` debe quedar incluido en el PATH.
+
+#### Imágenes Docker HLF v1.4.0.
+
+En cada nodo PEER y ORDERER cuando se ejecute por primera vez,  docker-compose intentará bajar las imágenes requeridas: fabric-tools, fabric-peer y fabric-orderer.
+
+Asimismo, cuando un peer intente ejecutar por primera vez un chaincode, intentará baja la imagen fabric-ccenv.
+
+Las imágenes se descargan desde https://hub.docker.com 
+
+Como alternativa se puede anticipar la descarga de las imágenes ejecutando:
+
+```
+$ $INSTALL_HOME/bin/hlf-1.4.0/get-docker.images.sh
+```
+El script baja todas las imágenes oficiales HLF v1.4.0, inclusive algunas que no serán utilizadas.
 
 ### Requerimientos de Ciberseguridad:
 
@@ -123,7 +157,7 @@ Los equipos ORDERER, AFIP.PEER0 y AFIP.PEER1 debe desplegarse en la red de Homol
 
 Deben habilitarse los siguientes accesos:
 
-| Origen | Destino | Puertos |
+| Origen | Destino | Puerto |
 | -------- | -------- | --- |
 | Internet     | ORDERER     | 7050/tcp |
 | Internet     | PEERs     | 7051/tcp |
@@ -135,44 +169,7 @@ Los equipos ORDERER, AFIP.PEER0 y AFIP.PEER1 deben acceder a endpoints expuestos
 Estas conexiones deben ser verificadas posteriormente al paso
 4.4 despues de que ARBA y AFIP logren correr sus respectivos PEERs.
 
-### Accesos a repositorios internos
-
-Los equipos ORDERER, AFIP.PEER0 y AFIP.PEER1 deben tener habilitado el acceso mediante protocolo HTTPS (puerto 443) a los siguientes recursos:
-
-| Recurso | Objetivo |
-| -------- | -------- |
-| https://nexus.hyperledger.org  | Obtener los binarios HLF cryptogen y configtxge |
-| https://hub.docker.com  | Obtener imágenes dockers del ORDERER y del PEER |
-| https://nexus.cloudint.afip.gob.ar  | Obtener chaincode en los equipos AFIP.PEER0 y AFIP.PEER1 (opcional) |
-
-### Binarios HLF v1.4.0: cryptogen y configtxgen
-
-Estos binarios solamente se requieren en el equipo de AFIP donde se ejecute la tarea ``Generación de configuraciones en AFIP``, explicada mas adelante en este doc.
-
-Para obtener los binarios específicos de la plataforma se puede ejecutar:
-
-```
-$ $INSTALL_HOME/bin/hlf-1.4.0/bootstrap.sh -d
-```
-
-Si se ejecuta sin argumentos bajará también las imágenes dockers oficiales de HLF v1.4.0.
-
-Ambos binarios deben quedar instalados en $INSTALL_HOME/bin/hlf-1.4.0 y $INSTALL_HOME/bin/hlf-1.4.0.
-$INSTALL_HOME/bin debe quedar incluido en el PATH.
-
-### Imágenes Docker HLF v1.4.0.
-
-Cuando se ejecute por primera vez en cada nodo, docker-compose intentará bajar las 3 imágenes requeridas: fabric-tools, fabric-peer y fabric-orderer.
-
-Como alternativa se puede anticipar la descarga de las imágenes ejecutando:
-
-```
-$ $INSTALL_HOME/bin/hlf-1.4.0/get-docker.images.sh
-```
-El script baja todas las imágenes oficiales HLF v1.4.0, inclusive algunas que no serán utilizadas.
-
 ---
-
 ## Creación de la red
 
 1. Generación de configuraciones en AFIP
@@ -247,6 +244,8 @@ El script baja todas las imágenes oficiales HLF v1.4.0, inclusive algunas que n
     $ ./cc.instantiate.sh <chaincode-version>
     ```
 
+    El script `./cc.download.sh` intenta bajar el chaincode desde https://nexus.cloudint.afip.gob.ar.
+
     2.4. En el directorio afip.peer1 en el equipo AFIP.PEER1 ejecutar:
 
     ```
@@ -254,7 +253,6 @@ El script baja todas las imágenes oficiales HLF v1.4.0, inclusive algunas que n
     $ ./ch.join.sh
     $ ./cc.download.sh <chaincode-version>
     $ ./cc.install.sh <chaincode-version>
-
     ```
 
 3. Delivery desde AFIP hacia ARBA y COMARB
