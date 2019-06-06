@@ -1,6 +1,6 @@
 # Block-Consumer
 
-Aplicacion que consume bloques desde un channel de una red de Blockchain [Hyperledger Fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html), procesa su contenido y lo persiste en una base de datos relacional Oracle o PostgreSQL. 
+Aplicación que consume bloques desde un channel de una red de Blockchain [Hyperledger Fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html), procesa su contenido y lo persiste en una base de datos relacional Oracle o PostgreSQL. 
 
 Los bloques son consumidos en orden ascendente desde el bloque 0(cero) o Genesis Block hasta el bloque mas reciente. 
 
@@ -248,6 +248,8 @@ rep/bc_pkg.sql | ddl | crea la pkg bc_pkg que permite actualizar las tablas del 
 ### Queries sobre la base de datos que carga el Block-Consumer 
 
 #### Queries de negocio
+
+Si bien, Block-Consumer es una aplicación totalmente agnóstica al negocio. Se puede utilizar para procesar bloques de cualquier Blockchain HLF, esta sección del doc contiene ejemplos de queries aplicables al modelo de datos del Padrón Federal. 
 
 Las queries propuestas utilizan condiciones con `LIKE` (o `REGEXP_LIKE` o `REGEXP_REPLACE` cuando requieren mayor precisión) aplicadas sobre las `KEY` y/o los `VALUE` registrados en la tabla `HLF.BC_VALID_TX_WRITE_SET`.
 
