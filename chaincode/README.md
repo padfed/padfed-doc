@@ -15,4 +15,4 @@ Funciones:
 | queryByKey| Recupera el valor que corresponde a una key registrada en el State. |
 | queryByKeyRange | Recupera un resultset con un registro para cada componente registrado en el State cuyas key estan comprendidas en el rango. |
 | queryHistory | Recupera la historia de cambios de una key. |
-| version | Recuperala versión del chaincode.
+| version | Recupera la versión del chaincode.

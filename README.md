@@ -4,7 +4,9 @@ Documentación del proyecto de Blockchain del Padrón Federal.
 
 ---
 
-[Vision General](https://github.com/padfed/padfed-doc/tree/master/overview)
+[Visión General](https://github.com/padfed/padfed-doc/tree/master/overview)
+
+![](images/network-diagram-1.png)
 
 ---
 
@@ -22,9 +24,8 @@ Documentación del proyecto de Blockchain del Padrón Federal.
 
 ## Aplicaciones de Integración:
 
-![](images/aplicaciones-de-integracion.png)
-
-- [HLF-proxy](https://cloud.docker.com/u/padfed/repository/docker/padfed/block-consumer)
+- [HLF-Proxy](applications/hlf-proxy/README.md)
 
 - [Block-Consumer](applications/block-consumer/README.md)
 
+![](images/aplicaciones-de-integracion.png)

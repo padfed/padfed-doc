@@ -6,7 +6,7 @@
 
 ## Objetivo
 
-Exponer endpoints REST que permiten invocar las funciones de los chaincodes de negocio (ejemplo padfedcc) y del Query System Chaincode [QSCC](https://github.com/hyperledger/fabric/tree/master/core/scc/qscc) de una red de Blockchain [Hyperledger Fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html)
+Exponer endpoints REST que permiten invocar las funciones de los chaincodes de negocio (ejemplo padfedcc) y del Query System Chaincode [QSCC](https://github.com/hyperledger/fabric/tree/master/core/scc/qscc) en una red de Blockchain [Hyperledger Fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html)
 
 Provee una Swagger UI que atiende en [FQDN]:[port configurado en application.conf]/swagger#/
 
@@ -39,11 +39,11 @@ Campo| Descripción
 function | String conteniendo el nombre de la función del chaincode.
 Args  | Json array con los parámetros que recibe la función del chaincode.
 
-Ej: invoke a la function "putPersona" que recibe dos parámetros: cuit numerico y un string conteniendo un json object (con sus caracteres `"` escapeados) con los datos identificatorios de una persona.
+Ej: invoke a la function "putPersona" que recibe un argumento strinh conteniendo un json object escapeado con los datos identificatorios de una persona.
 ``` json
 {"function":"putPersona","Args":["{\"id\":30562559112,\"persona\":{\"id\":30562559112,\"tipoid\":\"C\",\"tipo\":\"J\",\"estado\":\"I\",\"razonsocial\":\"xxxx\",\"formajuridica\":35,\"mescierre\":11,\"contratosocial\":\"1975-12-29\",\"inscripcion\":{\"registro\":2,\"numero\":194},\"ds\":\"2013-01-29\"},\"jurisdicciones\":{\"7\":{\"provincia\":77,\"sede\":true,\"desde\":\"2002-04-15\",\"ds\":\"2003-04-15\"}},\"impuestos\":{\"30\":{\"impuesto\":30,\"periodo\":199003,\"estado\":\"AC\",\"dia\":1,\"motivo\":44,\"inscripcion\":\"1990-03-01\",\"ds\":\"2003-04-15\"},\"301\":{\"impuesto\":301,\"periodo\":197701,\"estado\":\"AC\",\"dia\":1,\"motivo\":44,\"inscripcion\":\"1977-01-01\",\"ds\":\"2003-04-15\"}},\"actividades\":{\"883-466110\":{\"actividad\":\"883-466110\",\"orden\":1,\"desde\":201311,\"ds\":\"2014-10-02\"},\"883-12110\":{\"actividad\":\"883-12110\",\"orden\":2,\"desde\":201311,\"ds\":\"2014-10-02\"}},\"etiquetas\":{\"329\":{\"etiqueta\":329,\"periodo\":20160401,\"estado\":\"AC\",\"ds\":\"2016-04-12\"}},\"domicilios\":{\"1.1\":{\"tipo\":1,\"orden\":1,\"estado\":2,\"provincia\":7,\"localidad\":\"PALMIRA\",\"cp\":\"5584\",\"calle\":\"XXXX\",\"numero\":42,\"ds\":\"2003-04-15\"},\"2.1\":{\"tipo\":2,\"orden\":1,\"estado\":2,\"provincia\":7,\"localidad\":\"PALMIRA\",\"cp\":\"5584\",\"calle\":\"XXXX\",\"numero\":42,\"ds\":\"2003-04-15\"}}}"]}
 ``` 
-### query e invoke: HTTP Status Code
+### HTTP Status Code
 
 Basado en [List of HTTP status codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
 
@@ -52,10 +52,11 @@ Valor | Nombre | Descripción
 200 | OK (VALID)   | quey ok o tx invoke avalada por los Peers y validada por los Committers (actualizó el State).
 202 | ACCEPTED  | Tx invoke avalada por los Peers y procesada por el Orderer. Se desconoce si fue validada por los Committers.
 400 | BAD REQUEST| Error atribuible al cliente.
-404 | NOT FOUND  | El cliente mediante una funcion get intentó obtener un asset inexistente.
 403 | FORBIDDEN  | El cliente intentó ejecutar una función del chaincode para la cual no tiene privilegios. 
+404 | NOT FOUND  | El cliente mediante una funcion get intentó obtener un registro inexistente.
 409 | CONFLICT | Tx invoke avalada por los Peers pero posteriormente invalidada por los Committers. La tx fue agregada en un bloque pero quedó marcada como inválida. No actualizó el State. [Ver txflow](https://hyperledger-fabric.readthedocs.io/en/release-1.4/txflow.html)
 500 | INTERNAL SERVER ERROR | Error interno del sistema.
+501 | NOT IMPLEMENTED | El cliente invoco una función inexistente.
 
 ### query e invoke: Response
 
@@ -67,15 +68,15 @@ El body del response contiene un json object con la siguiente estructura:
 
 Campo        | SUCCESS verbose=false | SUCCESS verbose=true| ERROR | Desc
 ---          | --- | --- | --- | ---
-status       | X | X | X | [Ver query e invoke: HTTP Status Code]
-block        | X | X | X | Numero de bloque en que quedó incluida la tx. Solo se informa cuando el proxy espera por el evento de validación de la tx ``waitForEventSeconds>0``
+status       | X | X | X | [Ver HTTP Status Code]
+block        | X | X | X | Numero de bloque en que quedó incluida la tx. Solo se informa cuando el proxy espera por el evento de validación de la tx `waitForEventSeconds>0`
 txId         | X | X | X | id de la tx fabric
 time         | X | X | X | timestamp UTC en formato `yyyy-MM-dd HH:mm:ss`, ej: `2018-07-23 14:31:56`
 channel      |   | X | X | Nombre del channel
 chaincode    |   | X | X | Nombre del chaincode
 txStatus     |   | X | X | [Ver Campo txStatus]
 step         |   |   | X | [Ver Campo step]
-errMsg       |   |   | X | Mensaje de error generado en el step. Si el step es SIMULATING_TX, entonces **errMsg** contiene el mismo mensaje que vino en la respuesta del chaincode **ccResponse.msg**.
+errMsg       |   |   | X | Mensaje de error generado en el step.
 thread       |   | X | X | Nombre del thread que procesó la tx
 client       |   | X | X | Integration api utilizada. Ej: `afip.bc.fabric.api`
 simulatingMs |   | X | X | Milisegundos que demoró la simulación
@@ -129,7 +130,7 @@ Ejemplo:
   "txId": "64353766af2f226d202a2ac1a5457f0fccdab350f57a180ba5af5bcc4e2479d5",
   "time": "2019-02-28 14:50:20",
   "status": 200,
-  "ccResponse": "[{\"Key\":\"PER_20066806163\",\"Record\":{\"cuit\":20066806163,\"nombre\":\"JURGEN\",\"apellido\":\"VICTOR HUGO\",\"tipoPersona\":\"F\",\"estadoCuit\":\"A\",\"tipoDoc\":90,\"documento\":\"6680616\",\"sexo\":\"M\",\"mesCierre\":12,\"fechaNacimiento\":\"1935-11-10\"}}]"
+  "ccResponse": "[{\"Key\":\"per:20066806163#per\",\"Record\":\"id\":30562559112,\"tipoid\":\"C\",\"tipo\":\"J\",\"estado\":\"I\",\"razonsocial\":\"xxxx\",\"formajuridica\":35,\"mescierre\":11,\"contratosocial\":\"1975-12-29\",\"inscripcion\":{\"registro\":2,\"numero\":194},\"ds\":\"2013-01-29\"}}]"
 }
 ```
 ## Como obtener la imagen docker
@@ -139,7 +140,7 @@ docker pull padfed/bc-proxy
 ```
 ## Como correr el servicio
 
-#### Opcion 1
+#### Opción 1 - Mediante docker run
 
 ``` sh
 docker run --rm --name hlf-proxy -d -v ${PWD}/conf:/conf -p 8085:8085 padfed/bc-proxy:latest
@@ -147,8 +148,7 @@ docker run --rm --name hlf-proxy -d -v ${PWD}/conf:/conf -p 8085:8085 padfed/bc-
 > Si se requiere invocar el container en modo readOnly debe agregarse el siguiente parametro: **--tmpfs /tmp:exec**
 <br/>
 
-#### Opcion 2
-
+#### Opción 2 - Mediante docker-compose
 
 ``` sh
 version: '3.5'
@@ -175,11 +175,9 @@ services:
       - hlf-proxy
 ```
 
-
 ``` sh
-docker-compose up
+$ docker-compose up
 ```
-
 
 <br/>
 
@@ -371,14 +369,13 @@ peers:
 
 ```
 
-
 ### Changelog
 ---
 
 1.4.1
 
-* Fix: NPE al utilizar funciones de CC 0.6.x
-* Fix: NPE al recibir una invocacion fallida si el request esta en modo verbose
+* Fix: NPE invocando funciones que responden sin message
+* Fix: NPE reciviendo un error desde el chaincode cuando el request esta en modo verbose
 
 1.4.0
 
