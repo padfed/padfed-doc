@@ -22,6 +22,8 @@ Documentación del proyecto de Blockchain del Padrón Federal.
 
 ## Aplicaciones de Integración:
 
+![](images/aplicaciones-de-integracion.png)
+
 - [HLF-proxy](https://cloud.docker.com/u/padfed/repository/docker/padfed/block-consumer)
 
 - [Block-Consumer](applications/block-consumer/README.md)

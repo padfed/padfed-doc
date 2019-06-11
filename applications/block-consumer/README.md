@@ -6,11 +6,11 @@ Los bloques son consumidos en orden ascendente desde el bloque 0(cero) o Genesis
 
 Una organización, autorizada a acceder a la Blockchain que no corre nodos de la red, puede conectar el Block-Consumer mediante internet a cualquier nodo de la red. 
 
-![](deploy-accediendo-a-nodos-remotos.png)
+![](images/deploy-accediendo-a-nodos-remotos.png)
 
 Una organización que corre nodos de la Blockchain, puede conectar el Block-Consumer a sus propios nodos peers locales para lograr mejor performance de procesamiento. 
 
-![](deploy-accediendo-a-nodos-locales.png)
+![](images/deploy-accediendo-a-nodos-locales.png)
 
 ---
 
@@ -216,7 +216,7 @@ peers:
 
 ### Modelo de Datos
 
-![](diagrama-de-entidad-relaciones.png)
+![](images/diagrama-de-entidad-relaciones.png)
 
 Tabla | Descripcion | PK | Indice
 --- | --- | --- | ---
