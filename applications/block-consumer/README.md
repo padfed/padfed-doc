@@ -95,6 +95,25 @@ databases {
     connectionTestQuery = SELECT 1
   }
 }
+
+fabric {
+  netty {
+    grpc {
+      //keyAliveTime in Minutes
+      NettyChannelBuilderOption.keepAliveTime="5"
+      //keepAliveTimeout in Seconds
+      NettyChannelBuilderOption.keepAliveTimeout="8"
+      NettyChannelBuilderOption.keepAliveWithoutCalls="true"
+      //maxInboundMessageSize in bytes
+      NettyChannelBuilderOption.maxInboundMessageSize="50000000"
+    }
+  }
+
+  sdk {
+    peer.retry_wait_time = "5000"
+  }
+}
+
 ```
 ### ${fabric.yaml.conf}
 
