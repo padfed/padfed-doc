@@ -25,7 +25,7 @@ Una organización que corre nodos de la Blockchain, puede conectar el Block-Cons
 ## Como ejecutarlo:
 
 ``` sh
-docker run --rm --name block-consumer -d -v ${PWD}/conf:/conf -e TZ=America/Argentina/Buenos_Aires --tmpfs /tmp:exec -d padfed/block-consumer:latest
+docker run --rm --name block-consumer -d -v ${PWD}/conf:/conf -e TZ=America/Argentina/Buenos_Aires --tmpfs /tmp:exec -p 8084:8084 -d padfed/block-consumer:latest
 ```
 ## Archivos de configuración (Ejemplos)
 
@@ -95,6 +95,25 @@ databases {
     connectionTestQuery = SELECT 1
   }
 }
+
+fabric {
+  netty {
+    grpc {
+      //keyAliveTime in Minutes
+      NettyChannelBuilderOption.keepAliveTime="5"
+      //keepAliveTimeout in Seconds
+      NettyChannelBuilderOption.keepAliveTimeout="8"
+      NettyChannelBuilderOption.keepAliveWithoutCalls="true"
+      //maxInboundMessageSize in bytes
+      NettyChannelBuilderOption.maxInboundMessageSize="50000000"
+    }
+  }
+
+  sdk {
+    peer.retry_wait_time = "5000"
+  }
+}
+
 ```
 ### ${fabric.yaml.conf}
 
@@ -530,3 +549,19 @@ select * from
 hlf.bc_invalid_tx tx
 order by block desc, txseq desc
 ``` 
+
+### Changelog
+---
+
+1.3.1
+
+* getHeight: utilizar peer candidato seleccionado con longestBlockchainNode
+* longestBlockchainNode al iniciar la app y luego de un fallo
+* gestion de conexion jdbc: asegurar cierre de conexion cuando se produce una falla en las invocaciones
+* regresion: error "bc_valid_tx_write_set" violates check constraint "chek_valid_tx_value"
+
+1.3.0
+
+* Script para resetear la base de datos Oracle sin necesidad de recrear los objetos
+* Permite configurar tamaño máximo permitido para consumir
+* Entrypoint de monitoreo `/metrics` compatible con [Prometheus](https://prometheus.io/)
