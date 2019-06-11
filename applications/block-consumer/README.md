@@ -553,6 +553,13 @@ order by block desc, txseq desc
 ### Changelog
 ---
 
+1.3.1
+
+* getHeight: utilizar peer candidato seleccionado con longestBlockchainNode
+* longestBlockchainNode al iniciar la app y luego de un fallo
+* gestion de conexion jdbc: asegurar cierre de conexion cuando se produce una falla en las invocaciones
+* regresion: error "bc_valid_tx_write_set" violates check constraint "chek_valid_tx_value"
+
 1.3.0
 
 * Script para resetear la base de datos Oracle sin necesidad de recrear los objetos
