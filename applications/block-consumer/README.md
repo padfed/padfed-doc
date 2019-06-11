@@ -25,7 +25,7 @@ Una organización que corre nodos de la Blockchain, puede conectar el Block-Cons
 ## Como ejecutarlo:
 
 ``` sh
-docker run --rm --name block-consumer -d -v ${PWD}/conf:/conf -e TZ=America/Argentina/Buenos_Aires --tmpfs /tmp:exec -d padfed/block-consumer:latest
+docker run --rm --name block-consumer -d -v ${PWD}/conf:/conf -e TZ=America/Argentina/Buenos_Aires --tmpfs /tmp:exec -p 8084:8084 -d padfed/block-consumer:latest
 ```
 ## Archivos de configuración (Ejemplos)
 
