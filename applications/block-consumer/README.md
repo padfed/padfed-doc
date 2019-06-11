@@ -268,7 +268,7 @@ rep/bc_pkg.sql | ddl | crea la pkg bc_pkg que permite actualizar las tablas del 
 
 #### Queries de negocio
 
-Si bien, Block-Consumer es una aplicación totalmente agnóstica al negocio. Se puede utilizar para procesar bloques de cualquier Blockchain HLF, esta sección del doc contiene ejemplos de queries aplicables al modelo de datos del Padrón Federal. 
+Si bien, Block-Consumer es una aplicación totalmente agnóstica al negocio (se puede utilizar para procesar bloques de cualquier Blockchain HLF), esta sección del doc contiene ejemplos de queries aplicables al modelo de datos del Padrón Federal. 
 
 Las queries propuestas utilizan condiciones con `LIKE` (o `REGEXP_LIKE` o `REGEXP_REPLACE` cuando requieren mayor precisión) aplicadas sobre las `KEY` y/o los `VALUE` registrados en la tabla `HLF.BC_VALID_TX_WRITE_SET`.
 
@@ -305,7 +305,7 @@ donde:
 #### Versiones vigentes de las keys 
 
 Para una misma key se guarda un registro cada vez que su value es modificado. 
-Para recuperar la versión vigente de una key las queries utilizan la función analítica `MAX(block*100000+txseq) OVER(partition by key)` seleccionado el registro que tenga el mayor `block*100000+txseq`.
+Para recuperar la versión vigente de una key las queries utilizan la función analítica `MAX(block*100000+txseq) OVER(PARTITION BY key)` seleccionado el registro que tenga el mayor `block*100000+txseq`.
 
 #### Keys eliminadas 
 
