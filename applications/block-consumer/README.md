@@ -549,3 +549,12 @@ select * from
 hlf.bc_invalid_tx tx
 order by block desc, txseq desc
 ``` 
+
+### Changelog
+---
+
+1.3.0
+
+* Script para resetear la base de datos Oracle sin necesidad de recrear los objetos
+* Permite configurar tamaño máximo permitido para consumir
+* Entrypoint de monitoreo `/metrics` compatible con [Prometheus](https://prometheus.io/)
