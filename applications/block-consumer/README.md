@@ -14,7 +14,7 @@ Una organización que corre nodos de la Blockchain, puede conectar el Block-Cons
 
 ---
 
-## Requisitos de ambiente:
+## Requisitos de ambiente
 
 1. DOCKER 18.09 o superior
 1. DOCKER-COMPOSE 1.23.1 o superior
@@ -22,7 +22,7 @@ Una organización que corre nodos de la Blockchain, puede conectar el Block-Cons
 1. Instancia de base de datos Oracle o PostgreSQL
 1. En la base de datos: esquema HLF y usuario BC_APP 
 
-## Como ejecutarlo:
+## Como ejecutarlo
 
 ``` sh
 docker run --rm --name block-consumer -d -v ${PWD}/conf:/conf -e TZ=America/Argentina/Buenos_Aires --tmpfs /tmp:exec -p 8084:8084 -d padfed/block-consumer:latest
@@ -555,13 +555,11 @@ order by block desc, txseq desc
 
 1.3.1
 
-* getHeight: utilizar peer candidato seleccionado con longestBlockchainNode
-* longestBlockchainNode al iniciar la app y luego de un fallo
-* gestion de conexion jdbc: asegurar cierre de conexion cuando se produce una falla en las invocaciones
-* regresion: error "bc_valid_tx_write_set" violates check constraint "chek_valid_tx_value"
+* Conexiones jdbc: asegurar cierre de conexión cuando se producen errores en las invocaciones sql
+* Fix error violates check constraint "check_valid_tx_value" en bloques que cotienen txs con deletes
 
 1.3.0
 
 * Script para resetear la base de datos Oracle sin necesidad de recrear los objetos
-* Permite configurar tamaño máximo permitido para consumir
+* Permite configurar tamaño máximo de bloque a consumir
 * Entrypoint de monitoreo `/metrics` compatible con [Prometheus](https://prometheus.io/)
