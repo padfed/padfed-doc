@@ -1,14 +1,22 @@
 # HLF-Proxy
 
-[Ver gráfico](https://g.gravizo.com/svg?%20digraph%20G%20{%20aize=%224.4%22%20orgX%20[label=%22Org%20X%20Application%22%20shape=box];%20HLF_Proxy%20[shape=box%20label=%22HLF-Proxy%22%20style=filled];%20orderer%20[label=%22orderer%22];%20peer0_orgX%20[label=%22peer0.orgX%22];%20peer1_orgX%20[label=%22peer1.orgX%22];%20peer0_orgY%20[label=%22peer0.orgY%22];%20peer1_orgY%20[label=%22peer1.orgY%22];%20peer0_orgZ%20[label=%22peer0.orgZ%22];%20peer1_orgZ%20[label=%22peer1.orgZ%22];%20orgX%20-%3E%20HLF_Proxy%20[label=%22API\nRest%22];%20HLF_Proxy%20-%3E%20orderer%20[label=%22gRPCs%22];%20HLF_Proxy%20-%3E%20peer0_orgX%20[label=%22gRPCs%22];%20HLF_Proxy%20-%3E%20peer1_orgX%20[label=%22gRPCs%22];%20HLF_Proxy%20-%3E%20peer0_orgY%20[label=%22gRPCs%22];%20HLF_Proxy%20-%3E%20peer1_orgY%20[label=%22gRPCs%22];%20HLF_Proxy%20-%3E%20peer0_orgZ%20[label=%22gRPCs%22];%20HLF_Proxy%20-%3E%20peer1_orgZ%20[label=%22gRPCs%22];%20})
-
----
-
-## Objetivo
-
-Exponer endpoints REST que permiten invocar las funciones de los chaincodes de negocio (ejemplo padfedcc) y del Query System Chaincode [QSCC](https://github.com/hyperledger/fabric/tree/master/core/scc/qscc) en una red de Blockchain [Hyperledger Fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html)
+Aplicación que expone endpoints REST que permiten invocar las funciones de los chaincodes de negocio (ejemplo padfedcc) y del Query System Chaincode [QSCC](https://github.com/hyperledger/fabric/tree/master/core/scc/qscc) en una red de Blockchain [Hyperledger Fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html).
 
 Provee una Swagger UI que atiende en [FQDN]:[port configurado en application.conf]/swagger#/
+
+## Esquemas de deploy
+
+Una organización autorizada a acceder a la Blockchain que no corre nodos de la red, puede utilizar HLF-Proxy para invocar via REST las funciones del chaincode. HLF-Proxy se conecta mediante internet a los nodos de la red. 
+
+![](images/deploy-accediendo-a-nodos-remotos.png)
+
+Una organización que corre nodos de la Blockchain, puede utilizar un HLF-Proxy conectado a sus propios peers para tener mejor tiempo de respuesta en consultas.
+
+Para la actualizar la Blockchain requiere que HLF-Proxy este conectado mediante internet al orderer y a los peers remotos de otras organzasiones. 
+
+![](images/deploy-accediendo-a-nodos-locales.png)
+
+---
 
 ## Endpoints
 
@@ -39,9 +47,9 @@ Campo| Descripción
 function | String conteniendo el nombre de la función del chaincode.
 Args  | Json array con los parámetros que recibe la función del chaincode.
 
-Ej: invoke a la function "putPersona" que recibe un argumento strinh conteniendo un json object escapeado con los datos identificatorios de una persona.
+Ej: invoke a la function "getPersona" que recibe como argumento una cuit.
 ``` json
-{"function":"putPersona","Args":["{\"id\":30562559112,\"persona\":{\"id\":30562559112,\"tipoid\":\"C\",\"tipo\":\"J\",\"estado\":\"I\",\"razonsocial\":\"xxxx\",\"formajuridica\":35,\"mescierre\":11,\"contratosocial\":\"1975-12-29\",\"inscripcion\":{\"registro\":2,\"numero\":194},\"ds\":\"2013-01-29\"},\"jurisdicciones\":{\"7\":{\"provincia\":77,\"sede\":true,\"desde\":\"2002-04-15\",\"ds\":\"2003-04-15\"}},\"impuestos\":{\"30\":{\"impuesto\":30,\"periodo\":199003,\"estado\":\"AC\",\"dia\":1,\"motivo\":44,\"inscripcion\":\"1990-03-01\",\"ds\":\"2003-04-15\"},\"301\":{\"impuesto\":301,\"periodo\":197701,\"estado\":\"AC\",\"dia\":1,\"motivo\":44,\"inscripcion\":\"1977-01-01\",\"ds\":\"2003-04-15\"}},\"actividades\":{\"883-466110\":{\"actividad\":\"883-466110\",\"orden\":1,\"desde\":201311,\"ds\":\"2014-10-02\"},\"883-12110\":{\"actividad\":\"883-12110\",\"orden\":2,\"desde\":201311,\"ds\":\"2014-10-02\"}},\"etiquetas\":{\"329\":{\"etiqueta\":329,\"periodo\":20160401,\"estado\":\"AC\",\"ds\":\"2016-04-12\"}},\"domicilios\":{\"1.1\":{\"tipo\":1,\"orden\":1,\"estado\":2,\"provincia\":7,\"localidad\":\"PALMIRA\",\"cp\":\"5584\",\"calle\":\"XXXX\",\"numero\":42,\"ds\":\"2003-04-15\"},\"2.1\":{\"tipo\":2,\"orden\":1,\"estado\":2,\"provincia\":7,\"localidad\":\"PALMIRA\",\"cp\":\"5584\",\"calle\":\"XXXX\",\"numero\":42,\"ds\":\"2003-04-15\"}}}"]}
+{"function":"getPersona","Args":[20104249729]}
 ``` 
 ### HTTP Status Code
 
@@ -126,29 +134,38 @@ Tipicamente las funciones queries del chaincode **padfedcc** generan un json arr
 Ejemplo:
 
 ``` json
+{"function":"queryPersona","Args":[20104249729]}
+``` 
+
+``` json
 {
-  "txId": "64353766af2f226d202a2ac1a5457f0fccdab350f57a180ba5af5bcc4e2479d5",
-  "time": "2019-02-28 14:50:20",
+  "txId": "75c271b6604c8ce7cc280cc35d3c03e90a412a83238dba3666eb973f08ab3555",
+  "time": "2019-06-11 23:45:12",
   "status": 200,
-  "ccResponse": "[{\"Key\":\"per:20066806163#per\",\"Record\":\"id\":30562559112,\"tipoid\":\"C\",\"tipo\":\"J\",\"estado\":\"I\",\"razonsocial\":\"xxxx\",\"formajuridica\":35,\"mescierre\":11,\"contratosocial\":\"1975-12-29\",\"inscripcion\":{\"registro\":2,\"numero\":194},\"ds\":\"2013-01-29\"}}]"
+  "ccResponse": "[{\"Key\":\"per:20104249729#per\",\"Record\":{\"tipo\":\"F\",\"id\":20104249729,\"tipoid\":\"C\",\"estado\":\"A\",\"nombre\":\"XXXXXXXXXXXX\",\"apellido\":\"XXXXXXXX\",\"materno\":\"XXXXXXX\",\"sexo\":\"M\",\"documento\":{\"tipo\":96,\"numero\":\"XXXXXXXX\"},\"nacimiento\":\"1952-05-25\"}}]"
 }
 ```
-## Como obtener la imagen docker
+## Como correr la aplicación
+
+HLF-Proxy esta disponible como imgen docker.
+
+Para correr la aplicacion se requiere que el equipo tenga instalado:
+- DOCKER 18.09 o superior	
+- DOCKER-COMPOSE 1.23.1 o superior
+
+La imagen se puede obtener mediante `docker pull`
 
 ``` sh
-docker pull padfed/bc-proxy
+$ docker pull padfed/bc-proxy:latest
 ```
-## Como correr el servicio
-
-#### Opción 1 - Mediante docker run
+#### Opción 1 - Ejecución mediante docker run
 
 ``` sh
-docker run --rm --name hlf-proxy -d -v ${PWD}/conf:/conf -p 8085:8085 padfed/bc-proxy:latest
+$ docker run --rm --tmpfs /tmp:exec --name hlf-proxy -d -v ${PWD}/conf:/conf -p 8085:8085 padfed/bc-proxy:latest
 ```
-> Si se requiere invocar el container en modo readOnly debe agregarse el siguiente parametro: **--tmpfs /tmp:exec**
-<br/>
+#### Opción 2 - Ejecución mediante docker-compose
 
-#### Opción 2 - Mediante docker-compose
+Archivo `docker-comnpose.yaml`
 
 ``` sh
 version: '3.5'
@@ -178,9 +195,6 @@ services:
 ``` sh
 $ docker-compose up
 ```
-
-<br/>
-
 ## Requerimientos de networking
 
 Acceso por protocolo gRPC sobre TLS  a los nodos peers y orderer configurados en xxx.client.yaml:
@@ -243,8 +257,6 @@ fabric {
 swagger {
   schemes: ["http","https"]
 }
-
-
 ```
 ### xxx.client.yaml
 

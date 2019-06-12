@@ -19,7 +19,7 @@ package "Blockchain\npeers remotos" as remotos {
 } 
 
 package DataCenter {
-    component [BlockConsumer] 
+    component [Block-Consumer] as BlockConsumer 
     database "Oracle o\nPostgres\n" as db
     package "Blockchain\npeers propios" as locales {
     [peer0.xxx]

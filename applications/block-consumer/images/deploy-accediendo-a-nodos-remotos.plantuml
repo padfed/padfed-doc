@@ -19,7 +19,7 @@ package Blockchain {
 } 
 
 package DataCenter {
-    component [BlockConsumer] 
+    component [Block-Consumer] as BlockConsumer 
     database "Oracle o\nPostgres\n" as db 
 } 
 
