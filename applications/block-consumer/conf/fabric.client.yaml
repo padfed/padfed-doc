@@ -1,0 +1,112 @@
+name: "Network"
+version: "1.0"
+x-loggingLevel: trace
+
+client:
+  # MSPID de la organización cuya CA emitio los certificados de MSP que utiliza la aplicación para conectarse a la red: XXX | YYY | ZZZ | MULTIORGS
+  organization: XXX
+  logging:
+    level: info
+  eventService:
+    timeout:
+      connection: 5s
+      registrationResponse: 5s
+
+channels:
+  padfedchannel:
+#    orderers:
+#      - orderer0.orderer.xxx.com
+
+    # Block-Consumer accede a los peers que tengan habilitado el rol ledgerQuery
+    peers:
+      peer0.xxx.com:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+      peer1.xxx.com:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+      peer0.zzz.com:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+      peer1.zzz.com:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+      peer0.yyy.com:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+      peer1.yyy.com:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+organizations:
+  XXX:
+    mspid: XXX
+    peers:
+      - peer0.xxx.com
+      - peer1.xxx.com
+
+  ZZZ:
+    mspid: ZZZ
+    peers:
+      - peer0.zzz.com
+      - peer1.zzz.com
+
+  ZZZ:
+    mspid: ZZZ
+    peers:
+      - peer0.yyy.com
+      - peer1.yyy.com
+
+#orderers:
+#  orderer0.orderer.xxx.com:
+#    url: grpcs://orderer0.orderer.xxx.com:7050
+#    tlsCACerts:
+#      path: conf/tls/orderer/orderer.tls-root-ca.pem
+
+peers:
+  peer0.xxx.com:
+    url: grpcs://peer0.xxx.com:7051
+    tlsCACerts:
+      path: conf/tls/XXX/XXX.tls-root-ca.pem
+
+  peer1.xxx.com:
+    url: grpcs://peer1.xxx.com:7051
+    tlsCACerts:
+      path: conf/tls/XXX/XXX.tls-root-ca.pem
+
+  peer0.zzz.com:
+    url: grpcs://peer0.zzz.com:7051
+    tlsCACerts:
+      path: conf/tls/ZZZ/ZZZ.tls-root-ca.pem
+
+  peer1.zzz.com:
+    url: grpcs://peer1.zzz.com:7051
+    tlsCACerts:
+      path: conf/tls/ZZZ/ZZZ.tls-root-ca.pem
+
+  peer0.yyy.com:
+    url: grpcs://peer0.yyy.com:7051
+    tlsCACerts:
+      path: conf/tls/ZZZ/ZZZ.tls-root-ca.pem
+
+  peer1.yyy.com:
+    url: grpcs://peer1.yyy.com:7051
+   tlsCACerts:
+      path: conf/tls/ZZZ/ZZZ.tls-root-ca.pem

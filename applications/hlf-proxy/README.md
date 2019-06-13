@@ -163,7 +163,7 @@ $ docker pull padfed/bc-proxy:latest
 ``` sh
 $ docker run --rm --tmpfs /tmp:exec --name hlf-proxy -d -v ${PWD}/conf:/conf -p 8085:8085 padfed/bc-proxy:latest
 ```
-#### Opción 2 - Ejecución mediante docker-compose
+#### Opción 2 - Ejecución mediante docker-compose up
 
 Archivo `docker-comnpose.yaml`
 

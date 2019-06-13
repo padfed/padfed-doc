@@ -57,6 +57,8 @@ class BC_INVALID_TX_SET {
 	  {field} type: is_delete: Char (T | null)    
 }
 
+BC_VALID_TX --[hidden]right> BC_INVALID_TX 
+
 BC_VALID_TX "0..n" --up> "1" BC_BLOCK : < has
 BC_INVALID_TX "0..n" --up> "1" BC_BLOCK : < has
 BC_INVALID_TX_SET "0..n" --up> "1" BC_INVALID_TX : < has

@@ -3,12 +3,17 @@
 title Block-Consumer accediendo a nodos locales
 
 note as N1
-Esquema de deploy para organizaciones 
-que corren peers de la Blockchain.
+Esquema de deploy para 
+organizaciones que corren 
+peers de la Blockchain.
 
-Block-Consumer se conecta preferentemente 
-a un peer local. Para alta disponibilidad, se 
-conecta mediante internet a peers remotos.
+Block-Consumer se conecta 
+preferentemente a peers locales 
+para lograr mejor performance.
+
+Opcionalmente, para lograr 
+alta disponibilidad, se conecta 
+mediante internet a peers remotos.
 end note
 
 package "Blockchain\npeers remotos" as remotos {

@@ -4,232 +4,35 @@ Aplicación que consume bloques desde un channel de una red de Blockchain [Hyper
 
 Los bloques son consumidos en orden ascendente desde el bloque 0(cero) o Genesis Block hasta el bloque mas reciente. 
 
-Una organización, autorizada a acceder a la Blockchain que no corre nodos de la red, puede conectar el Block-Consumer mediante internet a cualquier nodo de la red. 
+Una organización, autorizada a acceder a la Blockchain que no corre nodos de la red, puede conectar el Block-Consumer mediante internet a cualquier peer de la red. 
 
 ![](images/deploy-accediendo-a-nodos-remotos.png)
 
-Una organización que corre nodos de la Blockchain, puede conectar el Block-Consumer a sus propios nodos peers locales para lograr mejor performance de procesamiento. 
+Una organización que corre nodos de la Blockchain, puede conectar el Block-Consumer a sus peers locales para lograr mejor performance de procesamiento. 
 
 ![](images/deploy-accediendo-a-nodos-locales.png)
 
 ---
 
-## Requisitos de ambiente
+## Requisitos para la instalación
 
+1. Equipo con 1 GB de RAM
 1. DOCKER 18.09 o superior
 1. DOCKER-COMPOSE 1.23.1 o superior
-1. Archivos de configuración ubicados en ${PWD}/conf/
+1. [Archivos de configuración](conf/README.md) 
 1. Instancia de base de datos Oracle o PostgreSQL
-1. En la base de datos: esquema HLF y usuario BC_APP 
 
 ## Como ejecutarlo
+
+#### Opción 1 - Ejecución mediante docker run
 
 ``` sh
 docker run --rm --name block-consumer -d -v ${PWD}/conf:/conf -e TZ=America/Argentina/Buenos_Aires --tmpfs /tmp:exec -p 8084:8084 -d padfed/block-consumer:latest
 ```
-## Archivos de configuración (Ejemplos)
+#### Opción 2 - Ejecución mediante docker-compose up
 
-###  application.conf
+:soon:
 
-``` yaml
-# DB 
-# Oracle
-# url      => jdbc:oracle:thin:@//<host>:<port>/<service_name>
-db.hlf.url = "jdbc:oracle:thin:@xxx.xxx.xxx.xxx:1521:blchain"
-# Postgres
-# url        => jdbc:postgresql://host:port/database
-# db.hlf.url = "jdbc:postgresql://localhost:5432/hlf_db"
-
-db.hlf.user = bc_app
-db.hlf.password = ????
-
-# hikari https://github.com/brettwooldridge/HikariCP
-db.hlf.hikari.maximumPoolSize = 1
-db.hlf.hikari.connectionTimeout = 60000
-
-# Nombre del schema donde estan creadas las tablas
-db_hlf.schema = hlf
-
-# Nombre de la package que recibe las invocaciones desde la aplicacion. 
-# Para Postgres debe quedar seteado con "".
-db_hlf.package = bc_pkg
-#db_hlf.package = ""
-
-# Puerto para monitoreo
-application.port = 8084
-
-# FABRIC conf
-fabric.preferred.peer = peer0.xxx.com
-fabric.switch.peers.regexp = ".*"
-fabric.switch.blocks.threshold = 10
-
-fabric.channel = padfedchannel
-fabric.yaml.conf = /conf/xxx.client.yaml
-
-# fabric.auth.type=fs: indica que la app se va a autenticar con un certificado y una pk de MSP residente en el file system.
-# El certificado debe ser emitido por la CA para MSP de la organizacion indicada en el archivo de configuracion ${fabric.yaml.conf} en client: organization:
-fabric.auth.type = fs
-fabric.auth.appuser.name = User1
-fabric.auth.appuser.keystore.path = /conf/store/local/orgX/UserX.OrgX.msp-pk.pem
-fabric.auth.appuser.certsign.path = /conf/store/local/orgX/UserX.OrgX.msp-cert.pem
-
-#fabric.tls.auth.appuser.keystore.path = /conf/store/local/orgX/UserX.OrgX.tls-pk.pem
-#fabric.tls.auth.appuser.certsign.path = /conf/store/local/orgX/UserX.OrgX.tls-cert.pem
-
-certificate.check.restrict = false
-
-databases {
-  #################################
-  # oracle
-  #################################
-  oracle {
-    dataSourceClassName = oracle.jdbc.pool.OracleDataSource
-    connectionTestQuery = SELECT 1 FROM DUAL
-  }
-
-  #################################
-  # postgresql
-  #################################
-  postgresql {
-    dataSourceClassName = org.postgresql.ds.PGSimpleDataSource
-    connectionTestQuery = SELECT 1
-  }
-}
-
-fabric {
-  netty {
-    grpc {
-      //keyAliveTime in Minutes
-      NettyChannelBuilderOption.keepAliveTime="5"
-      //keepAliveTimeout in Seconds
-      NettyChannelBuilderOption.keepAliveTimeout="8"
-      NettyChannelBuilderOption.keepAliveWithoutCalls="true"
-      //maxInboundMessageSize in bytes
-      NettyChannelBuilderOption.maxInboundMessageSize="50000000"
-    }
-  }
-
-  sdk {
-    peer.retry_wait_time = "5000"
-  }
-}
-
-```
-### ${fabric.yaml.conf}
-
-``` yaml
-name: "Network"
-version: "1.0"
-x-loggingLevel: trace
-
-client:
-  # organization: XXX | YYY | ZZZ | MULTIORGS
-  organization: XXX
-  logging:
-    level: info
-  eventService:
-    timeout:
-      connection: 5s
-      registrationResponse: 5s
-
-channels:
-  padfedchannel:
-    orderers:
-      - orderer0.orderer.xxx.com
-
-    peers:
-      peer0.xxx.com:
-        endorsingPeer: false
-        chaincodeQuery: false
-        ledgerQuery: true
-        eventSource: false
-
-      peer1.xxx.com:
-        endorsingPeer: false
-        chaincodeQuery: false
-        ledgerQuery: true
-        eventSource: false
-
-      peer0.zzz.com:
-        endorsingPeer: false
-        chaincodeQuery: false
-        ledgerQuery: true
-        eventSource: false
-
-      peer1.zzz.com:
-        endorsingPeer: false
-        chaincodeQuery: false
-        ledgerQuery: true
-        eventSource: false
-
-      peer0.yyy.com:
-        endorsingPeer: false
-        chaincodeQuery: false
-        ledgerQuery: true
-        eventSource: false
-
-      peer1.yyy.com:
-        endorsingPeer: false
-        chaincodeQuery: false
-        ledgerQuery: true
-        eventSource: false
-
-organizations:
-  XXX:
-    mspid: XXX
-    peers:
-      - peer0.xxx.com
-      - peer1.xxx.com
-
-  ZZZ:
-    mspid: ZZZ
-    peers:
-      - peer0.zzz.com
-      - peer1.zzz.com
-
-  ZZZ:
-    mspid: ZZZ
-    peers:
-      - peer0.yyy.com
-      - peer1.yyy.com
-
-orderers:
-  orderer0.orderer.xxx.com:
-    url: grpcs://orderer0.orderer.xxx.com:7050
-    tlsCACerts:
-      path: conf/tls/orderer/orderer.tls-root-ca.pem
-
-peers:
-  peer0.xxx.com:
-    url: grpcs://peer0.xxx.com:7051
-    tlsCACerts:
-      path: conf/tls/XXX/XXX.tls-root-ca.pem
-
-  peer1.xxx.com:
-    url: grpcs://peer1.xxx.com:7051
-    tlsCACerts:
-      path: conf/tls/XXX/XXX.tls-root-ca.pem
-
-  peer0.zzz.com:
-    url: grpcs://peer0.zzz.com:7051
-    tlsCACerts:
-      path: conf/tls/ZZZ/ZZZ.tls-root-ca.pem
-
-  peer1.zzz.com:
-    url: grpcs://peer1.zzz.com:7051
-    tlsCACerts:
-      path: conf/tls/ZZZ/ZZZ.tls-root-ca.pem
-
-  peer0.yyy.com:
-    url: grpcs://peer0.yyy.com:7051
-    tlsCACerts:
-      path: conf/tls/ZZZ/ZZZ.tls-root-ca.pem
-
-  peer1.yyy.com:
-    url: grpcs://peer1.yyy.com:7051
-   tlsCACerts:
-      path: conf/tls/ZZZ/ZZZ.tls-root-ca.pem
-```
 ---
 ## Base de Datos
 
@@ -237,32 +40,32 @@ peers:
 
 ![](images/diagrama-de-entidad-relaciones.png)
 
-Tabla | Descripcion | PK | Indice
+TABLE | Descripción | PRIMARY KEY | INDEX
 --- | --- | --- | ---
-BC_BLOCK | un registro por cada bloque consumido | BLOCK
-BC_VALID_TX | un registro por cada tx válida correspondiente a un bloque consumido | BLOCK, TXSEQ | TXID
-BC_INVALID_TX | un registro por cada tx inválida correspondiente a un bloque consumido | BLOCK, TXSEQ | TXID
-BC_VALID_TX_WRITE_SET | un registro por cada ítem del WRITE_SET de las tx válidas consumidas | BLOCK, TXSEQ, ITEM | KEY
-BC_INVALID_TX_SET | un registro por cada ítem del READ_SET o WRITE_SET de las txs inválidas consumidas | BLOCK, TXSEQ, TYPE, ITEM | KEY
+`BC_BLOCK` | Bloque consumido. | `BLOCK`
+`BC_VALID_TX` | Transacción válida contenida en un bloque consumido. | `BLOCK, TXSEQ` | `TXID`
+`BC_VALID_TX_WRITE_SET` | Ítem del WRITE_SET de transacciones válidas. Cada ítem corresponde a la creación o actualización de un registro del Padrón Federal en la Blockchain. Una actualización puede corresponder a la eliminación del registro (`IS_DELETE='T'`). | `BLOCK, TXSEQ, ITEM` | `KEY`
+`BC_INVALID_TX` | Transacción inválida contenida en un bloque consumido. | `BLOCK, TXSEQ` | `TXID`
+`BC_INVALID_TX_SET` | Ítem del READ_SET o WRITE_SET de transacciones inválidas. | `BLOCK, TXSEQ, TYPE, ITEM` | `KEY`
 
-Usuario| Desc
+Usuario | Desc
 --- | --- 
-??? | Admin de la instancia
-HLF | Dueño del schema
-BC_APP | Usuario para el datasource de la app BLOCK-CONSUMER. Tiene permisos para ejecutar HLF.BC_PKG y para leer HLF.BC_BLOCK
-BC_ROSI | Usuario para el datasource de la app ROSi. Tiene permisos para leer todas las tablas de HLF. Opcional.
+??? | Admin de la instancia.
+`HLF` | Dueño del schema.
+`BC_APP` | Usuario que utiliza la aplicación para conectarse a la base de datos. Debe tener permisos para ejecutar la package `HLF.BC_PKG`.
+`BC_ROSI` | (Opcional) Usuario para el datasource de la app ROSi. Tiene permisos para leer todas las tablas de `HLF`.
 
-### Creación del Esquema HLF y de los usuarios BC_APP y ROSI_APP
+### Creación del Esquema HLF y de los usuarios de base de datos
 
-Para crear el esquema HLF y los usuarios se deben ejecutar los scripts incrementales correspondientes a Oracle o a Postgres.
+Para crear el esquema `HLF` y se pueden ejecutar los scripts correspondientes a Oracle (`sql-oracle`) o a Postgres (`sql-postgresql`).
 
-Script | Tipo | Descripcion
+Script | Tipo | Descripción
 --- | --- | ---
-inc/001_dcl_create_user_hlf.sql | dcl | crea usuario del schema HLF
-inc/002_ddl_create_schema_hlf.sql | ddl | crea tablas, indices y restricciones en el schema HLF
-inc/003_ddl_create_pkg.sql | ddl | invoca al script ../rep/bc_pkg.sql 
-inc/004_dcl_create_apps_user.sql | dcl | crea usuarios BC_APP y ROSI_APP
-rep/bc_pkg.sql | ddl | crea la pkg bc_pkg que permite actualizar las tablas del schema HLF
+`inc/001_dcl_create_user_hlf.sql` | dcl | crea el usuario dueño del schema `HLF`
+`inc/002_ddl_create_schema_hlf.sql` | ddl | crea tablas, índices y restricciones en el schema `HLF`
+`inc/003_ddl_create_pkg.sql` | ddl | invoca al script `../rep/bc_pkg.sql` 
+`inc/004_dcl_create_apps_user.sql` | dcl | crea usuarios `BC_APP` y (opcional) `ROSI_APP`
+`rep/bc_pkg.sql` | ddl | create de la package `HLF.BC_PKG` que utiliza Block-Consumer leer y actualizar las tablas del schema `HLF`
 
 ### Queries sobre la base de datos que carga el Block-Consumer 
 
@@ -313,6 +116,34 @@ Las keys eliminadas quedan marcadas con `HLF.BC_VALID_TX_WRITE_SET.IS_DELETE='T'
 Las queries, una vez que recuperan la versión vigente de una key, verifican que no haya sido eliminada mediante la condición `IS_DELETE IS NULL`.
 
 #### Ejemplos
+
+``` sql
+-- Estado actual completo de una persona
+--
+select *
+from
+(
+select i.*, 
+block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt
+from hlf.bc_valid_tx_write_set i
+where key like 'per:20000021629#%'
+and   key not like '%#wit' -- descarta el testigo
+) x
+where bt = max_bt and is_delete is null
+order by length(key), key
+```
+Para obtener la historia de una key se puede joinear `HLF.BC_VALID_TX` y `HLF.BC_VALID_TX_WRITE_SET`. 
+
+``` sql
+-- Historia de una key
+--
+select block, txseq, t.timestamp, i.key, i.value, i.is_delete
+from hlf.bc_valid_tx_write_set i
+left join hlf.bc_valid_tx t
+using (block, txseq)
+where i.key like 'per:20000021629#per'
+order by block desc, txseq desc
+```
 
 ``` sql
 -- Cantidad de keys agrupadas por tag
@@ -489,33 +320,6 @@ and   regexp_like(value, '^\{.{0,}"provincia":3(,.{1,}|\})$')
 where bt = max_bt and is_delete is null
 ```
 
-``` sql
--- Estado actual completo de una persona
---
-select *
-from
-(
-select i.*, 
-block*100000+txseq as bt, max(block*100000+txseq) over(partition by key) as max_bt
-from hlf.bc_valid_tx_write_set i
-where key like 'per:20000021629#%'
-and   key not like '%#wit' -- descarta el testigo
-) x
-where bt = max_bt and is_delete is null
-order by length(key), key
-```
-Para obtener la historia de una key se puede joinear `HLF.BC_VALID_TX` y `HLF.BC_VALID_TX_WRITE_SET`. 
-
-``` sql
--- Historia de una key
---
-select block, txseq, t.timestamp, i.key, i.value, i.is_delete
-from hlf.bc_valid_tx_write_set i
-left join hlf.bc_valid_tx t
-using (block, txseq)
-where i.key like 'per:20000021629#per'
-order by block desc, txseq desc
-```
 ---
 
 #### Queries para monitoreo
