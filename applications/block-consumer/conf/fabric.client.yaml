@@ -14,9 +14,6 @@ client:
 
 channels:
   padfedchannel:
-#    orderers:
-#      - orderer0.orderer.xxx.com
-
     # Block-Consumer accede a los peers que tengan habilitado el rol ledgerQuery
     peers:
       peer0.xxx.com:
@@ -73,12 +70,6 @@ organizations:
     peers:
       - peer0.yyy.com
       - peer1.yyy.com
-
-#orderers:
-#  orderer0.orderer.xxx.com:
-#    url: grpcs://orderer0.orderer.xxx.com:7050
-#    tlsCACerts:
-#      path: conf/tls/orderer/orderer.tls-root-ca.pem
 
 peers:
   peer0.xxx.com:
