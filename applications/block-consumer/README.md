@@ -16,7 +16,7 @@ Una organización que corre nodos de la Blockchain, puede conectar el Block-Cons
 
 ## Requisitos para la instalación
 
-1. Equipo con 1 GB de RAM
+1. Equipo con 2 GB de RAM
 1. DOCKER 18.09 o superior
 1. DOCKER-COMPOSE 1.23.1 o superior
 1. [Archivos de configuración](conf/README.md) 
