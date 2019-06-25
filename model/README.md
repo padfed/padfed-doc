@@ -2,7 +2,7 @@
 
 Especificación del modelo de datos de la implementación basada en blockchain de Padrón Federal.
 
-El Padrón Federal mantiene registros de contribuyentes (personas físicas o jurídica) y de personas físicas que sin ser contribuyentes están relacionados con un contribuyente. 
+El Padrón Federal mantiene registros de contribuyentes (personas físicas o jurídica) y de personas físicas que sin ser contribuyentes están relacionadas con un contribuyente. 
 
 Los registros se identifican por una key y se persisten en formato json. 
 
@@ -14,7 +14,7 @@ Los registros se identifican por una key y se persisten en formato json.
 
 ### Formatos
 
-- **#cuit**: Número de 11 dígitos que debe cumplir con la validación de dígito verificador. 
+- **#cuit**: Número de 11 dígitos que debe cumplir con la validación de dígito verificador. Puede ser una CUIT, CUIL, CDI o CIE.
 - **#organismo**: Es el código de organismo que puede ser `1` AFIP, `900` COMARB, `901` AGIP, `902` ARBA, etc.
 - **#fecha**: Es la representación textual de una fecha con formato `YYYY-MM-DD` y los valores de `DD`, `MM` y `YYYY` deben cumplir las reglas de fechas de calendario estándar.
 - Períodos:
@@ -57,7 +57,6 @@ donde
 |  16 | transferencias :soon: | transferencias de sociedades                   | colección | | | | 
 |  17 | escisiones :soon:     | escisiones de sociedades                       | colección | | | |
 |  18 | [testigo](#escalar-personatestigo)                  | registro unico por persona. No puede ser actualizado. | 1(uno)    | `wit` | `per:20123412340#wit` | x |
-
 
 ---
 ### Objeto persona.persona
@@ -636,7 +635,7 @@ Aclaraciones:
 | hasta     | #fecha  |      |     |     |     |
 | ds        | #fecha  |      |     |     |     |
 
-#### Ejemplo: Jurisdiccon CABA informada por COMARB
+#### Ejemplo: Jurisdicción CABA informada por COMARB
 
     per:30120013439#jur:900.0
 
@@ -714,9 +713,9 @@ key | value
 `per:30643202812#cms:1`                 | `{"provincia":1,"desde":"2002-01-01","ds":"2019-06-03"}`
 `per:30643202812#dom:1.1.1`             | `{"orden":1,"org":1,"tipo":1,"estado":6,"calle":"XX XXXXXX","numero":3371,"provincia":1,"localidad":"VILLA LYNCH","cp":"1672","nomenclador":"104","ds":"2007-10-31"}`
 `per:30643202812#dom:1.2.1`             | `{"orden":1,"org":1,"tipo":2,"estado":6,"calle":"XX XXXXXX","numero":1097,"provincia":1,"localidad":"VILLA LYNCH","cp":"1672","nomenclador":"104","ds":"2007-10-31"}`
-`per:30643202812#dom:900.3.1`           | `{"orden":1,"org":900,"tipo":3,"estado":6,"calle":"14","numero":4745,"piso":"--","unidad":"----","provincia":1,"localidad":"VILLA LYNCH (PDO. GRAL. SAN MARTIN)","cp":"1672","ds":"2019-06-03"}`
-`per:30643202812#dom:900.3.2`           | `{"orden":2,"org":900,"tipo":3,"estado":6,"calle":"14","numero":4745,"piso":"--","unidad":"----","provincia":1,"localidad":"VILLA LYNCH (PDO. GRAL. SAN MARTIN)","cp":"1672","ds":"2019-06-03"}`
-`per:30643202812#dom:900.3.3`           | `{"orden":3,"org":900,"tipo":3,"estado":6,"calle":"14","numero":4745,"piso":"--","unidad":"----","provincia":1,"localidad":"VILLA FIGUEROA ALCOR","cp":"B1672WAA","ds":"2019-06-03"}`
+`per:30643202812#dom:900.3.1`           | `{"orden":1,"org":900,"tipo":3,"estado":6,"calle":"14","numero":4745,"piso":"1","unidad":"B","provincia":1,"localidad":"VILLA LYNCH (PDO. GRAL. SAN MARTIN)","cp":"1672","ds":"2019-06-03"}`
+`per:30643202812#dom:900.3.2`           | `{"orden":2,"org":900,"tipo":3,"estado":6,"calle":"14","numero":4745,"piso":"1","unidad":"B","provincia":1,"localidad":"VILLA LYNCH (PDO. GRAL. SAN MARTIN)","cp":"1672","ds":"2019-06-03"}`
+`per:30643202812#dom:900.3.3`           | `{"orden":3,"org":900,"tipo":3,"estado":6,"calle":"14","numero":4745,"piso":"1","unidad":"B","provincia":1,"localidad":"VILLA FIGUEROA ALCOR","cp":"B1672WAA","ds":"2019-06-03"}`
 `per:30643202812#dor:900.3.1.1`         | `{"orden":1,"org":900,"tipo":3,"rol":1,"ds":"2019-06-03"}`
 `per:30643202812#dor:900.3.2.3`         | `{"orden":2,"org":900,"tipo":3,"rol":3,"ds":"2019-06-03"}`
 `per:30643202812#dor:900.3.3.2`         | `{"orden":3,"org":900,"tipo":3,"rol":2,"ds":"2019-06-03"}`
