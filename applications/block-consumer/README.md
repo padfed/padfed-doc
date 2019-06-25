@@ -20,7 +20,7 @@ Una organización que corre nodos de la Blockchain, puede conectar el Block-Cons
 1. DOCKER 18.09 o superior
 1. DOCKER-COMPOSE 1.23.1 o superior
 1. [Archivos de configuración](conf/README.md) 
-1. Instancia de base de datos Oracle o PostgreSQL
+1. Instancia de base de datos Oracle, PostgreSQL o SQL Server (:soon:) 
 
 ## Como ejecutarlo
 
@@ -69,7 +69,6 @@ Script | Tipo | Descripción
 
 NOTA: Para Postgres asegurarse de ejecutar `su - postgres` y a continuación los scripts antes mencionados. Otra forma es ejecutando el script automatizado `helpers\createdb-hlf.sh`.
     
-
 ### Queries sobre la base de datos que carga el Block-Consumer 
 
 #### Queries de negocio
