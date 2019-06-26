@@ -83,21 +83,28 @@ Queda fuera del alcance de este instructivo la configuración de las aplicacione
 | 1 | ORDERER     | AFIP     | orderer0.orderer.blockchain-tributaria.testnet.afip.gob.ar     | ORDERER |
 | 2 | PEER     | AFIP     | peer0.blockchain-tributaria.testnet.afip.gob.ar     | AFIP.PEER0 |
 | 3 | PEER     | AFIP     | peer1.blockchain-tributaria.testnet.arba.gob.ar     | AFIP.PEER1 |
-| 4 | PEER     | ARBA     | peer0.blockchain-tributaria.testnet.arba.gob.ar :warning: | ARBA.PEER0 |
-| 5 | PEER     | ARBA     | peer1.blockchain-tributaria.testnet.arba.gob.ar :warning: | ARBA.PEER1 |
+| 4 | PEER     | ARBA     | peer0-blockchain-tributaria.test.arba.gob.ar        | ARBA.PEER0 |
+| 5 | PEER     | ARBA     | peer1-blockchain-tributaria.test.arba.gob.ar        | ARBA.PEER1 |
 | 6 | PEER     | COMARB     | peer0.blockchain-tributaria.testnet.comarb.gob.ar     | COMARB.PEER0 |
 | 7 | PEER     | COMARB     | peer1.blockchain-tributaria.testnet.comarb.gob.ar     | COMARB.PEER1 |
-
-> [2019.05.13] A requerimiento de ARBA el nombre de sus nodos serán: peer0.blockchain-tributaria.test.arba.gob.ar y peer1.blockchain-tributaria.test.arba.gob.ar 
 
 ## Prerequisitos
 
 ### Configuración de los servidores:
 
-* 4 a 8 vCPU
-* 8 a 16 GB de RAM
-* 500 GB en disco
-* IPs públicas accesibles desde internet
+- Equipo dedicado, puede ser virtual
+- 4 vCPU
+- 8 GB de RAM
+- 500 GB en disco
+
+### Networking
+
+- IP fija, pública y DNS Name válido en internet
+- Puerto accesible desde internet en nodos Peers: 7051/tpc
+- Puerto accesible desde internet en nodos Orderer: 7050/tcp (solamente AFIP)
+- Protocolo gRPC sobre TCP con TLS
+- Opcional: ssh para administración interna
+- Opcional: https para servicios de NoCs interno (salud, métricas, log)
 
 ### Software:
 
@@ -108,7 +115,7 @@ Queda fuera del alcance de este instructivo la configuración de las aplicacione
 | DOCKER-COMPOSE 1.23.1 o superior | Nodos PEERs u ORDERER  |
 | cURL     | Nodos PEERs de AFIP  |
 | md5sum     | Nodos PEERs de AFIP  |
-| binarios HLF cryptogen y configtxgen | Equipo de AFIP donde se ejecta la tara `[Generación de configuraciones en AFIP]`  
+| binarios HLF cryptogen y configtxgen | Solamente en el equipo de AFIP donde se ejecute la tarea `[Generación de configuraciones en AFIP]`  
 | imagen Docker HLF fabric-tool | Nodos PEERs y ORDERER
 | imagen Docker HLF fabric-orderer | Nodo ORDERER
 | imagen Docker HLF fabric-peer | Nodos PEERs
@@ -120,9 +127,7 @@ Solamente se requieren en el equipo de AFIP donde se ejecute la tarea `[Generaci
 
 Para obtener los binarios específicos de la plataforma se puede ejecutar:
 
-```
-$ $INSTALL_HOME/bin/hlf-1.4.0/bootstrap.sh -d -s
-```
+    $ $INSTALL_HOME/bin/hlf-1.4.0/bootstrap.sh -d -s
 
 El script obtiene los binarrios desde el repositorio https://nexus.hyperledger.org
 
@@ -138,9 +143,8 @@ Las imágenes se descargan desde https://hub.docker.com
 
 Como alternativa se puede anticipar la descarga de las imágenes ejecutando:
 
-```
-$ $INSTALL_HOME/bin/hlf-1.4.0/get-docker.images.sh
-```
+    $ $INSTALL_HOME/bin/hlf-1.4.0/get-docker.images.sh
+
 El script baja todas las imágenes oficiales HLF v1.4.0, inclusive algunas que no serán utilizadas.
 
 ### Requerimientos de Ciberseguridad:
@@ -192,10 +196,8 @@ Estas conexiones deben ser verificadas posteriormente al paso
 
     1.3. En $INSTALL_HOME/src/qa ejecutar
 
-    ```
-    $ ./create.network.sh
-    ```
-
+       $ ./create.network.sh
+   
     El script creará los siguientes directorios:
 
     ```
@@ -224,15 +226,13 @@ Estas conexiones deben ser verificadas posteriormente al paso
     2.1 Opcionalmente modificar los .env de los directorios orderer0.orderer, afip.peer0 y afip.peer01 en cada uno de los equipos para indicar el path raiz donde el nodo guardará los repositorios para el Legder y el State. El directorio debe existir.
 
     Ejemplo:
-    ```
-    FABRIC_LEDGER_STORE_PATH=/data/blockchain
-    ```
+
+        FABRIC_LEDGER_STORE_PATH=/data/blockchain
+    
     2.2. En el directorio orderer0.orderer del equipo ORDERER ejecutar:
 
-    ```
-    $ docker-compose up -d
-    ```
-
+        $ docker-compose up -d
+    
     2.3. En el directorio afip.peer0 del equipo AFIP.PEER0 ejecutar:
 
     ```
@@ -248,12 +248,11 @@ Estas conexiones deben ser verificadas posteriormente al paso
 
     2.4. En el directorio afip.peer1 en el equipo AFIP.PEER1 ejecutar:
 
-    ```
-    $ docker-compose up -d
-    $ ./ch.join.sh
-    $ ./cc.download.sh <chaincode-version>
-    $ ./cc.install.sh <chaincode-version>
-    ```
+        $ docker-compose up -d
+        $ ./ch.join.sh
+        $ ./cc.download.sh <chaincode-version>
+        $ ./cc.install.sh <chaincode-version>
+    
 
 3. Delivery desde AFIP hacia ARBA y COMARB
 
@@ -263,20 +262,16 @@ Estas conexiones deben ser verificadas posteriormente al paso
 
     3.2. Obtener el chaincode a instalar ejecutando:
 
-    ```
-    $ $INSTALL_HOME/src/qa/config/cc.download.sh <chaincode-version>
-    ```
-
+        $ $INSTALL_HOME/src/qa/config/cc.download.sh <chaincode-version>
+    
     3.3. Descomprir el zip recibido en paso 4.1.10 que contiene la estructura de directorios generada por network-setup.
 
     3.4. En los directorios arba.peer0, arba.peer1, comarb.peer0 y comarb.peer1 copiar el chaincode obtenido en el paso 3.2 debajo de /gopath/download/
 
     Ejemplo:
 
-    ```
-    /qa/deploy/nodes/arba.peer0/gopath/download/padfed-chaincode-0.2.5.tar.xz
-    ```
-
+       /qa/deploy/nodes/arba.peer0/gopath/download/padfed-chaincode-0.5.2.tar.xz
+   
     3.5. Entregar un zip con el contenido de los directorios arba.peer0 y arba.peer1 a ARBA
 
     3.6. Entregar un zip con el contenido de los directorios comarb.peer0 y comarb.peer1 a la COMARB
@@ -292,19 +287,16 @@ Estas conexiones deben ser verificadas posteriormente al paso
     4.3. Opcionalmente modificar los .env del [arba|comarb].[peer0|peer1] para indicar el path raiz donde el nodo guardará los repositorios para el Legder y el State. El directorio debe existir.
 
     Ejemplo:
-    ```
-    FABRIC_LEDGER_STORE_PATH=/data/blockchain
-    ```
-
+    
+        FABRIC_LEDGER_STORE_PATH=/data/blockchain
+    
     4.4. En el directorio [arba|comarb].[peer0|peer1] ejecutar:
 
-    ```
-    $ docker-compose up -d
-    $ ./ch.join.sh
-    * ./ch.add.anchor.sh (1)
-    $ ./cc.install.sh <chaincode-version>
-    ```
-
+        $ docker-compose up -d
+        $ ./ch.join.sh
+        $ ./ch.add.anchor.sh (1)
+        $ ./cc.install.sh <chaincode-version>
+    
     _(1) Solamente en los peer0 que van a ser los anchor peers de cada organización_
 
 ---
@@ -323,9 +315,9 @@ Los Operadores recibirá una RN solicitando actualizar una determinada versión 
 * ``<chaincode-version>``, ej ``0.4.3``
 * URL del artefacto tar.xz en Nexus, ej:
     ```
-    https://nexus.cloudint.afip.gob.ar/nexus/repository/padfed-bc-raw/padfed/padfed-chaincode/0.4.3/padfed-chaincode-0.4.3.tar.xz
+    https://nexus.cloudint.afip.gob.ar/nexus/repository/padfed-bc-raw/padfed/padfed-chaincode/0.5.2/padfed-chaincode-0.5.2.tar.xz
     ```
-* archivo tar.zx, requerido para ARBA y COMARB dado que no tienen acceso al Nexus de AFIP, ej: ``padfed-chaincode-0.4.3.tar.xz``
+* archivo tar.zx, requerido para ARBA y COMARB dado que no tienen acceso al Nexus de AFIP, ej: ``padfed-chaincode-0.5.2.tar.xz``
 
 ### Actualización del chaincode en AFIP
 
@@ -335,21 +327,19 @@ Si los peers no tienen conexión al Nexus, el Operador debe descargar en su PC e
 
 El Operador debe conectarse por ssh al peer y ejecutar:
 
-```
-./cc.download.sh <chaincode-version> (1)
-./cc.install.sh <chaincode-version>
-./cc.upgrade.sh <chaincode-version>
-```
+    $ ./cc.download.sh <chaincode-version> (1)
+    $ ./cc.install.sh <chaincode-version>
+    $ ./cc.upgrade.sh <chaincode-version>
+
 _(1) si no tiene conexion al Nexus, en vez de ejecutar cc.donwload.sh debe copiar el tar.xz en gopath/download_
 
 #### Actualización del chaincode en AFIP.PEER1
 
 El Operador debe conectarse por ssh al peer y ejecutar:
 
-```
-./cc.download.sh <chaincode-version> (1)
-./cc.install.sh <chaincode-version>
-```
+    $ ./cc.download.sh <chaincode-version> (1)
+    $ ./cc.install.sh <chaincode-version>
+
 _(1) si no tiene conexion al Nexus, en vez de ejecutar cc.donwload.sh debe copiar el tar.xz en gopath/download_
 
 ### Actualización del chaincode los peers de ARBA y COMARB
@@ -358,6 +348,4 @@ El Operador debe copiar el tar.xz del chaincode a los directorios gopath/downloa
 
 El Operador debe conectarse por ssh en cada peer y ejecutar
 
-```
-./cc.install.sh <chaincode-version>
-```
+    $ ./cc.install.sh <chaincode-version>
