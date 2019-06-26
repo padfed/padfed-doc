@@ -132,14 +132,12 @@ Todos los componentes ejecutables de una Red Fabric están dockerizados. Inclusi
 
 ## Configuación equipos Peers:
 
-Los requerimientos son similares para Testnet y para la red de Producción.
-
 ### Hardware
 
 - Equipo dedicado, puede ser virtual
 - 4 a 8 vCPU
-- 8 a 16 GB de RAM
-- 500 GB en disco
+- 8 de RAM
+- Disco 1TB (inicialmente 500 GB)
 
 ### Software
 
