@@ -21,7 +21,7 @@ package Blockchain {
 
 package DataCenter {
     component [Block-Consumer] as BlockConsumer 
-    database "Oracle o\nPostgres\n" as db 
+    database "Oracle,\nPostgres o\nSQL Server" as db 
 } 
 
 cloud internet

@@ -16,11 +16,11 @@ Una organización que corre nodos de la Blockchain, puede conectar el Block-Cons
 
 ## Requisitos para la instalación
 
-1. Equipo con 1 GB de RAM
+1. Equipo con 2 GB de RAM
 1. DOCKER 18.09 o superior
 1. DOCKER-COMPOSE 1.23.1 o superior
 1. [Archivos de configuración](conf/README.md) 
-1. Instancia de base de datos Oracle o PostgreSQL
+1. Instancia de base de datos Oracle, PostgreSQL o SQL Server (:soon:) 
 
 ## Como ejecutarlo
 
@@ -67,6 +67,8 @@ Script | Tipo | Descripción
 `inc/004_dcl_create_apps_user.sql` | dcl | crea usuarios `BC_APP` y (opcional) `ROSI_APP`
 `rep/bc_pkg.sql` | ddl | create de la package `HLF.BC_PKG` que utiliza Block-Consumer leer y actualizar las tablas del schema `HLF`
 
+NOTA: Para Postgres asegurarse de ejecutar `su - postgres` y a continuación los scripts antes mencionados. Otra forma es ejecutando el script automatizado `helpers\createdb-hlf.sh`.
+    
 ### Queries sobre la base de datos que carga el Block-Consumer 
 
 #### Queries de negocio

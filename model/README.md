@@ -2,7 +2,7 @@
 
 Especificación del modelo de datos de la implementación basada en blockchain de Padrón Federal.
 
-El Padrón Federal mantiene registros de contribuyentes (personas físicas o jurídica) y de personas físicas que sin ser contribuyentes están relacionados con un contribuyente. 
+El Padrón Federal mantiene registros de contribuyentes (personas físicas o jurídica) y de personas físicas que sin ser contribuyentes están relacionadas con un contribuyente. 
 
 Los registros se identifican por una key y se persisten en formato json. 
 
@@ -14,6 +14,7 @@ Los registros se identifican por una key y se persisten en formato json.
 
 ### Formatos
 
+- **#cuit**: Número de 11 dígitos que debe cumplir con la validación de dígito verificador. Puede ser una CUIT, CUIL, CDI o CIE.
 - **#organismo**: Es el código de organismo que puede ser `1` AFIP, `900` COMARB, `901` AGIP, `902` ARBA, etc.
 - **#fecha**: Es la representación textual de una fecha con formato `YYYY-MM-DD` y los valores de `DD`, `MM` y `YYYY` deben cumplir las reglas de fechas de calendario estándar.
 - Períodos:
@@ -35,26 +36,27 @@ donde
 - `{item-id}` identifica al ítem dentro del tipo de registro, compuesto por valores de las propiedades que conforman la clave primaria del ítem, separados por punto.
 
 
-| \#  | nombre                 | desc                                           | tipo      | key tag | key ejemplo | req
-| --- | ---                   | ---                                            | ---       | ---   | --- | :---: |
-|     | id                    | id de la persona                               | #cuit     |       | | x |
-|   1 | persona               | datos identificatorios de la persona           | objeto    | `per` | `per:20123412340#per` | x |
-|   2 | impuestos             | inscripciones en impuestos                     | colección | `imp` | `per:20123412340#imp:20` |  | 
-|   3 | domicilios            | domicilios                                     | colección | `dom` | `per:20123412340#dom:900.3.4` |  |
-|   4 | domisroles            | roles de los domicilios                        | colección | `dor` | `per:20123412340#dor:900.3.4.3` | |  
-|   5 | categorias            | categorias de monotributo y autonomos          | colección | `cat` | `per:20123412340#cat:20.1` | |  
-|   6 | contribmunis          | contribuciones municipales                     | colección | `con` | `per:20123412340#con:5244.98` | |  
-|   7 | actividades           | actividades económicas                         | colección | `act` | `per:20123412340#act:1.883-123456` | |  
-|   8 | etiquetas             | caracterizaciones                              | colección | `eti` | `per:20123412340#eti:160` | |  
-|   9 | telefonos             | telefonos                                      | colección | `tel` | `per:20123412340#tel:5` | |  
-|  10 | emails                | emails                                         | colección | `ema` | `per:20123412340#ema:2` | |
-|  11 | relaciones            | relaciones con otras personas                  | colección | `rel` | `per:20123412340#rel:20012531001.3.4` | |
-|  12 | jurisdicciones        | jurisdicciones                                 | colección | `jur` | `per:20123412340#jur:900.0` | |
-|  13 | cmsedes               | provincias sedes para el convenio multilateral | colección | `cms` | `per:20123412340#cms:3` | |
+| \#  | nombre                                             | desc                                           | tipo      | key tag | key ejemplo | req
+| --- | ---                                                | ---                                            | ---       | ---   | --- | :---: |
+|     | id                                                 | id de la persona                               | #cuit     |       | | x |
+|   1 | [persona](#objeto-personapersona)                  | datos identificatorios de la persona           | objeto    | `per` | `per:20123412340#per` | x |
+|   2 | [impuestos](#colección-personaimpuestos)           | inscripciones en impuestos                     | colección | `imp` | `per:20123412340#imp:20` |  | 
+|   3 | [domicilios](#colección-personadomicilios)         | domicilios                                     | colección | `dom` | `per:20123412340#dom:900.3.4` |  |
+|   4 | [domisroles](#colección-personadomisroles)         | roles de los domicilios                        | colección | `dor` | `per:20123412340#dor:900.3.4.3` | |  
+|   5 | [categorias](#colección-personacategorias)         | categorias de monotributo y autonomos          | colección | `cat` | `per:20123412340#cat:20.1` | |  
+|   6 | [contribmunis](#colección-personacontribmunis)     | contribuciones municipales                     | colección | `con` | `per:20123412340#con:5244.98` | |  
+|   7 | [actividades](#colección-personaactividades)       | actividades económicas                         | colección | `act` | `per:20123412340#act:1.883-123456` | |  
+|   8 | [etiquetas](#colección-personaetiquetas)           | caracterizaciones                              | colección | `eti` | `per:20123412340#eti:160` | |  
+|   9 | [telefonos](#colección-personatelefonos)           | telefonos                                      | colección | `tel` | `per:20123412340#tel:5` | |  
+|  10 | [emails](#coleccción-personaemails)                | emails                                         | colección | `ema` | `per:20123412340#ema:2` | |
+|  11 | [relaciones](#colección-personarelaciones)         | relaciones con otras personas                  | colección | `rel` | `per:20123412340#rel:20012531001.3.4` | |
+|  12 | [jurisdicciones](#colección-personajurisdicciones) | jurisdicciones                                 | colección | `jur` | `per:20123412340#jur:900.0` | |
+|  13 | [cmsedes](#colección-personacmsedes)               | provincias sedes para el convenio multilateral | colección | `cms` | `per:20123412340#cms:3` | |
 |  14 | archivos :soon:       | archivos digitalizados                         | colección | | | |
 |  15 | fusiones :soon:       | fusiones de sociedades                         | colección | | | |
 |  16 | transferencias :soon: | transferencias de sociedades                   | colección | | | | 
 |  17 | escisiones :soon:     | escisiones de sociedades                       | colección | | | |
+|  18 | [testigo](#escalar-personatestigo)                  | registro unico por persona. No puede ser actualizado. | 1(uno)    | `wit` | `per:20123412340#wit` | x |
 
 ---
 ### Objeto persona.persona
@@ -434,12 +436,13 @@ En esta colección se persisten los actividades de AFIP (`org 1`) y las jurisdic
 | orden          | integer |                    | 1   | 999 | x   |
 | desde          | #fecha  |                    |     |     | x   |
 | hasta          | #fecha  |                    |     |     |     |
-| articulo       | integer |                    | 1   | 999 |     |
+| articulo       | integer |                    | 2   | 13  |     |
 | ds             | #fecha  |                    |     |     |     |
 
 Aclaraciones:
 
-- **actividad**: compuesto por codigo de nomenclador y codigo de actividad, seprados por guión medio.
+- **actividad**: compuesto por codigo de nomenclador y codigo de actividad, separados por guión medio.
+- **articulo**: utilizado solamente para actividades de la org `900` COMARB, puede tener valor 2 o entre 6 y 13 (:soon: debe formar parte de la key ?)
 
 #### Ejemplo: Actividad primaria (orden 1) para AFIP 
 
@@ -455,15 +458,16 @@ Aclaraciones:
 }
 ```
 
-#### Ejemplo: Actividad secundaria (orden > 1) para AFIP
+#### Ejemplo: Actividad secundaria (orden > 1) para CM
 
-    per:20000000168#act:1.883-131300
+    per:20000000168#act:900.900-302000
 
 ```json
 {
-    "org": 1,
-    "actividad": "883-131300",
-    "orden": 3,
+    "org": 900,
+    "actividad": "900-302000",
+    "articulo": "7",
+    "orden": 2,
     "desde": 201507,
     "ds": "2015-07-22"
 }
@@ -631,7 +635,7 @@ Aclaraciones:
 | hasta     | #fecha  |      |     |     |     |
 | ds        | #fecha  |      |     |     |     |
 
-#### Ejemplo: Jurisdiccon CABA informada por COMARB
+#### Ejemplo: Jurisdicción CABA informada por COMARB
 
     per:30120013439#jur:900.0
 
@@ -675,3 +679,59 @@ Aclaraciones:
     "ds": "2019-04-14"
 }
 ```
+---
+### Escalar persona.testigo
+
+#### Cantidad de registros
+
+15.5 millones
+
+#### Estructura de la key
+
+    per:{id}#wit
+
+#### Estrucura de los ítems
+
+    1 (uno)
+
+#### Ejemplo
+
+    per:30120013439#wit
+
+```
+1
+```
+## Ejemplo completo
+
+    30643202812
+
+key | value
+--- | ---
+`per:30643202812#wit`                   | `1`
+`per:30643202812#per`                   | `{"tipo":"J","id":30643202812,"tipoid":"C","estado":"A","ds":"2013-11-29","razonsocial":"XXXXX XX XXXXXXXX XXXX","formajuridica":86,"mescierre":12,"contratosocial":"1976-08-21"}`
+`per:30643202812#act:900.900-949100`    | `{"org":900,"actividad":"900-949100","orden":1,"articulo":2,"desde":"2002-01-01","ds":"2019-06-03"}`
+`per:30643202812#cms:1`                 | `{"provincia":1,"desde":"2002-01-01","ds":"2019-06-03"}`
+`per:30643202812#dom:1.1.1`             | `{"orden":1,"org":1,"tipo":1,"estado":6,"calle":"XX XXXXXX","numero":3371,"provincia":1,"localidad":"VILLA LYNCH","cp":"1672","nomenclador":"104","ds":"2007-10-31"}`
+`per:30643202812#dom:1.2.1`             | `{"orden":1,"org":1,"tipo":2,"estado":6,"calle":"XX XXXXXX","numero":1097,"provincia":1,"localidad":"VILLA LYNCH","cp":"1672","nomenclador":"104","ds":"2007-10-31"}`
+`per:30643202812#dom:900.3.1`           | `{"orden":1,"org":900,"tipo":3,"estado":6,"calle":"14","numero":4745,"piso":"1","unidad":"B","provincia":1,"localidad":"VILLA LYNCH (PDO. GRAL. SAN MARTIN)","cp":"1672","ds":"2019-06-03"}`
+`per:30643202812#dom:900.3.2`           | `{"orden":2,"org":900,"tipo":3,"estado":6,"calle":"14","numero":4745,"piso":"1","unidad":"B","provincia":1,"localidad":"VILLA LYNCH (PDO. GRAL. SAN MARTIN)","cp":"1672","ds":"2019-06-03"}`
+`per:30643202812#dom:900.3.3`           | `{"orden":3,"org":900,"tipo":3,"estado":6,"calle":"14","numero":4745,"piso":"1","unidad":"B","provincia":1,"localidad":"VILLA FIGUEROA ALCOR","cp":"B1672WAA","ds":"2019-06-03"}`
+`per:30643202812#dor:900.3.1.1`         | `{"orden":1,"org":900,"tipo":3,"rol":1,"ds":"2019-06-03"}`
+`per:30643202812#dor:900.3.2.3`         | `{"orden":2,"org":900,"tipo":3,"rol":3,"ds":"2019-06-03"}`
+`per:30643202812#dor:900.3.3.2`         | `{"orden":3,"org":900,"tipo":3,"rol":2,"ds":"2019-06-03"}`
+`per:30643202812#imp:10`                | `{"impuesto":10,"inscripcion":"1964-01-01","estado":"EX","dia":3,"periodo":200804,"motivo":{"id":173},"ds":"2008-09-10"}`
+`per:30643202812#imp:32`                | `{"impuesto":32,"inscripcion":"2000-01-24","estado":"AC","dia":21,"periodo":200001,"motivo":{"id":44},"ds":"2003-03-26"}`
+`per:30643202812#jur:900.1`             | `{"provincia":1,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`
+`per:30643202812#jur:900.11`            | `{"provincia":11,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`
+`per:30643202812#jur:900.12`            | `{"provincia":12,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`
+`per:30643202812#jur:900.16`            | `{"provincia":16,"desde":"2010-01-01","org":900,"ds":"2019-06-03"}`
+`per:30643202812#jur:900.18`            | `{"provincia":18,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`
+`per:30643202812#jur:900.19`            | `{"provincia":19,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`
+`per:30643202812#jur:900.20`            | `{"provincia":20,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`
+`per:30643202812#jur:900.22`            | `{"provincia":22,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`
+`per:30643202812#jur:900.3`             | `{"provincia":3,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`
+`per:30643202812#jur:900.4`             | `{"provincia":4,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`
+`per:30643202812#jur:900.5`             | `{"provincia":5,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`
+`per:30643202812#jur:900.6`             | `{"provincia":6,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`
+`per:30643202812#jur:900.7`             | `{"provincia":7,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`
+`per:30643202812#rel:20083309424.3.1`   | `{"persona":20083309424,"tipo":3,"subtipo":1,"desde":"2007-09-24","ds":"2007-09-24"}`

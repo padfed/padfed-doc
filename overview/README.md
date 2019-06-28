@@ -128,15 +128,16 @@ Todos los componentes ejecutables de una Red Fabric están dockerizados. Inclusi
 | CA Raices | Dos para cada organización que corra nodos. Una para emitir los certificados que MSP y la otra TLS. Las organizaciones que solamente corren aplicaciones comparten un mismo par de CA Raíces gestionada por AFIP (organización ficticia MORG "Multi Organismos" |
 | Testnet | Para el ciclo de desarrollo y pruebas se requiere  implementar una Testnet que debe tener por lo menos: 2 Organizaciones, 4 Peers y un Orderer 
 
-[Ver Diagrama](https://www.lucidchart.com/documents/embeddedchart/9dbda4f3-e60a-4071-a6db-faa10945d8b8)
+![](/images/network-diagram-1.png)
 
 ## Configuación equipos Peers:
 
 ### Hardware
 
+- Equipo dedicado, puede ser virtual
 - 4 a 8 vCPU
-- 8 a 16 GB de RAM
-- 500 GB en disco
+- 8 de RAM
+- Disco 1TB (inicialmente 500 GB)
 
 ### Software
 
@@ -146,18 +147,20 @@ Todos los componentes ejecutables de una Red Fabric están dockerizados. Inclusi
 
 ### Networking
 
-- IPs públicas accesibles desde internet
+- IP fija, pública y DNS Name válido en internet
 - Puerto accesible desde internet en nodos Peers: 7051/tpc
-- Puerto accesible desde internet en nodos Orderer: 7050/tcp
+- Puerto accesible desde internet en nodos Orderer: 7050/tcp (solamente AFIP)
 - Protocolo gRPC sobre TCP con TLS
 - Opcional: ssh para administración interna
 - Opcional: https para servicios de NoCs interno (salud, métricas, log)
 
 ## Chaincode
 
-En principio en la Blockchain del Padron Federal se implementará un único Chaincode denominado denominado ``padfedcc`` desarrollado en Golang que ofrecerá funciones para actualizar y consultar el padrón de contribuyentes.
+En principio en la Blockchain del Padrón Federal se implementará un único Chaincode denominado denominado ``padfedcc`` desarrollado en Golang que ofrecerá funciones para actualizar y consultar el padrón de contribuyentes.
 
 Las funciones de actualización tendrán un mecanismo de control de acceso (ACL) basado en el identificador MSP de la aplicación que genera la transacción.
+
+Las funciones de consultas habilitadas seran puntuales. No se prevee ofrecer consultas que recuperar gran cantidad de registros. 
 
 La especificación de la interfase del chaincode está disponible en https://github.com/padfed/padfed-doc/tree/master/chaincode
 
@@ -178,12 +181,12 @@ Las aplicaciones son agnósticas al negocio. Pueden utilizarse en cualquier red 
 | block-consumer | Lee y procesa bloques de un determinado channel de una Blockchain. Desde cada bloque procesado extrae las transacciones que contiene y los datos modificados (writeSet) y guarda la información en una base de datos Oracle o PostgreSQL. Las organizaciones podrán utilizar este componente para mantener actualizada su propia de base de datos de Padrón. Disponible en https://cloud.docker.com/u/padfed/repository/docker/padfed/block-consumer |
 | hlf-proxy | Expone como API Rest un método que permite invocar a las funciones del chaincode. Disponible en https://cloud.docker.com/u/padfed/repository/docker/padfed/bc-proxy |
 
-[Ver Diagrama](https://www.lucidchart.com/documents/embeddedchart/d93d7832-62da-404e-986f-83051b878a01)
+![](/images/aplicaciones-de-integracion.png)
 
 ## Servicio HLD-Admin
+
+:soon:
 
 Webapp desarrollada por AFIP que permitirá 
 - solicitar ceritificados de MSP y de TLS para las organizaciones que solamente corren aplicaciones,
 - gestionar el despliegue del chaincode
-
-Esta aplicación aun no esta dispobible.

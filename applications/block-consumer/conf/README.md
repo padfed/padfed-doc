@@ -12,16 +12,17 @@ A manera de ejemplo se propone la siguiente diposición y nombres:
 conf
 |___ application.conf
 |___ fabric.client.yaml
-|___ msp
-|    |___ userN.orgW.msp-pk.pem
-|    |___ userN.orgW.msp-cert.pem
-|___ tls
-     |___ orgX
-     |    |___ orgX.tls-root-ca.pem
-     |___ orgY
-     |    |___ orgY.tls-root-ca.pem
-     |___ orgZ
-          |___ orgZ.tls-root-ca.pem
+|___ store
+|    |___ msp
+|    |    |___ userN.orgX.msp-pk.pem
+|    |    |___ userN.orgX.msp-cert.pem
+|    |___ tls
+|         |___ userN.orgX.tls-pk.pem
+|         |___ userN.orgX.tls-cert.pem
+|___ tls-root-cas
+     |___ orgX.tls-root-ca.pem
+     |___ orgY.tls-root-ca.pem
+     |___ orgZ.tls-root-ca.pem
 ```
 
 ### Archivos de configuración
@@ -36,6 +37,8 @@ conf
 
 ### Material criptográfico
 
-- **/conf/msp**: Directorio donde se ubican los archivos .pem que corresponden al par certificado/clave privada para MSP que identifica a la aplicación. El cerificado debe ser emitido por la CA raiz para MSP de la organización que corre la aplicación. La organizaciones que no corren peers utilizan certificados emitidos por la organización ficticia MORGS.
+- **/conf/store/msp**: Directorio donde se ubican los archivos .pem que corresponden al par certificado/clave privada para MSP que identifica a la aplicación. El certificado debe ser emitido por la CA raiz para MSP de la organización que corre la aplicación. La organizaciones que no corren peers utilizan certificados emitidos por la organización ficticia MORGS.
 
-- **/conf/tls**: Directorio donde se ubican los archivos .pem que corresponden a los certificados raíces de las CA para TLS de las organizaciones que corren peers.
+- **/conf/store/tls**: Directorio donde se ubican los archivos .pem que corresponden al par certificado/clave privada para TLS que identifica a la aplicación. El certificado debe ser emitido por la CA raiz para TLS de la organización que corre la aplicación. La organizaciones que no corren peers utilizan certificados emitidos por la organización ficticia MORGS.
+
+- **/conf/tls-root-cas**: Directorio donde se ubican los archivos .pem que corresponden a los certificados raíces de las CA para TLS de las organizaciones que corren peers.

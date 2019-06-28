@@ -3,7 +3,7 @@ version: "1.0"
 x-loggingLevel: trace
 
 client:
-  # MSPID de la organización cuya CA emitio los certificados de MSP que utiliza la aplicación para conectarse a la red: XXX | YYY | ZZZ | MULTIORGS
+  # MSPID de la organización cuya CA emitio el certificado de MSP que utiliza la aplicación para conectarse a la red: XXX | YYY | ZZZ | MORGS
   organization: XXX
   logging:
     level: info
@@ -75,29 +75,29 @@ peers:
   peer0.xxx.com:
     url: grpcs://peer0.xxx.com:7051
     tlsCACerts:
-      path: conf/tls/XXX/XXX.tls-root-ca.pem
+      path: conf/tls-root-cas/orgX.tls-root-ca.pem
 
   peer1.xxx.com:
     url: grpcs://peer1.xxx.com:7051
     tlsCACerts:
-      path: conf/tls/XXX/XXX.tls-root-ca.pem
-
-  peer0.zzz.com:
-    url: grpcs://peer0.zzz.com:7051
-    tlsCACerts:
-      path: conf/tls/ZZZ/ZZZ.tls-root-ca.pem
-
-  peer1.zzz.com:
-    url: grpcs://peer1.zzz.com:7051
-    tlsCACerts:
-      path: conf/tls/ZZZ/ZZZ.tls-root-ca.pem
+      path: conf/tls-root-cas/orgX.tls-root-ca.pem
 
   peer0.yyy.com:
     url: grpcs://peer0.yyy.com:7051
     tlsCACerts:
-      path: conf/tls/ZZZ/ZZZ.tls-root-ca.pem
+      path: conf/tls-root-cas/orgY.tls-root-ca.pem
 
   peer1.yyy.com:
     url: grpcs://peer1.yyy.com:7051
+    tlsCACerts:
+      path: conf/tls-root-cas/orgY.tls-root-ca.pem
+
+  peer0.zzz.com:
+    url: grpcs://peer0.zzz.com:7051
+    tlsCACerts:
+      path: conf/tls-root-cas/orgZ.tls-root-ca.pem
+
+  peer1.zzz.com:
+    url: grpcs://peer1.zzz.com:7051
    tlsCACerts:
-      path: conf/tls/ZZZ/ZZZ.tls-root-ca.pem
+      path: conf/tls-root-cas/orgZ.tls-root-ca.pem
