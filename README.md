@@ -3,7 +3,8 @@
 Documentación del proyecto de Blockchain del Padrón Federal.
 
 
-[Presentación del Proyecto](https://github.com/padfed/padfed-doc/tree/master/BlockchainPadrónFederal.pdf)
+---
+[Presentación](https://github.com/padfed/padfed-doc/tree/master/BlockchainPadrónFederal.pdf)
 
 
 ---
