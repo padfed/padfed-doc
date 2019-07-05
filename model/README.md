@@ -199,6 +199,11 @@ Aclaraciones:
 | inscripcion      | #fecha          |                    |        |        |     |
 | ds               | #fecha          |                    |        |        |     |
 
+Aclaraciones:
+
+- **motivo.desde/hasta**：Solamente los impuestos provinciales correspondientes regimenes simplificado de IIBB tendrán valores en estos campos 
+
+
 #### Ejemplo: Impuesto activo (estado AC) 
 
     per:20000000168#imp:20
