@@ -215,8 +215,7 @@ Aclaraciones:
     "estado": "AC",
     "dia": 19,
     "motivo": {
-        "id": 44, 
-        "desde":"2005-04-20"
+        "id": 44
         },
     "inscripcion": "2005-04-20",
     "ds": "2015-12-30"
