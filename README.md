@@ -2,23 +2,28 @@
 
 Documentación del proyecto de Blockchain del Padrón Federal.
 
+
+---
+[Presentación](https://github.com/padfed/padfed-doc/tree/master/BlockchainPadrónFederal.pdf)
+
+
 ---
 
-[Visión General](overview/README.md)
+[Visión General](https://github.com/padfed/padfed-doc/tree/master/overview)
 
 ![](images/network-diagram-1.png)
 
 ---
 
-[Modelo de Datos](model/README.md)
+[Modelo de Datos](https://github.com/padfed/padfed-doc/tree/master/model)
 
 ---
 
-[Testnet](testnet-network-setup/README.md)
+[Testnet](https://github.com/padfed/padfed-doc/tree/master/testnet-network-setup)
 
 ---
 
-[Chaincode](chaincode/README.md)
+[Chaincode](https://github.com/padfed/padfed-doc/tree/master/chaincode)
 
 ---
 
