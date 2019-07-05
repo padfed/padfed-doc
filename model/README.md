@@ -425,7 +425,7 @@ En esta colección se persisten los actividades de AFIP (`org 1`) y las jurisdic
 
 #### Estructura de la key
 
-    per:{id}#act:{org}.{actividad}
+    per:{id}#act:{org}.{actividad}[.{articulo}]
 
 #### Estrucura de los ítems
 
@@ -442,7 +442,7 @@ En esta colección se persisten los actividades de AFIP (`org 1`) y las jurisdic
 Aclaraciones:
 
 - **actividad**: compuesto por codigo de nomenclador y codigo de actividad, separados por guión medio.
-- **articulo**: utilizado solamente para actividades de la org `900` COMARB, puede tener valor 2 o entre 6 y 13 (:soon: debe formar parte de la key ?)
+- **articulo**: utilizado solamente para las actividades de la org `900` COMARB, puede tener valor 2 o entre 6 y 13, en cuyo caso forma parte de la key.
 
 #### Ejemplo: Actividad primaria (orden 1) para AFIP 
 
@@ -458,16 +458,16 @@ Aclaraciones:
 }
 ```
 
-#### Ejemplo: Actividad secundaria (orden > 1) para CM
+#### Ejemplo: Actividad secundaria (orden > 1) para COMARB
 
-    per:20000000168#act:900.900-302000
+    per:20000000168#act:900.900-302000.7
 
 ```json
 {
     "org": 900,
     "actividad": "900-302000",
     "articulo": "7",
-    "orden": 2,
+    "orden": 6,
     "desde": 201507,
     "ds": "2015-07-22"
 }
