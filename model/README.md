@@ -63,7 +63,7 @@ donde
 
 #### Cantidad de registros
 
-    Total 15.5 millones
+    Total 15.500.000
 
     - Contribuyentes: 15.4 millones
     - No contribuyentes: 221.000  
@@ -178,7 +178,10 @@ Aclaraciones:
 
 #### Cantidad de registros
 
-    22.6 millones
+org | cantidad
+:---: | ---:
+`1`    | `22.600.000`
+`900`  | `700.000`
 
 #### Estrucuta de la key
 
@@ -192,7 +195,7 @@ Aclaraciones:
 | estado           | string          | AC, NA, BD, BP, EX |        |        | x   |
 | periodo          | #periodomensual |                    |        |        | x   |
 | dia              | integer         |                    | 1      | 31     |     |
-| motivo :new:     | object          |                    |        |        |     | 
+| motivo           | object          |                    |        |        |     | 
 | motivo.id        | integer         |                    | 1      | 999999 | x   |
 | motivo.desde     | #fecha          |                    |        |        |     |
 | motivo.hasta     | #fecha          |                    |        |        |     |  
@@ -246,7 +249,10 @@ En esta colección se persisten los domicilios de AFIP (`org 1`) y los jurisdicc
 
 #### Cantidad de registros
 
-    Domicilios registrados en AFIP: 76.3 millones
+org | cantidad
+:---: | ---:
+`1` | `76.300.000`
+`900` | `2.500.000`
 
 #### Estrucura de la key
 
@@ -318,7 +324,9 @@ Aclaraciones:
 
 #### Cantidad de registros
 
-:question:
+org | cantidad
+:---: | ---:
+`900` | `2.500.000`
 
 #### Estructura de la key
 
@@ -352,7 +360,7 @@ Aclaraciones:
 
 #### Cantidad de registros
 
-    16 millones
+    16.000.000
 
 #### Estructura de la key
 
@@ -387,7 +395,7 @@ Aclaraciones:
 
 #### Cantidad de registros
 
-    Mínimo 600.000
+    Mínimo: 600.000
 
 #### Estructura de la key
 
@@ -425,7 +433,10 @@ En esta colección se persisten los actividades de AFIP (`org 1`) y las jurisdic
 
 #### Cantidad de registros
 
-    Actividades registradas en AFIP: 12.7 millones
+org | cantidad
+:---: | ---:
+`1` | `12.700.00`
+`900` | `1.700.000`
 
 #### Estructura de la key
 
@@ -481,7 +492,7 @@ Aclaraciones:
 
 #### Cantidad de registros
 
-    3.7 millones
+    3.700.000
 
 #### Estructura de la key
 
@@ -513,7 +524,7 @@ Aclaraciones:
 
 #### Cantidad de registros 
 
-    8.7 millones
+    8.700.000
 
 #### Estructura de la key
 
@@ -551,7 +562,7 @@ Aclaraciones:
 
 #### Cantidad de registros
 
-    6.2 millones
+    6.200.000
 
 #### Estructura de la key
 
@@ -623,7 +634,9 @@ Aclaraciones:
 
 #### Cantidad de registros
 
-:question:
+org | cantidad
+:---: | ---:
+`900` | `1.900.000`
 
 #### Estructura de la key
 
@@ -656,7 +669,7 @@ Aclaraciones:
 
 #### Cantidad de registros
 
-:question:
+    700.000
 
 #### Estructura de la key
 
@@ -688,7 +701,7 @@ Aclaraciones:
 
 #### Cantidad de registros
 
-15.5 millones
+    15.500.000
 
 #### Estructura de la key
 
