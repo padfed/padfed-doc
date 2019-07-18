@@ -31,7 +31,54 @@ docker run --rm --name block-consumer -d -v ${PWD}/conf:/conf -e TZ=America/Arge
 ```
 #### Opción 2 - Ejecución mediante docker-compose up
 
-:soon:
+
+``` sh
+
+version: "2"
+
+
+services:
+  block-consumer:
+    image: padfed/block-consumer:latest
+    container_name: block-consumer
+#    environment:
+#      TZ=America/Argentina/Buenos_Aires
+#    read_only: true
+#   tmpfs: /tmp:exec
+    working_dir: /
+    volumes:
+      - "./conf:/conf"
+    ports:
+      - "8084:8084"
+    mem_limit: 512m
+    depends_on:
+      - oracle
+#     - postgres
+
+  oracle:
+    image: sath89/oracle-xe-11g
+    container_name: block-consumer-oracle
+    ports:
+      - "1521:1521"
+    volumes:
+      - /my/oracle/data:/u01/app/oracle sath89/oracle-xe-11g
+
+#  postgres:
+#    image: postgres
+#    container_name: block-consumer-postgres
+#    ports:
+#    - "5433:5432"
+#    volumes:
+#    - ../src/main/sql-postgresql/inc:/scripts
+
+
+# Logging overwrite
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "100m"
+#        max-file: "10"
+```
 
 ---
 ## Base de Datos
@@ -358,6 +405,11 @@ order by block desc, txseq desc
 
 ### Changelog
 ---
+
+1.4.0
+* Se permite definir un límite de memoria a la JVM utilizada dentro de la imagen docker. Se incluyen ejemplos de inicio
+* Soporte de SQL Server para persistir modelo de datos. Se incorporan scripts de creación del modelo de datos para dicho motor
+* Se reapunta endpoint para metricas de monitoreo desde el endpoint "/metrics" a "/blockconsumer/metrics"
 
 1.3.1
 

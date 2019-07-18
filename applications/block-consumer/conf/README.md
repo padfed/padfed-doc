@@ -42,13 +42,3 @@ conf
 - **/conf/store/tls**: Directorio donde se ubican los archivos .pem que corresponden al par certificado/clave privada para TLS que identifica a la aplicación. El certificado debe ser emitido por la CA raiz para TLS de la organización que corre la aplicación. La organizaciones que no corren peers utilizan certificados emitidos por la organización ficticia MORGS.
 
 - **/conf/tls-root-cas**: Directorio donde se ubican los archivos .pem que corresponden a los certificados raíces de las CA para TLS de las organizaciones que corren peers.
-
-
-### Changelog
----
-
-
-1.4.0
-* Se permite definir un límite de memoria a la JVM utilizada dentro de la imagen docker. Se incluyen ejemplos de inicio
-* Soporte de SQL Server para persistir modelo de datos. Se incorporan scripts de creación del modelo de datos para dicho motor
-* Se reapunta endpoint para metricas de monitoreo desde el endpoint "/metrics" a "/blockconsumer/metrics"
