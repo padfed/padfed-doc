@@ -161,18 +161,26 @@ $ docker pull padfed/bc-proxy:latest
 #### Opción 1 - Ejecución mediante docker run
 
 ``` sh
-$ docker run --rm --tmpfs /tmp:exec --name hlf-proxy -d -v ${PWD}/conf:/conf -p 8085:8085 padfed/bc-proxy:latest
+ docker run \
+ --log-driver json-file \
+ --log-opt max-size=100m \
+ --log-opt max-file=10 \
+ -m 512m \
+ --rm \
+ --name hlf-proxy \
+ --tmpfs /tmp:exec \
+ -v ${PWD}/conf:/conf \
+ -p 8085:8085 \
+ -d \
+ padfed/bc-proxy:latest
+
 ```
 #### Opción 2 - Ejecución mediante docker-compose up
 
 Archivo `docker-comnpose.yaml`
 
 ``` sh
-version: '3.5'
-
-networks:
-  hlf-proxy:
-    name: hlf-proxy-network
+version: "2"
 
 services:
   hlf-proxy:
@@ -183,13 +191,19 @@ services:
 #    read_only: true
 #    environment:
 #      - TZ=America/Argentina/Buenos_Aires
+    mem_limit: 512m
     ports:
       - 8085:8085
     tmpfs: /tmp:exec
     volumes:
-       - "./conf:/conf"
-    networks:
-      - hlf-proxy
+      - "./conf:/conf"
+
+# Logging overwrite
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "100m"
+#        max-file: "10"
 ```
 
 ``` sh
@@ -212,7 +226,16 @@ orgX.tls-root-ca.pem | Archivos en formato PEM conteniendo los certificados X509
 ###  application.conf
 
 ```
+# Puerto para monitoreo
 application.port=8085
+
+
+# Habilita/Deshabilita invocacion a endpoint "/invoke/{channel}/{cc}"
+endpoint.invoke.enabled=true
+
+# Regexp para restringir acceso a funciones especificas del CC invocado
+endpoint.invoke.function.list.enabled=".*"
+
 
 ##FABRIC conf
 fabric.waitForEventSeconds=5
@@ -384,8 +407,15 @@ peers:
 ### Changelog
 ---
 
-1.4.1
+1.4.3
+* Se cambia comportamiento para el uso del endpoint "/invoke/{channel}/{cc}" que por default pasa a quedar inhabilitado.
+* Se incluyen 2 nuevas propiedades de configuración para habilitar/deshabilitar endpoint "/invoke/{channel}/{cc}"
+* Se reapunta endpoint para metricas de monitoreo desde el endpoint "/metrics" a "/hlfproxy/metrics"
 
+1.4.2
+* Se permite definir un límite de memoria a la JVM utilizada dentro de la imagen docker. Se incluyen ejemplos de inicio
+
+1.4.1
 * Fix: NPE invocando funciones que responden sin message
 * Fix: NPE reciviendo un error desde el chaincode cuando el request esta en modo verbose
 
