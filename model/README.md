@@ -14,7 +14,7 @@ Los registros se identifican por una key y se persisten en formato json.
 
 ### Formatos
 
-- **#cuit**: Número de 11 dígitos que debe cumplir con la validación de dígito verificador. Puede ser una CUIT, CUIL, CDI o CIE.
+- **#cuit**: Número de 11 dígitos que debe cumplir con la validación de dígito verificador. Puede ser una CUIT, CUIL, CDI o CIE (Clave de Inversor del Exterior).
 - **#organismo**: Es el código de organismo que puede ser `1` AFIP, `900` COMARB, `901` AGIP, `902` ARBA, etc.
 - **#fecha**: Es la representación textual de una fecha con formato `YYYY-MM-DD` y los valores de `DD`, `MM` y `YYYY` deben cumplir las reglas de fechas de calendario estándar.
 - Períodos:
@@ -91,7 +91,7 @@ donde
 
 Aclaraciones:
 
-- **tipoid** C:CUIT, E:CIE, I:CDI, L:CUIT
+- **tipoid** C: CUIT, E: CIE, I: CDI, L: CUIT
 - **activoid**: nueva cuit que se le asignó a la persona
 - **ch**: array de nombres de campos cuyos valores fueron modificados en la mas reciente tx
 
@@ -184,11 +184,11 @@ org | cantidad
 `1`    | `22.600.000`
 `900`  | `700.000`
 
-#### Estrucuta de la key
+#### Estructura de la key
 
     per:{id}#imp:{impuesto}
 
-#### Estrucuta de los ítems
+#### Estructura de los ítems
 
 | nombre           | tipo            | enum               | min    | max    | req |
 | ---------------- | --------------- | ------------------ | ------ | ------ | --- |
@@ -205,7 +205,7 @@ org | cantidad
 
 Aclaraciones:
 
-- **estado**: AC:activo, NA:no alcanzadom BD:baja definitiva, EX:exento
+- **estado**: AC: Activo, NA: No alcanzado, BD: Baja definitiva, EX: Exento
 - **motivo.desde/hasta**：Solamente los impuestos provinciales correspondientes regimenes simplificado de IIBB tendrán valores en estos campos 
 
 
@@ -350,7 +350,7 @@ Aclaraciones:
 
 rol | descripcón
 --- | ---
-1  | Fiscal (Jurisdicción SEde)
+1  | Fiscal (Jurisdicción Sede)
 2  | Principal de Actividades
 3  | Fiscal (en la Jurisdicción)
 4  | Otros Domicilios
@@ -360,8 +360,6 @@ rol | descripcón
 8  | Empresa en la cual se fusiona
 9  | Empresa de la UTE
 10 | Sucesiones indivisas
-
-:warning: cuando el rol apunta a un domicilio de AFIP (`org` 1) podemos necesitar agregar un segundo atributo `org` para indicar explicitamente a que org corresponde el rol. Podriamos tener `org`: org del rol, `domiorg`: org del domicilio. 
 
 #### Ejemplo: Rol "Fiscal Jurisdiccional" asignado por DGR Córdoba al domicilio orden 20.
 
@@ -376,6 +374,20 @@ rol | descripcón
     "ds":"2019-05-15"
 }
 ```
+:warning: Actualmente en `domisroles` el atributo `org` junto con `tipo` y `orden` referencian al domicilio que tiene asignado el rol. Cuando un `domirole` referencia a un domicilio cargado en AFIP, podemos necesitar agregar un segundo atributo `org` para indicar explícitamente a que organización correpsonde el rol. Podríamos tener `org` para el org del rol, `domiorg` para la referencia al domicilio. El siguiente ejemplo correspondería a un rol de domicilio de DGR Cordoba referido a un domicilio registrado en AFIP.
+
+```json
+{
+    "org": 906,   // org a la que corresponde el rol
+    "domiorg": 1, // referencia al domicilio
+    "tipo": 3,    // referencia al domicilio
+    "orden": 20,  // referencia al domicilio
+    "rol": 3,
+    "ds":"2019-05-15"
+}
+```
+
+
 ---
 ### Colección persona.categorias
 
