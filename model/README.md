@@ -91,6 +91,7 @@ donde
 
 Aclaraciones:
 
+- **tipoid** C:CUIT, E:CIE, I:CDI, L:CUIT
 - **activoid**: nueva cuit que se le asignó a la persona
 - **ch**: array de nombres de campos cuyos valores fueron modificados en la mas reciente tx
 
@@ -192,7 +193,7 @@ org | cantidad
 | nombre           | tipo            | enum               | min    | max    | req |
 | ---------------- | --------------- | ------------------ | ------ | ------ | --- |
 | impuesto         | integer         |                    | 1      | 9999   | x   |
-| estado           | string          | AC, NA, BD, BP, EX |        |        | x   |
+| estado           | string          | AC, NA, BD, EX     |        |        | x   |
 | periodo          | #periodomensual |                    |        |        | x   |
 | dia              | integer         |                    | 1      | 31     |     |
 | motivo           | object          |                    |        |        |     | 
@@ -204,6 +205,7 @@ org | cantidad
 
 Aclaraciones:
 
+- **estado**: AC:activo, NA:no alcanzadom BD:baja definitiva, EX:exento
 - **motivo.desde/hasta**：Solamente los impuestos provinciales correspondientes regimenes simplificado de IIBB tendrán valores en estos campos 
 
 
@@ -341,6 +343,25 @@ org | cantidad
 | orden           | integer    |      | 1   | 9999 | x   |
 | rol             | integer    |      | 1   | 99   | x   |
 | ds              | #fecha     |      |     |      |     |
+
+Aclaraciones:
+
+**rol**: rol o clasificación de domicilio.
+
+rol | descripcón
+--- | ---
+1  | Fiscal (Jurisdicción SEde)
+2  | Principal de Actividades
+3  | Fiscal (en la Jurisdicción)
+4  | Otros Domicilios
+5  | Unipersonal
+6  | Responsable de la Sociedad
+7  | Empresa en la cual se escinde
+8  | Empresa en la cual se fusiona
+9  | Empresa de la UTE
+10 | Sucesiones indivisas
+
+:warning: cuando el rol apunta a un domicilio de AFIP (`org` 1) podemos necesitar agregar un segundo atributo `org` para indicar explicitamente a que org corresponde el rol. Podriamos tener `org`: org del rol, `domiorg`: org del domicilio. 
 
 #### Ejemplo: Rol "Fiscal Jurisdiccional" asignado por DGR Córdoba al domicilio orden 20.
 
