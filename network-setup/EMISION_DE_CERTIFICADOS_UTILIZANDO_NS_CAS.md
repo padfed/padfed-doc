@@ -20,7 +20,7 @@ Para crear las CAs se puede copiar el proyecto `prod` en un equipo linux con `op
 
     ./setup.sh cas
 
-Si `CA_MODE=ROOTCAS` el comando crea 3 CA raices.
+Con `CA_MODE=ROOTCAS` el comando crea 3 CAs raíces.
 
 ```
 $CAS_INSTANCES_PATH
@@ -30,7 +30,7 @@ $CAS_INSTANCES_PATH
     └── tls
 ```
 
-Si `CA_MODE=ROOTCAS` crea un CA raíz y 3 itermedias.
+Con `CA_MODE=ROOTCAS` crea una CA raíz y 3 intermedias.
 
 ```
 $CAS_INSTANCES_PATH
@@ -59,4 +59,4 @@ Una vez emitidos los certificados se puede copiar el directorio `$MSPID-peerX-cr
 
     ./setup.sh init peerX
 
-`setup.sh` esta preparado para trabajar con material cryptográfico que respete la convención de nombres de archivos especificada en [MATERIAL_CRIPTOGRAFICO_NOMBRES_ARCHIVOS](MATERIAL_CRIPTOGRAFICO_NOMBRES_ARCHIVOS.md).
+`setup.sh` esta preparado para trabajar con material cryptográfico que cumpla con la convención de nombres de archivos especificada en [MATERIAL_CRIPTOGRAFICO_NOMBRES_ARCHIVOS](MATERIAL_CRIPTOGRAFICO_NOMBRES_ARCHIVOS.md).

@@ -6,7 +6,7 @@
 
 crea un directorio `$FABRIC_INSTANCE_PATH/$MSPID-peerX` conteniendo en entorno de runtime del peerX.
 
-Para correr el peer, la sesión puede posicionarse en este directorio y ejecutar
+Para correr el peer, la sesión puede posicionarse en ese directorio y ejecutar
 
     docker-compose up -d
 
@@ -16,8 +16,8 @@ El directorio `$MSPID-peerX` contiene:
 
 | subdir                            | contenido                                                                                                                                                                                    |
 | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`crypto-config`](#crypto-config) | estructuras MSP [link](https://hyperledger-fabric.readthedocs.io/en/release-1.4/msp.html#msp-setup-on-the-peer-orderer-side) y material criptográfico necesario para el peer y para el admin |
-| `gopath`                          | estructura para despilege del chaincode                                                                                                                                                      |
+| [`crypto-config`](#crypto-config) | [estructuras `MSP`](https://hyperledger-fabric.readthedocs.io/en/release-1.4/msp.html#msp-setup-on-the-peer-orderer-side) y material criptográfico necesario para el peer y para el admin |
+| `gopath`                          | estructura para el deploy del chaincode                                                                                                                                                      |
 | `.env`                            | variables de entorno referenciadas en el `docker-compose.yaml` y en los scripts de administración                                                                                            |
 | `docker-compose.yaml`             | docker compose para el peer y para el cli del admin                                                                                                                                               |
 | [`*.sh`](#scripts-para-administración-del-peer)                            | scripts para administración del peer                                                                                                                                                         |
@@ -28,12 +28,12 @@ El subdir `crypto-config` contiene:
 
 | subdir        | contenido                                                                                                                                                                                    |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `admin/msp`   | estructura MSP del admin                                                                                                                                                                     |
-| `admin/tls`   | ca, key y crt para TLS del admin                                                                                                                                                             |
-| `msp`         | estructura MSP del peer                                                                                                                                                                      |
+| `admin/msp`   | estructura `MSP` del admin                                                                                                                                                                     |
+| `admin/tls`   | ca, key y crt para `TLS` del admin                                                                                                                                                             |
+| `msp`         | estructura `MSP` del peer                                                                                                                                                                      |
 | `operations`  | ca, keys y crts del peer para `OPERATIONS` como client y como server. Las credenciales como client se utilizan exclusivamente para probar localmente la correcta configuración del servicio. |
 | `tls`         | ca, keys y crts del peer para `TLS` como client y como server.                                                                                                                               |
-| `orderer/tls` | ca de TLS de la organización que corre el orderer0.                                                                                                                                          |
+| `orderer/tls` | ca de `TLS` de la organización que corre el orderer0.                                                                                                                                          |
 
 Ejemplo del contenido de un `fabric-instance/CBA-peer0`:
 
@@ -117,9 +117,9 @@ fabric-instance
 
 | script                   | descripción |
 | ------------------------ | ----------- |
-| cc.install.sh            | instalación de chaincode
-| cc.query.sh              | ejecuación de chaincode en modo query
+| cc.install.sh            | instalación del chaincode
+| cc.query.sh              | ejecuación del chaincode en modo query
 | ch.anchor.peer.update.sh | actualización del channel para agregar el anchor peer
 | ch.fetch.block.sh        | obtención de un block
 | ch.join.sh               | join de un un peer al channel
-| crypto.admin.export.sh   | genera un directorio `$MSP-peerX-crypto-admin` conteniendo el material criptográfico del peer
+| crypto.admin.export.sh   | genera un directorio `$MSPID-peerX-crypto-admin` conteniendo el material criptográfico del peer
