@@ -253,6 +253,11 @@ netty {
   #server.threads.Max default --> Math.max(32, availableProcessors * 8)
   #overwrite like system property --> -Dserver.threads.Max
   workerThreads = ${server.threads.Max}
+  
+  http {
+    #overwrite max body size (413 Request Entity Too Large)
+    MaxContentLength = ${server.http.MaxRequestSize}
+  }  
 }
 
 server {
@@ -406,6 +411,12 @@ peers:
 
 ### Changelog
 ---
+
+1.4.4
+
+* Se incluye nueva propiedad MaxContentLength en la configuración para facilitar ajustar el tamaño máximo de un request (413 Request Entity Too Large)
+* Mejora de inicialización para evitar error NPE en escenarios de falla de conexión a los Peers en el arranque de la aplicación
+* Se soporta recibir "function" o "Function" como así también "args" o "Args" en el json del request body 
 
 1.4.3
 * Se cambia comportamiento para el uso del endpoint "/invoke/{channel}/{cc}" que por default pasa a quedar inhabilitado.
