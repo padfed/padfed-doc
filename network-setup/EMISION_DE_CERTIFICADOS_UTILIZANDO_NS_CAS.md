@@ -6,7 +6,7 @@
 
 Se puede utilizar `NS` para crear CAs de prueba o para Producción con los recaudos indicados en la documentación de `openssl`.
 
-Para crear las CAs, `NS` utiliza las opciones:
+Para crear las CAs, `NS` utiliza las opciones de configuración disponibles en `setup.conf`:
 
 | opción               | descripción                                                                  |
 | -------------------- | ---------------------------------------------------------------------------- |

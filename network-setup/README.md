@@ -11,7 +11,7 @@
 - Servicio `TLS` con autenticación de cliente
 - Servicio `OPERATIONS` opcional en cada nodo
 - State database `LevelDB`
-- Chaincode ´padfedcc´ desarrollado en `Golang`
+- Chaincode `padfedcc` desarrollado en `Golang`
 - Un Admin por cada organización que corre nodos
 - No se utilizan colecciones privadas de datos, las organizaciones agregadas a la red pueden ver todos los datos del Padrón Federal
 
@@ -49,9 +49,9 @@ Las prestaciones son opcionales y adaptables segun los requerimientos de cada or
 | `hyperledger/fabric-tools 1.4.3`   | x    |         |
 | `hyperledger/fabric-peer 1.4.3`    | x    |         |
 | `hyperledger/fabric-orderer 1.4.3` | x    | x       |
-| `hyperledger/fabric-ccenv mkdir -p   "$CRYPTO_REQUESTS_PATH-crts"1.4.3`   | x    |         |
-| `hyperledger/fabric-baseosmkdir -p   "$CRYPTO_REQUESTS_PATH-crts" 1.4.3`  | x    |         |
-mkdir -p   "$CRYPTO_REQUESTS_PATH-crts"
+| `hyperledger/fabric-ccenv 1.4.3`   | x    |         |
+| `hyperledger/fabric-baseos 1.4.3`  | x    |         |
+
 Los nodos peers intentarán bajar `fabric-ccenv` y `fabric-baseos` la primera vez que ejecuten el chaincode.
 
 - Binarios de Fabric: Los scripts de instalación intentarán bajar los siguientes binarios desde https://nexus.hyperledger.org/
@@ -61,9 +61,9 @@ Los nodos peers intentarán bajar `fabric-ccenv` y `fabric-baseos` la primera ve
 | `configtxgen`                      | x     | x        |
 | `configtxlator`                    | x     |          |
 
-- `openssl`: Para la generación del material crpytográfico. 
-- `jq`: Para procesamiento de json. 
-- `cURL`: Para bajar los binarios de Fabric y para testear el servicio `OPERATIONS`.
+- `openssl` para la generación del material crpytográfico.
+- `jq` para procesamiento de json.
+- `cURL`: para bajar los binarios de Fabric y para testear el servicio `OPERATIONS`.
 
 ### Networking
 
@@ -73,7 +73,7 @@ Los nodos peers intentarán bajar `fabric-ccenv` y `fabric-baseos` la primera ve
 - Opcional: puerto para `OPERATIONS` (defualt `9443/tcp`) no expuesto a internet.
 - Acceso a los peers y orderers de las restantes organizaciones mediante protocolo `gRPCs` con `TLS`.
 
-## Material criptográfico (introducción)
+## Material criptográfico
 
 Fabric implementa 3 tipos de servicios:
 
@@ -83,10 +83,11 @@ Fabric implementa 3 tipos de servicios:
 
 Las organizaciones que corren nodos trabajan con sus propias entidades emisoras de certificados. Fabric requiere con una CA distinta para cada servicio, o bien, una única CA raíz y CAs intermedias para cada servicio.
 
-Opcionalmente se puede utilizar `NS` para crear las CAs y/o para generar el material criptográfico (claves y requests CSR) necesario para cada identidad de la organización (nodos, admin y clientes).
-
 Para obtener mas información sobre las características del material criptográfico requerido por Fabric: 
 [link ESPECIFICACION DEL MATERIAL CRIPTOGRAFICO](MATERIAL_CRIPTOGRAFICO_ESPECIFICACION.md).
+
+Opcionalmente se puede utilizar `NS` para crear las CAs y/o para generar el material criptográfico (claves y requests CSR) necesario para cada identidad de la organización (nodos, admin y clientes).
+[link EMISION_DE_CERTIFICADOS_UTILIZANDO_NS_CAS](EMISION_DE_CERTIFICADOS_UTILIZANDO_NS_CAS.md).
 
 ## Opciones de configuración
 
@@ -96,7 +97,7 @@ Las opciones son:
 
 | opción              | descripción                                                                                                                                                                                                                                                               |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `MSPID`             | Asignado a la organización (ej: `AFIP`, `ARBA`, `COMARB`, `CBA`, etc.). Ver lista completa en **TODO**                                                                                                                                                                    |
+| `MSPID`             | Asignado a la organización (ej: `AFIP`, `ARBA`, `COMARB`, `CBA`, ...). [link ORGANIZACIONES](ORGANIZACIONES.md)                                                                                                                                                                    |
 | `DOMAIN`            | Nombre que se utilizará para los nodos (ej: `blockchain-tributaria.arba.gob.ar`)                                                                                                                                                                                          |
 | `NODE_NAMESEP`      | Caracter separador entre los prefijos `peer[n]` y el `DOMAIN` para conformar el nombre definitivo de los peers (ej `NODE_NAMESEP` establecido con guión: `peer0-blockchain-tributaria.arba.gob.ar`, establecido con punto: `peer0.blockchain-tributaria.arba.gob.ar`) |
 | `CA_MODE`           | Puede ser `ROOTCAS` (una CA raíz para cada servicio) o `INTERMEDIATECAS` (una CA raíz con intermedias para cada servicio)                                                                                                                                                 |
