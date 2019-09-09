@@ -154,7 +154,7 @@ Opcionalmente, se puede utilizar `NS` para crear las CAs y emitir los certificad
 [link EMISION DE CERTIFICADOS UTILIZANDO NS CAS](EMISION_DE_CERTIFICADOS_UTILIZANDO_NS_CAS.md).
 
 Una vez emitidos los certificados deben copiarse en `$CRYPTO_STAGE_PATH/$MSPID-peer0`, para lo cual es importante respetar la convención de nombres para el material crytográfico utililizada por `NS`. 
-[link MATERIAL CRIPTOGRAFICO - CONVENCION DE NOMRBES DE ARCHIVOS](MATERIAL_CRIPTOGRAFICO_NOMBRES_ARCHIVOS.md).
+[link MATERIAL CRIPTOGRAFICO - CONVENCION DE NOMBRES DE ARCHIVOS](MATERIAL_CRIPTOGRAFICO_NOMBRES_ARCHIVOS.md).
 
 Inicializar el peer ejecutando el comando:
 
