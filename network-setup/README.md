@@ -5,7 +5,7 @@
 `padfed-network-setup` (en adelante `NS`) es un proyecto bash que permite configurar peers y orderers para la red de blockchain del Padrón Federal con la siguiente configuración inicial:
 
 - Red Hyperledger Fabric 1.4.3
-- Un orderer RAFT corriendo en la organización AFIP
+- Un orderer SOLO corriendo en la organización AFIP (preparado para migrar a RAFT)
 - Un channel `padfedchannel`
 - Organizaciones corriendo uno o mas peers (típicamente 2)
 - Servicio `TLS` con autenticación de cliente
