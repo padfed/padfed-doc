@@ -1,6 +1,6 @@
 # Block-Consumer
 
-Aplicación que consume bloques desde un channel de una red de Blockchain [Hyperledger Fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html), procesa su contenido y lo persiste en una base de datos relacional Oracle o PostgreSQL. 
+Aplicación que consume bloques desde un channel de una red de Blockchain [Hyperledger Fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html), procesa su contenido y lo persiste en una base de datos relacional Oracle, PostgreSQL o SQL Server. 
 
 Los bloques son consumidos en orden ascendente desde el bloque 0(cero) o Genesis Block hasta el bloque mas reciente. 
 
@@ -20,67 +20,352 @@ Una organización que corre nodos de la Blockchain, puede conectar el Block-Cons
 1. DOCKER 18.09 o superior
 1. DOCKER-COMPOSE 1.23.1 o superior
 1. [Archivos de configuración](conf/README.md) 
-1. Instancia de base de datos Oracle, PostgreSQL o SQL Server (:soon:) 
+2. Instancia de base de datos `Oracle`, `PostgreSQL` o `SQL Server`
+3. Espacio en base de datos para Padrón Federal: 100 GB
+4. Reglas de firewall: acceso a por lo menos un peer de la red puerto 7051, no requiere acceder al orderer
+5. Base de datos Oracle:
+   - Schema de base de datos `HLF` creado
+   - Usuario de aplicacion `BC_APP` creado con acceso a las tablas del schema `HLF`
+6. Material criptográfico Fabric:
+   - Certificado y clave privada para `MSP` (`OU=client`) emitido para la aplicación
+   - Certificado y clave privada para `TLS` (`Extended Key Usage TLS Web Client Authentication`) emitido para la aplicación
+   - Certificado de la Root CA o intermedia de `TLS` de las organizaciones dueñas de los peers a los que se conecta
 
-## Como ejecutarlo
+## Instrucciones de instalación
 
-#### Opción 1 - Ejecución mediante docker run
+### 1- Crea la estructura de directorios para el runtime
 
-``` sh
-docker run --rm --name block-consumer -d -v ${PWD}/conf:/conf -e TZ=America/Argentina/Buenos_Aires --tmpfs /tmp:exec -p 8084:8084 -d padfed/block-consumer:latest
+``` txt
+blockconsumer
+  └── conf
+      └── crypto
+          ├── client
+          └── tlscas
 ```
-#### Opción 2 - Ejecución mediante docker-compose up
 
+### 2- Obtené los certificados y las claves privadas para `MSP` y para `TLS`
 
-``` sh
+En caso que para obtener los certiticados se utilizó `padfed-network-setup` los nombres de los archivos son los siguientes: 
 
+- `blockconsumer@blockchain-tributaria.xxxx.gob.ar-msp-client.key`
+- `blockconsumer@blockchain-tributaria.xxxx.gob.ar-msp-client.crt`
+- `blockconsumer@blockchain-tributaria.xxxx.gob.ar-tls-client.key`
+- `blockconsumer@blockchain-tributaria.xxxx.gob.ar-tls-client.crt`
+
+NOTA: podes ponerles otros nombres cualesquiera y en el `application.conf` indicar cuales son.
+
+### 3- Obtené los certificados de las Roots CA o intermedias de `TLS` de las organizaciones dueñas de los peers a los cuales se intente conectar
+
+Ej:
+
+- `tlsica.blockchain-tributaria.xxxx.gob.ar-tls.crt`
+
+### 4- Ubicá las los certificados y las claves en la estructura de directorios de runtime
+
+Tenes que ubicar los 2 pares key/crt obtenidos en el paso 2 y el crt obtenido en el paso 3 en la estructura de directorio para runtime.
+
+Ejemplo: condiguración de `blockconsumer` para conectarse a peers de AFIP y de ARBA
+
+``` txt
+blockconsumer
+  └── conf
+      └── crypto
+          ├── client
+          │   ├── blockconsumer@blockchain-tributaria.xxxx.gob.ar-msp-client.key
+          │   ├── blockconsumer@blockchain-tributaria.xxxx.gob.ar-msp-client.crt
+          │   ├── blockconsumer@blockchain-tributaria.xxxx.gob.ar-tls-client.key
+          │   └── blockconsumer@blockchain-tributaria.xxxx.gob.ar-tls-client.crt
+          └── tlscas
+              ├── tlsica.blockchain-tributaria.afip.gob.ar-tls.crt
+              └── tlsica.blockchain-tributaria.arba.gob.ar-tls.crt
+```
+
+### 5- Creá el application.conf
+
+En el directorio `blockconsumer/conf` tenes que crear un `application.conf`.
+
+El `application.conf` contiene los parámetros de conexión a la base de datos, la ubicación del `client.yaml`, la ubicación de las
+credenciales de la aplicación, ...
+
+Podes copiar el siguiente contenido, reemplazando las properties correspondientes:
+
+```conf
+# DB
+# Oracle
+# url      => jdbc:oracle:thin:@//<host>:<port>/<service_name>
+db.hlf.url = "jdbc:oracle:thin:@xxx.xxx.xxx.xxx:1521:SID"
+# Postgres
+# db.hlf.url = "jdbc:postgresql://localhost:5432/hlf_db"
+# SQLServer
+# db.hlf.url = "jdbc:jtds:sqlserver://host:1433:hlf_db"
+
+# Usuario con que se conecta la aplicacion
+db.hlf.user = bc_app
+db.hlf.password = ????
+
+# hikari https://github.com/brettwooldridge/HikariCP
+db.hlf.hikari.maximumPoolSize = 1
+db.hlf.hikari.connectionTimeout = 60000
+
+# Nombre del schema donde estan creadas las tablas (owner)
+db_hlf.schema = hlf
+
+# Nombre de la package que recibe las invocaciones desde la aplicacion. 
+# Para Postgres debe quedar seteado con "".
+db_hlf.package = bc_pkg
+#db_hlf.package = ""
+
+# Puerto para monitoreo
+application.port = 8084
+
+# FABRIC conf
+# Nombre del peer preferido
+fabric.preferred.peer = peer0.xxx.com
+
+# Regexp para filtrar nombres de peers alternativos al preferido
+# Cuando el preferido no responde o esta mas atrasado que fabric.switch.blocks.threshold
+# Block-Consumer swithea a algun peer alternativo cuyo nombre 
+# matchee con esta regexp
+fabric.switch.peers.regexp = ".*"
+fabric.switch.blocks.threshold = 10
+
+# Nombre del channel 
+fabric.channel = padfedchannel
+
+# Archivo de configuracion con la descripcion de la Blockchain 
+fabric.yaml.conf = /conf/client.yaml
+
+# fabric.auth.type = fs: indica que block-consumer se va a autenticar con un certificado y una pk de MSP residente en el file system.
+# El certificado debe ser emitido por la CA para MSP de la organizacion indicada en el archivo de configuracion ${fabric.yaml.conf} en client: organization:
+fabric.auth.type = fs
+
+fabric.channel=padfedchannel
+fabric.yaml.conf=/conf/client.yaml
+
+fabric.auth.type=fs
+fabric.auth.appuser.name=User1
+fabric.auth.appuser.keystore.path=/conf/crypto/client/blockconsumer"@"blockchain-tributaria.afip.gob.ar-msp.key
+fabric.auth.appuser.certsign.path=/conf/crypto/client/blockconsumer"@"blockchain-tributaria.afip.gob.ar-msp.crt
+fabric.tls.auth.appuser.keystore.path=/conf/crypto/client/blockconsumer"@"blockchain-tributaria.afip.gob.ar-tls-client.key
+fabric.tls.auth.appuser.certsign.path=/conf/crypto/client/blockconsumer"@"blockchain-tributaria.afip.gob.ar-tls-client.crt
+
+certificate.check.restrict=false
+
+databases {
+  #################################
+  # oracle
+  #################################
+  oracle {
+    dataSourceClassName = oracle.jdbc.pool.OracleDataSource
+    connectionTestQuery = SELECT 1 FROM DUAL
+  }
+
+  #################################
+  # postgresql
+  #################################
+  postgresql {
+    dataSourceClassName = org.postgresql.ds.PGSimpleDataSource
+    connectionTestQuery = SELECT 1
+  }
+
+  ###############################################################################################
+  # sqlserver
+  # url => jdbc:jtds:sqlserver://host:port/database
+  ###############################################################################################
+  jtds {
+    driverClassName = net.sourceforge.jtds.jdbc.Driver
+    connectionTestQuery = SELECT 1
+  }
+}
+
+fabric {
+   netty {
+     grpc {
+       //keyAliveTime in Minutes
+       NettyChannelBuilderOption.keepAliveTime="5"
+       //keepAliveTimeout in Seconds
+       NettyChannelBuilderOption.keepAliveTimeout="8"
+       NettyChannelBuilderOption.keepAliveWithoutCalls="true"
+       //maxInboundMessageSize in bytes
+       NettyChannelBuilderOption.maxInboundMessageSize="50000000"
+     }
+   }
+
+   sdk {
+     peer.retry_wait_time = "5000"
+   }
+}
+```
+
+### 6- Creá el client.yaml
+
+En el directorio `blockconsumer/conf` tenes que crear un `client.yaml`.
+
+El `client.yaml` es un archivo de configuración estándar de Fabric que sirve para describir la red de nodos a una aplicación.
+
+En futuras versiones de la aplicación esta descripción no será necesaria, porque la aplicación tendrá la capacidad de descubrir la red.
+
+Podes copiar el siguiente contenido:
+
+```yaml
+name: "Network"
+version: "1.0"
+x-loggingLevel: trace
+
+client:
+  # MSPID de la organización cuya CA emitio el certificado de MSP que utiliza la aplicación para conectarse a la red: XXX | YYY | ZZZ | MORGS
+  organization: XXX
+  logging:
+    level: info
+
+channels:
+  padfedchannel:
+    # Block-Consumer accede a los peers que tengan habilitado el rol ledgerQuery
+    peers:
+      peer0.xxx.com:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+      peer1.xxx.com:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+      peer0.zzz.com:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+      peer1.zzz.com:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+      peer0.yyy.com:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+      peer1.yyy.com:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+organizations:
+  XXX:
+    mspid: XXX
+    peers:
+      - peer0.xxx.com
+      - peer1.xxx.com
+
+  ZZZ:
+    mspid: ZZZ
+    peers:
+      - peer0.zzz.com
+      - peer1.zzz.com
+
+  ZZZ:
+    mspid: ZZZ
+    peers:
+      - peer0.yyy.com
+      - peer1.yyy.com
+
+peers:
+  peer0.xxx.com:
+    url: grpcs://peer0.xxx.com:7051
+    tlsCACerts:
+      path: conf/tlscas/tlsica.blockchain-tributaria.xxx.gob.ar-tls.crt
+
+  peer1.xxx.com:
+    url: grpcs://peer1.xxx.com:7051
+    tlsCACerts:
+      path: conf/tlscas/tlsica.blockchain-tributaria.xxx.gob.ar-tls.crt
+
+  peer0.yyy.com:
+    url: grpcs://peer0.yyy.com:7051
+    tlsCACerts:
+      path: conf/tlscas/tlsica.blockchain-tributaria.yyy.gob.ar-tls.crt
+
+  peer1.yyy.com:
+    url: grpcs://peer1.yyy.com:7051
+    tlsCACerts:
+      path: conf/tlscas/tlsica.blockchain-tributaria.yyy.gob.ar-tls.crt
+
+  peer0.zzz.com:
+    url: grpcs://peer0.zzz.com:7051
+    tlsCACerts:
+      path: conf/tlscas/tlsica.blockchain-tributaria.zzz.gob.ar-tls.crt
+
+  peer1.zzz.com:
+    url: grpcs://peer1.zzz.com:7051
+   tlsCACerts:
+      path: conf/tlscas/tlsica.blockchain-tributaria.zzz.gob.ar-tls.crt
+```
+
+### 7- Obtené la imagen docker de la aplicaciónv padfed/block-consumer:1.4.1
+
+### 8- Creá un script bash para correr el contenedor
+
+En el directorio `blockconsumer` crea un script `blockconsumer.run.sh` con el siguiente contenido:
+
+```sh
+#!/bin/bash
+
+docker run --log-opt max-size=10m \
+           --log-opt max-file=10 \
+           --rm \
+           --name blockconsumer \
+           --tmpfs /tmp:exec \
+           -v ${PWD}/conf:/conf \
+           -e TZ=America/Argentina/Buenos_Aires \
+           -p 8084:8084 \
+           -d padfed/block-consumer:1.4.1
+```
+
+Verificá que el puerto mappeado en el comando coincida con el configurado en el `application.conf`.
+
+Podes crear otro script para detener el contenedor `blockconsumer.stop.sh` con el siguiente contenido:
+
+```sh
+#!/bin/bash
+
+docker stop blockconsumer
+```
+Alternativamente podes ejecutar la aplicacion con `docker-compose` creando un el siguiente `docker-compose.yaml`:
+
+```yaml
 version: "2"
-
 
 services:
   block-consumer:
-    image: padfed/block-consumer:latest
+    image: padfed/block-consumer:1.4.1
     container_name: block-consumer
-#    environment:
-#      TZ=America/Argentina/Buenos_Aires
-#    read_only: true
-#   tmpfs: /tmp:exec
+    environment:
+      TZ=America/Argentina/Buenos_Aires
+    read_only: true
+    tmpfs: /tmp:exec
     working_dir: /
     volumes:
       - "./conf:/conf"
     ports:
       - "8084:8084"
     mem_limit: 512m
-    depends_on:
-      - oracle
-#     - postgres
 
-  oracle:
-    image: sath89/oracle-xe-11g
-    container_name: block-consumer-oracle
-    ports:
-      - "1521:1521"
-    volumes:
-      - /my/oracle/data:/u01/app/oracle sath89/oracle-xe-11g
-
-#  postgres:
-#    image: postgres
-#    container_name: block-consumer-postgres
-#    ports:
-#    - "5433:5432"
-#    volumes:
-#    - ../src/main/sql-postgresql/inc:/scripts
-
-
-# Logging overwrite
-#    logging:
-#      driver: "json-file"
-#      options:
-#        max-size: "100m"
-#        max-file: "10"
+Logging overwrite
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
 ```
 
----
 ## Base de Datos
 
 ### Modelo de Datos
@@ -138,26 +423,26 @@ donde:
 
 {tag} | entidad         | ejemplo
 --- | ---               | ---
-`per` | Persona           | `per:20123456780#per`
-`act` | Actividades       | `per:20123456780#act:1.883-123456`
-`imp` | Impuestos         | `per:20123456780#per:20`
-`dom` | Domicilios        | `per:20123456780#per:1.1.1`
-`dor` | DomiciliosRoles   | `per:20123456780#per:1.1.1.1`
-`tel` | Telefonos         | `per:20123456780#per:1`
-`jur` | Jurisdicciones    | `per:20123456780#per:900`
-`ema` | Emails            | `per:20123456780#per:1`
-`arc` | Archivos          | :soon:
-`cat` | Categorias        | `per:20123456780#cat:20.12`
-`eti` | Etiquetas         | `per:20123456780#eti:329`
-`con` | Contribuciones    | `per:20123456780#con:5244.21`
-`rel` | Relaciones        | `per:20123456780#rel:20077799975.3.15`
-`cms` | CMSedes           | `per:20123456780#cms:3`
-`wit` | Testigo (witness) | `per:20123456780#wit`
+`per` | persona           | `per:20123456780#per`
+`act` | actividades       | `per:20123456780#act:1.883-123456`
+`imp` | impuestos         | `per:20123456780#per:20`
+`dom` | domicilios        | `per:20123456780#per:1.1.1`
+`dor` | domiroles   | `per:20123456780#per:1.1.1.1`
+`tel` | telefonos         | `per:20123456780#per:1`
+`jur` | jurisdicciones    | `per:20123456780#per:900`
+`ema` | emails            | `per:20123456780#per:1`
+`arc` | archivos          | :soon:
+`cat` | categorias        | `per:20123456780#cat:20.12`
+`eti` | etiquetas         | `per:20123456780#eti:329`
+`con` | contribmunis    | `per:20123456780#con:5244.21`
+`rel` | relaciones        | `per:20123456780#rel:20077799975.3.15`
+`cms` | cmsedes           | `per:20123456780#cms:3`
+`wit` | testigo (witness) | `per:20123456780#wit`
 
 #### Versiones vigentes de las keys 
 
 Para una misma key se guarda un registro cada vez que su value es modificado. 
-Para recuperar la versión vigente de una key las queries utilizan la función analítica `MAX(block*100000+txseq) OVER(PARTITION BY key)` seleccionado el registro que tenga el mayor `block*100000+txseq`.
+Para recuperar la versión vigente de cada key las queries utilizan la función analítica `ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) as persona_id_row_number` seleccionado las filas cuando `persona_id_row_number = 1`.
 
 #### Keys eliminadas 
 
