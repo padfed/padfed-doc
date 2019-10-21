@@ -19,6 +19,10 @@ Documentación del proyecto de Blockchain del Padrón Federal.
 
 ---
 
+[Network-Setup](https://github.com/padfed/padfed-doc/tree/master/network-setup)
+
+---
+
 [Testnet](https://github.com/padfed/padfed-doc/tree/master/testnet-network-setup)
 
 ---

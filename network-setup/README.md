@@ -10,9 +10,8 @@
 - Organizaciones corriendo uno o mas peers (típicamente 2)
 - Servicio `TLS` con autenticación de cliente
 - Servicio `OPERATIONS` opcional en cada nodo
-- State database `LevelDB`
+- World State database `LevelDB`
 - Chaincode `padfedcc` desarrollado en `Golang`
-- Un Admin por cada organización que corre nodos
 - No se utilizan colecciones privadas de datos, las organizaciones agregadas a la red pueden ver todos los datos del Padrón Federal
 
 ---
@@ -35,7 +34,7 @@ Las prestaciones son opcionales y adaptables segun los requerimientos de cada or
 - Equipo dedicado, puede ser virtual
 - 4 a 8 vCPU
 - 8 a 16 GB de RAM
-- 1TB GB en disco
+- 500 GB en disco
 
 ### Software
 
