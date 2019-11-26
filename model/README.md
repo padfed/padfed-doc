@@ -628,13 +628,14 @@ Aclaraciones:
 | ------- | ------- | ---- | --- | --- | --- |
 | persona | #cuit   |      |     |     | x   |
 | tipo    | integer |      | 1   | 999 | x   |
-| subtipo | integer |      | 1   | 999 | x   |
+| subtipo | integer |      | 0   | 999 | x   |
 | desde   | #fecha  |      |     |     | x   |
 | ds      | #fecha  |      |     |     |     |
 
 Aclaraciones:
 
-- **tipo**: Inicialmente siempre `3` que son relaciones societarias.
+- **tipo 3**: relaciones societarias.
+- **tipo 18**: administrador de relaciones.
 
 #### Ejemplo: Administrador de Relaciones de una Sociedad.
 
