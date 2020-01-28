@@ -360,6 +360,7 @@ Aclaraciones:
 | 8   | Empresa en la cual se fusiona |
 | 9   | Empresa de la UTE             |
 | 10  | Sucesiones indivisas          |
+| 11  | Sin actividad                 |
 
 #### Ejemplo: Rol "Fiscal Jurisdiccional" asignado por DGR Córdoba al domicilio orden 20.
 
