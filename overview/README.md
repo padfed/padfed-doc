@@ -16,6 +16,7 @@ https://www.ca.gob.ar/hacia-un-registro-unico-tributario-a-nivel-federal
 En términos generales una Blockchain es un registro inmutable de transacciones replicado en una red de nodos. Cada nodo mantiene una copia del registro secuencial inmutable de transacciones previamente validadas mediante un protocolo de consenso. Las transacciones quedan agrupadas en bloques que incluyen un hash que vincula cada bloque con su precedente conformando una cadena de bloques.
 
 En el Padron Federal se utiliza tecnología de Blockchain para mantener una base de datos conteniendo la información del padrón de contribuyentes, compartida entre las organizaciones participantes, logrando:
+
 - la disponibilidad en casi tiempo real de los cambios que se producen sobre la información compartida,
 - la garantía de inmutabilidad de los registros, fecha y origen de cada transacción,
 - la integridad transaccional de la información, evitando la generación de incoherencias por fallas de sistemas o interrupción del servicio,
@@ -23,7 +24,7 @@ En el Padron Federal se utiliza tecnología de Blockchain para mantener una base
 - la garantía de la auditabilidad del sistema,
 - la eliminación de la necesidad de generar procesos periódicos o eventuales de conciliación o de reenvíos de registros para resolver problemas de perdida de información.
 
-## Como participan las distintas organizaciones en la Blockchain ?
+## Como participan las distintas organizaciones en la Blockchain
 
 Algunas de las organizaciones, que dispongan de infraestructura de IT adecuada, van a correr uno o mas nodos de Blockchain en su data center. Cada uno de estos nodos mantendrán un copia actualizada con los datos del padrón.
 
@@ -32,6 +33,7 @@ Para facilitar el gobierno de la red, inicialmente debieran ser pocas las organi
 Las organizaciones candidatas a correr nodos son AFIP, COMARB, ARBA, **XXX**, **YYY**.
 
 Tanto las organizaciones que corran nodos en su data center, como las que no lo hagan, van a poder acceder a los mismos servicios que ofrece la Blockchain. Estos servicios permitirán:
+
 - registrar transacciones que agregan o modifican datos del padrón
 - consultar el registro de transacciones
 - consultar el estado actual de la representación de cada contribuyente, que resulta de los sucesivos cambios aplicados por las transacciones.
@@ -124,13 +126,13 @@ Todos los componentes ejecutables de una Red Fabric están dockerizados. Inclusi
 | Nodos Orderer | Inicialmente un solo nodo corriendo en AFIP (configurado en modo Solo). |
 | Channel | Inicialmente un solo channel, denominado ``padfedchannel`` |
 | Chaincode | Inicialmente un solo chaincode, denominado ``padfedcc`` |
-| Política de Respaldo de Transacciones | A definir por el consorcio. |
+| Política de Respaldo de Transacciones | A definir por el consorcio. En la primera version de la Blockchian las tx son válidas con el solo respaldo de AFIP  |
 | CA Raices | Dos para cada organización que corra nodos. Una para emitir los certificados que MSP y la otra TLS. Las organizaciones que solamente corren aplicaciones comparten un mismo par de CA Raíces gestionada por AFIP (organización ficticia MORG "Multi Organismos" |
 | Testnet | Para el ciclo de desarrollo y pruebas se requiere  implementar una Testnet que debe tener por lo menos: 2 Organizaciones, 4 Peers y un Orderer
 
-![](/images/network-diagram-1.png)
+![](/images/network-diagram.png)
 
-## Configuación equipos Peers:
+## Configuación equipos Peers
 
 ### Hardware
 
@@ -188,5 +190,6 @@ Las aplicaciones son agnósticas al negocio. Pueden utilizarse en cualquier red 
 :soon:
 
 Webapp desarrollada por AFIP que permitirá
-- solicitar ceritificados de MSP y de TLS para las organizaciones que solamente corren aplicaciones,
+
+- solicitar ceritificados de MSP y de TLS para las organizaciones que solamente corren aplicaciones
 - gestionar el despliegue del chaincode

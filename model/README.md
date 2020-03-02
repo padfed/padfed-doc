@@ -2,13 +2,13 @@
 
 Especificación del modelo de datos de la implementación basada en blockchain de Padrón Federal.
 
-El Padrón Federal mantiene registros de contribuyentes (personas físicas o jurídica) y de personas físicas que sin ser contribuyentes están relacionadas con un contribuyente. 
+El Padrón Federal mantiene registros de contribuyentes (personas físicas o jurídica) y de personas físicas que sin ser contribuyentes están relacionadas con un contribuyente.
 
-Los registros se identifican por una key y se persisten en formato json. 
+Los registros se identifican por una key y se persisten en formato json.
 
 ## Convenciones generales
 
-- **key**: clave que identifica a un registro. La estructura de las keys respetan patrones establecidos. En la especificación de estos patrones sus componentes variables están encerrados entre llaves `{}`. 
+- **key**: clave que identifica a un registro. La estructura de las keys respetan patrones establecidos. En la especificación de estos patrones sus componentes variables están encerrados entre llaves `{}`.
 - **min** y **max**: Para los strings son longitudes y para los integers son valores.
 - **ds**: Fecha de la más reciente modificación del registro en la base de datos de AFIP.
 
@@ -23,18 +23,17 @@ Los registros se identifican por una key y se persisten en formato json.
 
 ## Registros de una Persona
 
-Los datos correspondiente a una persona se persisten en un conjunto de registros de distintos tipos. 
+Los datos correspondiente a una persona se persisten en un conjunto de registros de distintos tipos.
 
 Las keys de los registros de una persona cumplen con el siguiente patrón:
-   
+
     per:{id}#{tag}[:{item-id}]
 
-donde    
-      
-- `{id}` es la clave que identifica a la persona, formato #cuit. 
-- `{tag}` identificador del tipo de registro, formato string(3) 
-- `{item-id}` identifica al ítem dentro del tipo de registro, compuesto por valores de las propiedades que conforman la clave primaria del ítem, separados por punto.
+donde
 
+- `{id}` es la clave que identifica a la persona, formato #cuit.
+- `{tag}` identificador del tipo de registro, formato string(3)
+- `{item-id}` identifica al ítem dentro del tipo de registro, compuesto por valores de las propiedades que conforman la clave primaria del ítem, separados por punto.
 
 | \#  | nombre                                             | desc                                                  | tipo      | key tag | key ejemplo                           |  req  |
 | --- | -------------------------------------------------- | ----------------------------------------------------- | --------- | ------- | ------------------------------------- | :---: |
@@ -59,6 +58,7 @@ donde
 | 18  | [testigo](#escalar-personatestigo)                 | registro unico por persona. No puede ser actualizado. | 1(uno)    | `wit`   | `per:20123412340#wit`                 |   x   |
 
 ---
+
 ### Objeto persona.persona
 
 #### Cantidad de registros
@@ -66,9 +66,9 @@ donde
     Total 15.500.000
 
     - Contribuyentes: 15.4 millones
-    - No contribuyentes: 221.000  
-    - Personas físicas: 14 millones 
-    - Personas jurídicas: 1.5 millones 
+    - No contribuyentes: 221.000
+    - Personas físicas: 14 millones
+    - Personas jurídicas: 1.5 millones
 
 #### Estructura de la key
 
@@ -153,6 +153,7 @@ Aclaraciones:
     "ds": "2010-02-14"
 }
 ```
+
 #### Ejemplo: Persona jurídica
 
     per:30120013439#per
@@ -174,7 +175,9 @@ Aclaraciones:
     "ds": "2008-01-21"
 }
 ```
+
 ---
+
 ### Colección persona.impuestos
 
 #### Cantidad de registros
@@ -206,10 +209,9 @@ Aclaraciones:
 Aclaraciones:
 
 - **estado**: AC: Activo, NA: No alcanzado, BD: Baja definitiva, EX: Exento
-- **motivo.desde/hasta**：Solamente los impuestos provinciales correspondientes regimenes simplificado de IIBB tendrán valores en estos campos 
+- **motivo.desde/hasta**：Solamente los impuestos provinciales correspondientes regimenes simplificado de IIBB tendrán valores en estos campos
 
-
-#### Ejemplo: Impuesto activo (estado AC) 
+#### Ejemplo: Impuesto activo (estado AC)
 
     per:20000000168#imp:20
 
@@ -226,6 +228,7 @@ Aclaraciones:
     "ds": "2015-12-30"
 }
 ```
+
 #### Ejemplo: Impuesto con baja definitiva (estado BD)
 
     per:20000000168#imp:5243
@@ -237,14 +240,16 @@ Aclaraciones:
     "estado": "BD",
     "dia": 31,
     "motivo": {
-        "id": 44, 
+        "id": 44,
         "desde":"2018-04-20"
         },
     "inscripcion": "2018-06-07",
     "ds": "2018-07-10"
 }
 ```
+
 ---
+
 ### Colección persona.domicilios
 
 En esta colección se persisten los domicilios de AFIP (`org 1`) y los jurisdiccionales (`org` entre `900` y `924`)
@@ -295,7 +300,7 @@ Aclaraciones:
 - **partido** es el código del partido provincial
 - **partida** es el número de partida inmobiliaria
 - **tipo** indica el tipo de domicilio para AFIP. Una persona puede tener solamente un domcilio con tipo `1` (Fiscal para AFIP), un solo domcilio con tipo `2` (Real para AFIP) y 0 a n domicilios tipo `3`; Los domicilios jurisdiccionales (`org != 1`) siempre tienen `tipo` `3`
-- **orden** comienza desde `1` para cada `org` y `tipo` 
+- **orden** comienza desde `1` para cada `org` y `tipo`
 
 #### Ejemplo: Domicilio fiscal para AFIP
 
@@ -321,7 +326,9 @@ Aclaraciones:
     "ds": "2008-01-18"
 }
 ```
+
 ---
+
 ### Colección persona.domisroles
 
 #### Cantidad de registros
@@ -377,6 +384,7 @@ Aclaraciones:
 ```
 
 ---
+
 ### Colección persona.categorias
 
 #### Cantidad de registros
@@ -411,7 +419,9 @@ Aclaraciones:
     "ds": "2003-04-14"
 }
 ```
+
 ---
+
 ## Colección persona.contribmunis
 
 #### Cantidad de registros
@@ -480,7 +490,7 @@ Aclaraciones:
 - **actividad**: compuesto por codigo de nomenclador y codigo de actividad, separados por guión medio.
 - **articulo**: utilizado solamente para las actividades de la org `900` COMARB, puede tener valor 2 o entre 6 y 13, en cuyo caso forma parte de la key.
 
-#### Ejemplo: Actividad primaria (orden 1) para AFIP 
+#### Ejemplo: Actividad primaria (orden 1) para AFIP
 
     per:20000000168#act:1.883-772099
 
@@ -508,7 +518,9 @@ Aclaraciones:
     "ds": "2015-07-22"
 }
 ```
+
 ---
+
 ## Colección persona.etiquetas
 
 #### Cantidad de registros
@@ -540,10 +552,12 @@ Aclaraciones:
     "ds": "2003-04-11"
 }
 ```
+
 ---
+
 ## Colección persona.telefonos
 
-#### Cantidad de registros 
+#### Cantidad de registros
 
     8.700.000
 
@@ -578,7 +592,9 @@ Aclaraciones:
     "ds": "2013-12-16"
 }
 ```
+
 ---
+
 ## Coleccción persona.emails
 
 #### Cantidad de registros
@@ -612,7 +628,9 @@ Aclaraciones:
     "ds": "2016-10-20"
 }
 ```
+
 ---
+
 ### Colección persona.relaciones
 
 #### Cantidad de registros
@@ -651,7 +669,9 @@ Aclaraciones:
     "ds": "2014-04-30"
 }
 ```
+
 ---
+
 ### Colección persona.jurisdicciones
 
 #### Cantidad de registros
@@ -686,7 +706,9 @@ Aclaraciones:
     "ds": "2019-05-15"
 }
 ```
+
 ---
+
 ### Colección persona.cmsedes
 
 #### Cantidad de registros
@@ -718,7 +740,9 @@ Aclaraciones:
     "ds": "2019-04-14"
 }
 ```
+
 ---
+
 ### Escalar persona.testigo
 
 #### Cantidad de registros
@@ -740,6 +764,7 @@ Aclaraciones:
 ```
 1
 ```
+
 ## Ejemplo completo
 
     30643202812
@@ -780,10 +805,11 @@ Aclaraciones:
 ## Atributo organización
 
 **#organización** conforma los registros de tipo:
+
 - [domicilios](#colección-personadomicilios)
 - [domisroles](#colección-personadomisroles)
-- [actividades](#colección-personaactividades)   
-- [jurisdicciones](#colección-personajurisdicciones)   
+- [actividades](#colección-personaactividades)
+- [jurisdicciones](#colección-personajurisdicciones)
 
 En todos los caso, un valor mayor que 1(uno) indica que los datos del registro provienen directamente de la migración de datos efectuada por la organización identificada con ese valor, mientras que un valor igual a 1(uno) indica que los datos del registro fueron generados por una aplicación o proceso de AFIP.
 
