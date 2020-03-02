@@ -32,31 +32,31 @@ Para facilitar el gobierno de la red, inicialmente debieran ser pocas las organi
 Las organizaciones candidatas a correr nodos son AFIP, COMARB, ARBA, **XXX**, **YYY**.
 
 Tanto las organizaciones que corran nodos en su data center, como las que no lo hagan, van a poder acceder a los mismos servicios que ofrece la Blockchain. Estos servicios permitirán:
-- registrar transacciones que agregan o modifican datos del padrón 
+- registrar transacciones que agregan o modifican datos del padrón
 - consultar el registro de transacciones
 - consultar el estado actual de la representación de cada contribuyente, que resulta de los sucesivos cambios aplicados por las transacciones.
 
-## Plataforma de Blockchain utilizada 
+## Plataforma de Blockchain utilizada
 
 La plataforma de Blockchain utilizada para el Padrón Federal es Hyperledger Fabric. Fabric es un proyecto de código abierto dentro de la iniciativa Hyperledger de la Fundación Linux. Permite implementar una Blockchain de tipo privada y permisionada, de propósito general, no orientada a criptomonedas, de alta performance.
 
-https://hyperledger-fabric.readthedocs.io
+https://hyperledger-fabric.readthedocs.io/en/release-1.4/
 
 ### Componentes de una red de Blockchain Fabric
 
-- Aplicaciones clientes: 
+- Aplicaciones clientes:
 
     Son las aplicaciones que interactúan con la red de Blockchain conectándose a algunos de sus nodos. Crean transacciones y las envían a algunos de los nodos para que sean ejecutadas por los Smart Contract (Chaincodes) y posteriormente procesadas por toda la red.
 
 - Chaincode:
- 
-    En Fabric a los Smart Contract se los denomina "Chaincode". Un chaincode expone un conjunto de funciones que pueden ser invocadas por las transacciones para crear, modificar o consultar los datos que se registran en la Blockchain. 
-    
-    Fabric permite que el chaincode sea escrito en lenguajes de programación convencionales como Golang, Node o Java. 
+
+    En Fabric a los Smart Contract se los denomina "Chaincode". Un chaincode expone un conjunto de funciones que pueden ser invocadas por las transacciones para crear, modificar o consultar los datos que se registran en la Blockchain.
+
+    Fabric permite que el chaincode sea escrito en lenguajes de programación convencionales como Golang, Node o Java.
 
     https://hyperledger-fabric.readthedocs.io/en/release-1.4/smartcontract/smartcontract.html
-    
-- Transacciones: 
+
+- Transacciones:
 
     Las transacciones son creadas por las aplicaciones clientes. Cada transacción conforma una invocación a una función de un chaincode. A esta invocación se la denomina Propousal. La aplicación deben enviar el Propousal hacia uno o mas nodos tipo Peer, dependiente de la Política de Respaldo establecida en la Blockchain. Deben recopilar las respuestas obtenidas y reenvía la transacción con las respuestas a un nodo de tipo Orderer. El Orderer agrega la transacción a un bloque y enviá el bloque a todos los nodos de la red para que lo validen y actualicen la Blockchain.
 
@@ -68,14 +68,14 @@ https://hyperledger-fabric.readthedocs.io
 
     https://hyperledger-fabric.readthedocs.io/en/release-1.4/endorsement-policies.html
 
-- Peers: 
-  
+- Peers:
+
     Son los nodos encargados de ejecutar las funciones implementadas en los chaincodes (respaldar transacciones) y de mantener una copia del Ledger y del State. Eventualmente se puede correr un Nodo que no tenga instalado chaincodes, dedicado exclusivamente a mantener copias del Ledger y del State.
 
     https://hyperledger-fabric.readthedocs.io/en/release-1.4/peers/peers.html
 
-- Orderers: 
-  
+- Orderers:
+
     Son los nodos encargados de generar bloques de transacciones y de enviarlos a los nodos Peers para su validación y confirmación.
 
     https://hyperledger-fabric.readthedocs.io/en/release-1.4/arch-deep-dive.html#ordering-service-nodes-orderers
@@ -86,31 +86,31 @@ https://hyperledger-fabric.readthedocs.io
 
     https://hyperledger-fabric.readthedocs.io/en/release-1.4/channels.html
 
-- Ledger: 
-  
+- Ledger:
+
     Cadena de bloques replicada en los nodos de la red. Cada bloque contiene un conjunto de transacciones. Cada transacción contiene un conjunto de registros leídos (readSet) y de registros modificados (writeSet). Fabric persisten el Ledger en un conjunto de archivos cada uno de 64 MB.
 
     https://hyperledger-fabric.readthedocs.io/en/release-1.4/ledger/ledger.html
 
-- State: 
-  
-    Base de datos de tipo Key-Value-Store (KVS) que se mantiene actualizada en los Peers. Contiene la versión vigente de cada objeto registro en la Blockchain. Cada objeto se identifica con una KEY y tiene un VALUE que típicamente en formato JSON. Fabric permite utilizar como KVS una base de datos LevelDB o CouchDB. La implementación de Fabric ofrecida por Oracle utiliza Berkeley DB. 
+- State:
+
+    Base de datos de tipo Key-Value-Store (KVS) que se mantiene actualizada en los Peers. Contiene la versión vigente de cada objeto registro en la Blockchain. Cada objeto se identifica con una KEY y tiene un VALUE que típicamente en formato JSON. Fabric permite utilizar como KVS una base de datos LevelDB o CouchDB. La implementación de Fabric ofrecida por Oracle utiliza Berkeley DB.
 
     https://hyperledger-fabric.readthedocs.io/en/release-1.4/ledger/ledger.html#world-state
 
     https://hyperledger-fabric.readthedocs.io/en/release-1.4/arch-deep-dive.html#state
 
-- Servicio MSP: 
+- Servicio MSP:
 
-    Es el servicio encargado de manejar la membresía en la red. Identifica a las organizaciones miembros de la red y a todos los componentes y actores de la red que posee cada organización (aplicaciones, usuarios administradores y nodos). Cada componente se identificar con un un par de clave privada y certificado X509 emitido por la CA Raíz de la organización a la que pertenece. 
+    Es el servicio encargado de manejar la membresía en la red. Identifica a las organizaciones miembros de la red y a todos los componentes y actores de la red que posee cada organización (aplicaciones, usuarios administradores y nodos). Cada componente se identificar con un un par de clave privada y certificado X509 emitido por la CA Raíz de la organización a la que pertenece.
 
     https://hyperledger-fabric.readthedocs.io/en/release-1.4/membership/membership.html
-    
-- TLS: 
-  
+
+- TLS:
+
     Los nodos Fabric resuelven TLS para lo cual cada nodo debe disponer de un certificado X509 emitido por la CA Raiz de la organización a la que pertenecen. Preferiblemente la CA Raíz de TLS debe ser distinta que la de MSP.
 
-    https://hyperledger-fabric.readthedocs.io/en/release-1.4/enable_tls.html 
+    https://hyperledger-fabric.readthedocs.io/en/release-1.4/enable_tls.html
 
 Todos los componentes ejecutables de una Red Fabric están dockerizados. Inclusive cada chaincode corre en su propio docker.
 
@@ -126,7 +126,7 @@ Todos los componentes ejecutables de una Red Fabric están dockerizados. Inclusi
 | Chaincode | Inicialmente un solo chaincode, denominado ``padfedcc`` |
 | Política de Respaldo de Transacciones | A definir por el consorcio. |
 | CA Raices | Dos para cada organización que corra nodos. Una para emitir los certificados que MSP y la otra TLS. Las organizaciones que solamente corren aplicaciones comparten un mismo par de CA Raíces gestionada por AFIP (organización ficticia MORG "Multi Organismos" |
-| Testnet | Para el ciclo de desarrollo y pruebas se requiere  implementar una Testnet que debe tener por lo menos: 2 Organizaciones, 4 Peers y un Orderer 
+| Testnet | Para el ciclo de desarrollo y pruebas se requiere  implementar una Testnet que debe tener por lo menos: 2 Organizaciones, 4 Peers y un Orderer
 
 ![](/images/network-diagram-1.png)
 
@@ -141,9 +141,9 @@ Todos los componentes ejecutables de una Red Fabric están dockerizados. Inclusi
 
 ### Software
 
-- RHEL, Ubuntu, Debian   
-- DOCKER 18.09 o superior    
-- DOCKER-COMPOSE 1.23.1 o superior   
+- RHEL, Ubuntu, Debian
+- DOCKER 18.09 o superior
+- DOCKER-COMPOSE 1.23.1 o superior
 
 ### Networking
 
@@ -160,7 +160,7 @@ En principio en la Blockchain del Padrón Federal se implementará un único Cha
 
 Las funciones de actualización tendrán un mecanismo de control de acceso (ACL) basado en el identificador MSP de la aplicación que genera la transacción.
 
-Las funciones de consultas habilitadas seran puntuales. No se prevee ofrecer consultas que recuperar gran cantidad de registros. 
+Las funciones de consultas habilitadas seran puntuales. No se prevee ofrecer consultas que recuperar gran cantidad de registros.
 
 La especificación de la interfase del chaincode está disponible en https://github.com/padfed/padfed-doc/tree/master/chaincode
 
@@ -172,7 +172,7 @@ La especificación del modelo de datos está disponible en https://github.com/pa
 
 ## Aplicaciones de Integración desarrolladas por AFIP
 
-El equipo de Blockchain de AFIP desarrolló dos aplicaciones que facilitan la integración entre los sistemas informáticos de las organizaciones y los servicios de la Blockchain. Las imágenes de las aplicaciones están disponibles en Docker Hub para que puedan ser descargadas y utilizadas opcionalmente por las organizaciones miembros de la red. 
+El equipo de Blockchain de AFIP desarrolló dos aplicaciones que facilitan la integración entre los sistemas informáticos de las organizaciones y los servicios de la Blockchain. Las imágenes de las aplicaciones están disponibles en Docker Hub para que puedan ser descargadas y utilizadas opcionalmente por las organizaciones miembros de la red.
 
 Las aplicaciones son agnósticas al negocio. Pueden utilizarse en cualquier red Fabric.
 
@@ -187,6 +187,6 @@ Las aplicaciones son agnósticas al negocio. Pueden utilizarse en cualquier red 
 
 :soon:
 
-Webapp desarrollada por AFIP que permitirá 
+Webapp desarrollada por AFIP que permitirá
 - solicitar ceritificados de MSP y de TLS para las organizaciones que solamente corren aplicaciones,
 - gestionar el despliegue del chaincode
