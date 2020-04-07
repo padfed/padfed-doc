@@ -717,23 +717,25 @@ Aclaraciones:
 
 #### Estructura de la key
 
-    per:{id}#cms:{provincia}
+    per:{id}#cms:{org}.{provincia}
 
 #### Estrucura de los ítems
 
-| nombre    | tipo    | enum | min | max | req |
-| --------- | ------- | ---- | --- | --- | --- |
-| provincia | integer |      | 0   | 24  | x   |
-| desde     | #fecha  |      |     |     | x   |
-| hasta     | #fecha  |      |     |     |     |
-| ds        | #fecha  |      |     |     |     |
+| nombre    | tipo    | enum   | min | max | req |
+| --------- | ------- | ----   | --- | --- | --- |
+| org       | integer | 1, 900 |     |     | x   |
+| provincia | integer |        | 0   | 24  | x   |
+| desde     | #fecha  |        |     |     | x   |
+| hasta     | #fecha  |        |     |     |     |
+| ds        | #fecha  |        |     |     |     |
 
 #### Ejemplo
 
-    per:30120013439#cms:3
+    per:30120013439#cms:900.3
 
 ```json
 {
+    "org": 900,
     "provincia": 3,
     "desde": "2019-06-23",
     "hasta": "2019-04-14",
@@ -810,6 +812,7 @@ Aclaraciones:
 - [domisroles](#colección-personadomisroles)
 - [actividades](#colección-personaactividades)
 - [jurisdicciones](#colección-personajurisdicciones)
+- [cmsedes](#colección-personacmsedes)
 
 En todos los caso, un valor mayor que 1(uno) indica que los datos del registro provienen directamente de la migración de datos efectuada por la organización identificada con ese valor, mientras que un valor igual a 1(uno) indica que los datos del registro fueron generados por una aplicación o proceso de AFIP.
 
