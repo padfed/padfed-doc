@@ -51,10 +51,7 @@ donde
 | 11  | [relaciones](#colección-personarelaciones)         | relaciones con otras personas                         | colección | `rel`   | `per:20123412340#rel:20012531001.3.4` |       |
 | 12  | [jurisdicciones](#colección-personajurisdicciones) | jurisdicciones                                        | colección | `jur`   | `per:20123412340#jur:900.0`           |       |
 | 13  | [cmsedes](#colección-personacmsedes)               | provincias sedes para el convenio multilateral        | colección | `cms`   | `per:20123412340#cms:3`               |       |
-| 14  | archivos :soon:                                    | archivos digitalizados                                | colección |         |                                       |       |
-| 15  | fusiones :soon:                                    | fusiones de sociedades                                | colección |         |                                       |       |
-| 16  | transferencias :soon:                              | transferencias de sociedades                          | colección |         |                                       |       |
-| 17  | escisiones :soon:                                  | escisiones de sociedades                              | colección |         |                                       |       |
+| 14  | [archivos](#colección-personaarchivos)             | archivos digitalizados                                | colección |  `arc`    |  `per:20123412340#arc:1` |
 | 18  | [testigo](#escalar-personatestigo)                 | registro unico por persona. No puede ser actualizado. | 1(uno)    | `wit`   | `per:20123412340#wit`                 |   x   |
 
 ---
@@ -63,7 +60,7 @@ donde
 
 #### Cantidad de registros
 
-    Total 15.500.000
+    Total 16.200.000
 
     - Contribuyentes: 15.4 millones
     - No contribuyentes: 221.000
@@ -261,11 +258,11 @@ En esta colección se persisten los domicilios de AFIP (`org 1`) y los jurisdicc
 |  `1`  | `76.300.000` |
 | `900` |  `2.500.000` |
 
-#### Estrucura de la key
+#### Estructura de la key
 
     per:{id}#dom:{org}.{tipo}.{orden}
 
-#### Estrucura de los ítems
+#### Estructura de los ítems
 
 | nombre         | tipo          | enum | min | max     | req |
 | -------------- | ------------- | ---- | --- | ------- | --- |
@@ -341,7 +338,7 @@ Aclaraciones:
 
     per:{id}#dor:{org}.{tipo}.{orden}.{rol}
 
-#### Estrucura de los ítems
+#### Estructura de los ítems
 
 | nombre | tipo          | enum | min | max  | req |
 | ------ | ------------- | ---- | --- | ---- | --- |
@@ -395,7 +392,7 @@ Aclaraciones:
 
     per:{id}#cat:{impuesto}.{categoria}
 
-#### Estrucura de los ítems
+#### Estructura de los ítems
 
 | nombre    | tipo            | enum   | min    | max    | req |
 | --------- | --------------- | ------ | ------ | ------ | --- |
@@ -432,7 +429,7 @@ Aclaraciones:
 
     per:{id}#con:{impuesto}.{municipio}
 
-#### Estrucura de los ítems
+#### Estructura de los ítems
 
 | nombre    | tipo    | enum | min | max  | req |
 | --------- | ------- | ---- | --- | ---- | --- |
@@ -473,7 +470,7 @@ En esta colección se persisten los actividades de AFIP (`org 1`) y las jurisdic
 
     per:{id}#act:{org}.{actividad}[.{articulo}]
 
-#### Estrucura de los ítems
+#### Estructura de los ítems
 
 | nombre    | tipo          | regexp pattern            | min | max | req |
 | --------- | ------------- | ------------------------- | --- | --- | --- |
@@ -531,7 +528,7 @@ Aclaraciones:
 
     per:{id}#eti:{etiqueta}
 
-#### Estrucura de los ítems
+#### Estructura de los ítems
 
 | nombre   | tipo           | enum   | min      | max      | req |
 | -------- | -------------- | ------ | -------- | -------- | --- |
@@ -565,7 +562,7 @@ Aclaraciones:
 
     per:{id}#tel:{orden}
 
-#### Estrucura de los ítems
+#### Estructura de los ítems
 
 | nombre | tipo    | enum | min | max             | req |
 | ------ | ------- | ---- | --- | --------------- | --- |
@@ -605,7 +602,7 @@ Aclaraciones:
 
     per:{id}#ema:{orden}
 
-#### Estrucura de los ítems
+#### Estructura de los ítems
 
 | nombre    | tipo    | enum | min | max | req |
 | --------- | ------- | ---- | --- | --- | --- |
@@ -641,7 +638,7 @@ Aclaraciones:
 
     per:{id}#rel:{persona}.{tipo}.{subtipo}
 
-#### Estrucura de los ítems
+#### Estructura de los ítems
 
 | nombre  | tipo    | enum | min | max | req |
 | ------- | ------- | ---- | --- | --- | --- |
@@ -684,7 +681,7 @@ Aclaraciones:
 
     per:{id}#jur:{org}.{provincia}
 
-#### Estrucura de los ítems
+#### Estructura de los ítems
 
 | nombre    | tipo          | enum | min | max | req |
 | --------- | ------------- | ---- | --- | --- | --- |
@@ -719,7 +716,7 @@ Aclaraciones:
 
     per:{id}#cms:{org}.{provincia}
 
-#### Estrucura de los ítems
+#### Estructura de los ítems
 
 | nombre    | tipo    | enum   | min | max | req |
 | --------- | ------- | ----   | --- | --- | --- |
@@ -744,18 +741,49 @@ Aclaraciones:
 ```
 
 ---
+### Colección persona.archivos
+
+#### Cantidad de registros
+
+    desconocida
+
+#### Estructura de la key
+
+    per:{id}#arc:{orden}
+
+#### Estructura de los ítems
+
+| nombre    | tipo    | enum | min | max | req |
+| --------- | ------- | ---- | --- | --- | --- |
+| orden     | integer |      | 1   | 999 | x   |
+| tipo      | integer |      | 1   | 99  | x   |
+| ds        | #fecha  |      |     |     |     |
+
+#### Ejemplo
+
+    per:30120013439#arc:1
+
+```json
+{
+    "orden": 1,
+    "tipo": 16,
+    "ds": "2019-04-14"
+}
+```
+
+---
 
 ### Escalar persona.testigo
 
 #### Cantidad de registros
 
-    15.500.000
+    16.200.000
 
 #### Estructura de la key
 
     per:{id}#wit
 
-#### Estrucura de los ítems
+#### Estructura de los ítems
 
     1 (uno)
 
@@ -777,7 +805,7 @@ Aclaraciones:
 | `per:30643202812#per`                  | `{"tipo":"J","id":30643202812,"tipoid":"C","estado":"A","ds":"2013-11-29","razonsocial":"XXXXX XX XXXXXXXX XXXX","formajuridica":86,"mescierre":12,"contratosocial":"1976-08-21"}`           |
 | `per:30643202812#act:1.883-702091`     | `{"org":1,"actividad":"883-702091","orden":1,"desde":"2002-01-01","ds":"2019-06-03"}`                                                                                                        |
 | `per:30643202812#act:900.900-949100`   | `{"org":900,"actividad":"900-949100","orden":1,"articulo":2,"desde":"2002-01-01","ds":"2019-06-03"}`                                                                                         |
-| `per:30643202812#cms:1`                | `{"provincia":1,"desde":"2002-01-01","ds":"2019-06-03"}`                                                                                                                                     |
+| `per:30643202812#cms:900.1`            | `{"org":900,"provincia":1,"desde":"2002-01-01","ds":"2019-06-03"}`                                                                                                                      |
 | `per:30643202812#dom:1.1.1`            | `{"orden":1,"org":1,"tipo":1,"estado":6,"calle":"XX XXXXXX","numero":3371,"provincia":1,"localidad":"VILLA LYNCH","cp":"1672","nomenclador":"104","ds":"2007-10-31"}`                        |
 | `per:30643202812#dom:1.2.1`            | `{"orden":1,"org":1,"tipo":2,"estado":6,"calle":"XX XXXXXX","numero":1097,"provincia":1,"localidad":"VILLA LYNCH","cp":"1672","nomenclador":"104","ds":"2007-10-31"}`                        |
 | `per:30643202812#dom:900.3.1`          | `{"orden":1,"org":900,"tipo":3,"estado":6,"calle":"14","numero":4745,"piso":"1","unidad":"B","provincia":1,"localidad":"VILLA LYNCH (PDO. GRAL. SAN MARTIN)","cp":"1672","ds":"2019-06-03"}` |
@@ -802,7 +830,8 @@ Aclaraciones:
 | `per:30643202812#jur:900.5`            | `{"provincia":5,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`                                                                                                                           |
 | `per:30643202812#jur:900.6`            | `{"provincia":6,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`                                                                                                                           |
 | `per:30643202812#jur:900.7`            | `{"provincia":7,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`                                                                                                                           |
-| `per:30643202812#rel:20083309424.3.18` | `{"persona":20083309424,"tipo":3,"subtipo":18,"desde":"2007-09-24","ds":"2007-09-24"}`                                                                                                       |
+| `per:30643202812#rel:20083309424.3.18` | `{"persona":20083309424,"tipo":3,"subtipo":18,"desde":"2007-09-24","ds":"2007-09-24"}` |
+| `per:30643202812#arc:1`                | `{"orden":1,"tipo":16,"ds":"2007-09-24"}` |
 
 ## Atributo organización
 
