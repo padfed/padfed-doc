@@ -1,14 +1,14 @@
 # Block-Consumer
 
-Aplicación que consume bloques desde un channel de una red de Blockchain [Hyperledger Fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html), procesa su contenido y lo persiste en una base de datos relacional Oracle, PostgreSQL o SQL Server. 
+Aplicación que consume bloques desde un channel de una red de Blockchain [Hyperledger Fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html), procesa su contenido y lo persiste en una base de datos relacional Oracle, PostgreSQL o SQL Server.
 
-Los bloques son consumidos en orden ascendente desde el bloque 0(cero) o Genesis Block hasta el bloque mas reciente. 
+Los bloques son consumidos en orden ascendente desde el bloque 0(cero) o Genesis Block hasta el bloque mas reciente.
 
-Una organización, autorizada a acceder a la Blockchain que no corre nodos de la red, puede conectar el Block-Consumer mediante internet a cualquier peer de la red. 
+Una organización, autorizada a acceder a la Blockchain que no corre nodos de la red, puede conectar el Block-Consumer mediante internet a cualquier peer de la red.
 
 ![](images/deploy-accediendo-a-nodos-remotos.png)
 
-Una organización que corre nodos de la Blockchain, puede conectar el Block-Consumer a sus peers locales para lograr mejor performance de procesamiento. 
+Una organización que corre nodos de la Blockchain, puede conectar el Block-Consumer a sus peers locales para lograr mejor performance de procesamiento.
 
 ![](images/deploy-accediendo-a-nodos-locales.png)
 
@@ -19,7 +19,7 @@ Una organización que corre nodos de la Blockchain, puede conectar el Block-Cons
 1. Equipo con 2 GB de RAM
 1. DOCKER 18.09 o superior
 1. DOCKER-COMPOSE 1.23.1 o superior
-1. [Archivos de configuración](conf/README.md) 
+1. [Archivos de configuración](conf/README.md)
 2. Instancia de base de datos `Oracle`, `PostgreSQL` o `SQL Server`
 3. Espacio en base de datos para Padrón Federal: 100 GB
 4. Reglas de firewall: acceso a por lo menos un peer de la red puerto 7051, no requiere acceder al orderer
@@ -45,7 +45,7 @@ blockconsumer
 
 ### 2- Obtené los certificados y las claves privadas para `MSP` y para `TLS`
 
-En caso que para obtener los certiticados se utilizó `padfed-network-setup` los nombres de los archivos son los siguientes: 
+En caso que para obtener los certiticados se utilizó `padfed-network-setup` los nombres de los archivos son los siguientes:
 
 - `blockconsumer@blockchain-tributaria.xxxx.gob.ar-msp-client.key`
 - `blockconsumer@blockchain-tributaria.xxxx.gob.ar-msp-client.crt`
@@ -110,7 +110,7 @@ db.hlf.hikari.connectionTimeout = 60000
 # Nombre del schema donde estan creadas las tablas (owner)
 db_hlf.schema = hlf
 
-# Nombre de la package que recibe las invocaciones desde la aplicacion. 
+# Nombre de la package que recibe las invocaciones desde la aplicacion.
 # Para Postgres debe quedar seteado con "".
 db_hlf.package = bc_pkg
 #db_hlf.package = ""
@@ -124,15 +124,15 @@ fabric.preferred.peer = peer0.xxx.com
 
 # Regexp para filtrar nombres de peers alternativos al preferido
 # Cuando el preferido no responde o esta mas atrasado que fabric.switch.blocks.threshold
-# Block-Consumer swithea a algun peer alternativo cuyo nombre 
+# Block-Consumer swithea a algun peer alternativo cuyo nombre
 # matchee con esta regexp
 fabric.switch.peers.regexp = ".*"
 fabric.switch.blocks.threshold = 10
 
-# Nombre del channel 
+# Nombre del channel
 fabric.channel = padfedchannel
 
-# Archivo de configuracion con la descripcion de la Blockchain 
+# Archivo de configuracion con la descripcion de la Blockchain
 fabric.yaml.conf = /conf/client.yaml
 
 # fabric.auth.type = fs: indica que block-consumer se va a autenticar con un certificado y una pk de MSP residente en el file system.
@@ -338,6 +338,7 @@ Podes crear otro script para detener el contenedor `blockconsumer.stop.sh` con e
 
 docker stop blockconsumer
 ```
+
 Alternativamente podes ejecutar la aplicacion con `docker-compose` creando un el siguiente `docker-compose.yaml`:
 
 ```yaml
@@ -381,7 +382,7 @@ TABLE | Descripción | PRIMARY KEY | INDEX
 `BC_INVALID_TX_SET` | Ítem del READ_SET o WRITE_SET de transacciones inválidas. | `BLOCK, TXSEQ, TYPE, ITEM` | `KEY`
 
 Usuario | Desc
---- | --- 
+--- | ---
 ??? | Admin de la instancia.
 `HLF` | Dueño del schema.
 `BC_APP` | Usuario que utiliza la aplicación para conectarse a la base de datos. Debe tener permisos para ejecutar la package `HLF.BC_PKG`.
@@ -395,58 +396,30 @@ Script | Tipo | Descripción
 --- | --- | ---
 `inc/001_dcl_create_user_hlf.sql` | dcl | crea el usuario dueño del schema `HLF`
 `inc/002_ddl_create_schema_hlf.sql` | ddl | crea tablas, índices y restricciones en el schema `HLF`
-`inc/003_ddl_create_pkg.sql` | ddl | invoca al script `../rep/bc_pkg.sql` 
+`inc/003_ddl_create_pkg.sql` | ddl | invoca al script `../rep/bc_pkg.sql`
 `inc/004_dcl_create_apps_user.sql` | dcl | crea usuarios `BC_APP` y (opcional) `ROSI_APP`
 `rep/bc_pkg.sql` | ddl | create de la package `HLF.BC_PKG` que utiliza Block-Consumer leer y actualizar las tablas del schema `HLF`
 
 NOTA: Para Postgres asegurarse de ejecutar `su - postgres` y a continuación los scripts antes mencionados. Otra forma es ejecutando el script automatizado `helpers\createdb-hlf.sh`.
-    
-### Queries sobre la base de datos que carga el Block-Consumer 
+
+### Queries sobre la base de datos que carga el Block-Consumer
 
 #### Queries de negocio
 
-Si bien, Block-Consumer es una aplicación totalmente agnóstica al negocio (se puede utilizar para procesar bloques de cualquier Blockchain HLF), esta sección del doc contiene ejemplos de queries aplicables al modelo de datos del Padrón Federal. 
+Si bien, Block-Consumer es una aplicación totalmente agnóstica al negocio (se puede utilizar para procesar bloques de cualquier Blockchain HLF), esta sección del doc contiene ejemplos de queries aplicables al modelo de datos del Padrón Federal.
 
-Las queries propuestas utilizan condiciones con `LIKE` (o `REGEXP_LIKE` o `REGEXP_REPLACE` cuando requieren mayor precisión) aplicadas sobre las `KEY` y/o los `VALUE` registrados en la tabla `HLF.BC_VALID_TX_WRITE_SET`.
+Las queries propuestas utilizan condiciones de búsqueda con `LIKE`, `REGEXP_LIKE` y `REGEXP_REPLACE` aplicadas sobro los atributos `KEY` y/o `VALUE` registrados en la tabla `HLF.BC_VALID_TX_WRITE_SET`.
 
-#### Estructura de las keys
+La estructura de las keys y los values están especificados en [Model](/model/README.md)
 
-Para aplicar condiciones sobre `HLF.BC_VALID_TX_WRITE_SET.KEY` es importante entender el patrón con el que se construyen las key: 
+#### Versiones vigentes de las keys
 
-    per:{persona-id}#{tag}[:{item-id}]
-
-donde:
-
-- {persona-id} es la CUIT, CUIL o CDI, clave que identifica a la persona, formato NUMBER(11) 
-- {tag} identifica al tipo de componente, formato STRING(3) 
-- {item-id} identifica al ítem dentro del tipo de componente, compuesto por valores de las propiedades que conforman la clave primaria del ítem separados por punto.
-
-{tag} | entidad         | ejemplo
---- | ---               | ---
-`per` | persona           | `per:20123456780#per`
-`act` | actividades       | `per:20123456780#act:1.883-123456`
-`imp` | impuestos         | `per:20123456780#per:20`
-`dom` | domicilios        | `per:20123456780#per:1.1.1`
-`dor` | domiroles   | `per:20123456780#per:1.1.1.1`
-`tel` | telefonos         | `per:20123456780#per:1`
-`jur` | jurisdicciones    | `per:20123456780#per:900`
-`ema` | emails            | `per:20123456780#per:1`
-`arc` | archivos          | :soon:
-`cat` | categorias        | `per:20123456780#cat:20.12`
-`eti` | etiquetas         | `per:20123456780#eti:329`
-`con` | contribmunis    | `per:20123456780#con:5244.21`
-`rel` | relaciones        | `per:20123456780#rel:20077799975.3.15`
-`cms` | cmsedes           | `per:20123456780#cms:3`
-`wit` | testigo (witness) | `per:20123456780#wit`
-
-#### Versiones vigentes de las keys 
-
-Para una misma key se guarda un registro cada vez que su value es modificado. 
+Para una misma key se guarda un registro cada vez que su value es modificado.
 Para recuperar la versión vigente de cada key las queries utilizan la función analítica `ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) as persona_id_row_number` seleccionado las filas cuando `persona_id_row_number = 1`.
 
-#### Keys eliminadas 
+#### Keys eliminadas
 
-Las keys eliminadas quedan marcadas con `HLF.BC_VALID_TX_WRITE_SET.IS_DELETE='T'`. 
+Las keys eliminadas quedan marcadas con `HLF.BC_VALID_TX_WRITE_SET.IS_DELETE='T'`.
 Las queries, una vez que recuperan la versión vigente de una key, verifican que no haya sido eliminada mediante la condición `IS_DELETE IS NULL`.
 
 #### Ejemplos
@@ -483,10 +456,10 @@ order by block desc, txseq desc
 ``` sql
 -- Cantidad de keys agrupadas por tag
 --
-select tag, 
+select tag,
 sum(case is_delete when 'T' then 0 else 1 end) as count_no_deleted,
 sum(case is_delete when 'T' then 1 else 0 end) as count_deleted
-from 
+from
 (
 select key,
 substr(key, 17, 3) as tag,
@@ -508,7 +481,7 @@ from
 (
 select key,
 ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number,
-is_delete 
+is_delete
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#per'
 ) x
@@ -516,22 +489,22 @@ where persona_id_row_number = 1 and is_delete is null
 ```
 
 ``` sql
--- Impuestos: 
+-- Impuestos:
 -- + cantidad de personas inscriptas en el impuesto
 -- + cantidad de inscripciones en el impuestos
 --
 -- + para extraer la cuit/cuil desde la key: substr(key, 5, 11)
--- + para extrear el impuesto desde el value se utiliza una regexp 
+-- + para extrear el impuesto desde el value se utiliza una regexp
 --
 select
-impuesto, 
+impuesto,
 count(distinct substr(key, 5, 11)) as personas,
 count(*) as personas_impuestos
-from 
+from
 (
 select key,
 to_number(regexp_replace(value, '^(\{.{0,})("impuesto":)([0-9]{1,4})(,.{1,}|\})$', '\3')) as impuesto,
-ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number, is_delete 
+ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number, is_delete
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#imp:%'
 ) x
@@ -545,15 +518,15 @@ Los componentes de tipo `domicilio` y `actividad` puede tener ítems nacionales 
 ``` sql
 -- Actividades nacionales (org 1)
 --
-select 
+select
 count(*)
-from 
+from
 (
-select key, 
-ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number, is_delete 
+select key,
+ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number, is_delete
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#act:_.%'
-or    key like 'per:___________#act:883-%' /* registros guardados en la testnet con versiones del chaincode anteriores a 0.5.x */   
+or    key like 'per:___________#act:883-%' /* registros guardados en la testnet con versiones del chaincode anteriores a 0.5.x */
 ) x
 where persona_id_row_number = 1 and is_delete is null
 ```
@@ -561,12 +534,12 @@ where persona_id_row_number = 1 and is_delete is null
 ``` sql
 -- Domicilios jurisdiccionales (orgs entre 900 y 924)
 --
-select 
+select
 count(*)
-from 
+from
 (
-select key,  
-ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number, is_delete 
+select key,
+ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number, is_delete
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#dom:9%'
 ) x
@@ -576,12 +549,12 @@ where persona_id_row_number = 1 and is_delete is null
 ``` sql
 -- Domicilios jurisdiccionales informados por COMARB (org 900)
 --
-select 
+select
 count(*)
-from 
+from
 (
-select key,  
-ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number, is_delete 
+select key,
+ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number, is_delete
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#dom:900.%'
 ) x
@@ -591,14 +564,14 @@ where persona_id_row_number = 1 and is_delete is null
 ``` sql
 -- Domicilios agrupados por provincia
 --
-select 
+select
 provincia,
 count(distinct persona) as personas,
 count(*) as domicilios
 from
 (
 select key, persona,
-case provincia   
+case provincia
 when '0'  then 'CABA'
 when '1'  then 'BUENOS AIRES'
 when '2'  then 'CATAMARCA'
@@ -627,12 +600,12 @@ else '#sin provincia'
 end as provincia
 from
 (
-select key, 
+select key,
 substr(key, 5, 11) as persona,
 regexp_replace(value, '^(\{.{0,})("provincia":)([0-9]{1,2})(,.{1,}|\})$', '\3') as provincia,
 ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number, is_delete
 from hlf.bc_valid_tx_write_set
-where key like 'per:___________#dom:%' 
+where key like 'per:___________#dom:%'
 ) x
 where persona_id_row_number = 1 and is_delete is null
 ) x2
@@ -643,12 +616,12 @@ order by personas desc
 ``` sql
 -- Domicilios nacionales ubicados en Cordoba (provincia 3)
 --
-select 
+select
 count(*)
-from 
+from
 (
-select key,  
-ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number, 
+select key,
+ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number,
 is_delete
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#dom:_.%'
@@ -664,10 +637,10 @@ where persona_id_row_number = 1 and is_delete is null
 ``` sql
 -- Ultimos 50 bloques procesados
 --
-with max_block as 
+with max_block as
 (
 select max(block) as mb from hlf.bc_block
-) 
+)
 select *
 from   hlf.bc_block, max_block
 where  block between max_block.mb-50 and max_block.mb
@@ -677,19 +650,19 @@ order by block desc
 ``` sql
 -- Txs de deploy de chaincode
 --
-select * from 
+select * from
 hlf.bc_valid_tx tx
 where chaincode='lscc'
 order by block desc, txseq desc
-``` 
+```
 
 ``` sql
 -- Txs inválidas
 --
-select * from 
+select * from
 hlf.bc_invalid_tx tx
 order by block desc, txseq desc
-``` 
+```
 
 ### Changelog
 ---
