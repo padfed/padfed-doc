@@ -26,9 +26,9 @@ Una organización que corre nodos de la Blockchain, puede conectar el Block-Cons
 1. Base de datos:
    - Schema de base de datos `HLF` creado
    - Usuario de aplicacion `BC_APP` creado con acceso a las tablas del schema `HLF`
-1. Material criptográfico Fabric:
-   - Certificado y clave privada para `MSP` (`OU=client`) emitido para la aplicación
-   - Certificado y clave privada para `TLS` (`Extended Key Usage TLS Web Client Authentication`) emitido para la aplicación
+1. Material criptográfico `x509` en formato `PEM`:
+   - Clave privada y certificado para el Servicio de Membresia [`MSP`](https://hyperledger-fabric.readthedocs.io/en/latest/membership/membership.html), con `OU=client` en el `DN`
+   - Clave privada y certificado para [`TLS`](https://hyperledger-fabric.readthedocs.io/en/latest/enable_tls.html), con `Extended Key Usage TLS Web Client Authentication`
    - Certificado de la Root CA o intermedia de `TLS` de las organizaciones dueñas de los peers a los que se conecta
 
 ## Instrucciones de instalación
@@ -52,7 +52,7 @@ En caso que para obtener los certiticados se utilizó `padfed-network-setup` los
 - `blockconsumer@blockchain-tributaria.xxxx.gob.ar-tls-client.key`
 - `blockconsumer@blockchain-tributaria.xxxx.gob.ar-tls-client.crt`
 
-NOTA: podes ponerles otros nombres cualesquiera y en el `application.conf` indicar cuales son.
+NOTA: podes asignarles otros nombres cualesquiera indicándolos en el [`application.conf`](#5--cre%c3%a1-el-applicationconf).
 
 ### 3- Obtené los certificados de las Roots CA o intermedias de `TLS` de las organizaciones dueñas de los peers a los cuales se intente conectar
 
