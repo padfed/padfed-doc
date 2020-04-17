@@ -847,31 +847,31 @@ En todos los caso, un valor mayor que 1(uno) indica que los datos del registro p
 
 Las organizaciones son:
 
-| coddigo | nombre                    | provincia |
-| :-----: | ------------------------- | --------: |
-|    1    | AFIP                      |           |
-|   900   | COMISION ARBITRAL         |           |
-|   901   | AGIP - CABA               |         0 |
-|   902   | ARBA - BUENOS AIRES       |         1 |
-|   903   | AGR - CATAMARCA           |         2 |
-|   904   | RENTAS CORDOBA            |         3 |
-|   905   | DGR - CORRIENTES          |         4 |
-|   906   | DGR - CHACO               |        16 |
-|   907   | DGR - CHUBUT              |        17 |
-|   908   | ATER - ENTRE RIOS         |         5 |
-|   909   | DGR - FORMOSA             |        18 |
-|   910   | DPR - JUJUY               |         6 |
-|   911   | DGR - LA PAMPA            |        21 |
-|   912   | DGIP - LA RIOJA           |        18 |
-|   913   | ATM - MENDOZA             |         7 |
-|   914   | DGR - MISIONES            |        19 |
-|   915   | DPR - NEUQUEN             |        20 |
-|   916   | DGR - RIO NEGRO           |        22 |
-|   917   | DGR - SALTA               |         9 |
-|   918   | DGR - SAN JUAN            |        10 |
-|   919   | DPIP - SAN LUIS           |        11 |
-|   920   | ASIP - SANTA CRUZ         |        23 |
-|   921   | API - SANTA FE            |        12 |
-|   922   | DGR - SANTIAGO DEL ESTERO |        19 |
-|   923   | DGR - TIERRA DEL FUEGO    |        24 |
-|   924   | DGR - TUCUMAN             |        23 |
+| coddigo | nombre                    | provincia | MSP
+| :-----: | ------------------------- | --------: | ---
+|    1    | AFIP                      |           | AFIP
+|   900   | COMISION ARBITRAL         |           | COMARB
+|   901   | AGIP - CABA               |         0 | org901
+|   902   | ARBA - BUENOS AIRES       |         1 | ARBA
+|   903   | AGR - CATAMARCA           |         2 | org903
+|   904   | RENTAS CORDOBA            |         3 | CBA
+|   905   | DGR - CORRIENTES          |         4 | org905
+|   906   | DGR - CHACO               |        16 | org906
+|   907   | DGR - CHUBUT              |        17 | org907
+|   908   | ATER - ENTRE RIOS         |         5 | org908
+|   909   | DGR - FORMOSA             |        18 | org909
+|   910   | DPR - JUJUY               |         6 | org910
+|   911   | DGR - LA PAMPA            |        21 | org911
+|   912   | DGIP - LA RIOJA           |        18 | org912
+|   913   | ATM - MENDOZA             |         7 | org913
+|   914   | DGR - MISIONES            |        19 | org914
+|   915   | DPR - NEUQUEN             |        20 | org915
+|   916   | DGR - RIO NEGRO           |        22 | org916
+|   917   | DGR - SALTA               |         9 | org917
+|   918   | DGR - SAN JUAN            |        10 | org918
+|   919   | DPIP - SAN LUIS           |        11 | org919
+|   920   | ASIP - SANTA CRUZ         |        23 | org920
+|   921   | API - SANTA FE            |        12 | org921
+|   922   | DGR - SANTIAGO DEL ESTERO |        19 | org922
+|   923   | DGR - TIERRA DEL FUEGO    |        24 | org923
+|   924   | DGR - TUCUMAN             |        23 | org924
