@@ -1,16 +1,16 @@
 # Block-Consumer
 
-Aplicación que consume bloques desde un channel de una red de Blockchain [Hyperledger Fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html), procesa su contenido y lo persiste en una base de datos relacional Oracle, PostgreSQL o SQL Server.
+Aplicación que consume bloques desde un channel de una red de Blockchain [Hyperledger Fabric 1.4 LTS](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html), procesa su contenido y lo persiste en una base de datos relacional Oracle, PostgreSQL o SQL Server.
 
 Los bloques son consumidos en orden ascendente desde el bloque 0(cero) o Genesis Block hasta el bloque mas reciente.
 
 Una organización, autorizada a acceder a la Blockchain que no corre nodos de la red, puede conectar el Block-Consumer mediante internet a cualquier peer de la red.
 
-![](images/deploy-accediendo-a-nodos-remotos.png)
+![deploy-accediendo-a-nodos-remotos](images/deploy-accediendo-a-nodos-remotos.png)
 
 Una organización que corre nodos de la Blockchain, puede conectar el Block-Consumer a sus peers locales para lograr mejor performance de procesamiento.
 
-![](images/deploy-accediendo-a-nodos-locales.png)
+![deploy-accediendo-a-nodos-locales](images/deploy-accediendo-a-nodos-locales.png)
 
 ---
 
@@ -20,13 +20,13 @@ Una organización que corre nodos de la Blockchain, puede conectar el Block-Cons
 1. DOCKER 18.09 o superior
 1. DOCKER-COMPOSE 1.23.1 o superior
 1. [Archivos de configuración](conf/README.md)
-2. Instancia de base de datos `Oracle`, `PostgreSQL` o `SQL Server`
-3. Espacio en base de datos para Padrón Federal: 100 GB
-4. Reglas de firewall: acceso a por lo menos un peer de la red puerto 7051, no requiere acceder al orderer
-5. Base de datos Oracle:
+1. Instancia de base de datos `Oracle`, `PostgreSQL` o `SQL Server`
+1. Espacio en base de datos para Padrón Federal: 100 GB
+1. Reglas de firewall: acceso a por lo menos un peer de la red puerto 7051, no requiere acceder al orderer
+1. Base de datos Oracle:
    - Schema de base de datos `HLF` creado
    - Usuario de aplicacion `BC_APP` creado con acceso a las tablas del schema `HLF`
-6. Material criptográfico Fabric:
+1. Material criptográfico Fabric:
    - Certificado y clave privada para `MSP` (`OU=client`) emitido para la aplicación
    - Certificado y clave privada para `TLS` (`Extended Key Usage TLS Web Client Authentication`) emitido para la aplicación
    - Certificado de la Root CA o intermedia de `TLS` de las organizaciones dueñas de los peers a los que se conecta
@@ -371,7 +371,7 @@ Logging overwrite
 
 ### Modelo de Datos
 
-![](images/diagrama-de-entidad-relaciones.png)
+![diagrama-de-entidad-relaciones](images/diagrama-de-entidad-relaciones.png)
 
 TABLE | Descripción | PRIMARY KEY | INDEX
 --- | --- | --- | ---
