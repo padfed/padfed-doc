@@ -1,10 +1,10 @@
 # Block-Consumer
 
-Aplicación que consume bloques desde un channel de una red de Blockchain [Hyperledger Fabric 1.4 LTS](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html), procesa su contenido y lo persiste en una base de datos relacional Oracle, PostgreSQL o SQL Server.
+Aplicación que lee bloques desde un channel de una red de Blockchain [Hyperledger Fabric 1.4 LTS](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html), procesa su contenido y lo persiste en una base de datos relacional Oracle, PostgreSQL o SQL Server.
 
-Los bloques son consumidos en orden ascendente desde el bloque 0(cero) o Genesis Block hasta el bloque mas reciente.
+Los bloques son leidos en orden ascendente desde el bloque 0(cero) o Genesis Block, hasta el bloque mas reciente.
 
-Una organización, autorizada a acceder a la Blockchain que no corre nodos de la red, puede conectar el Block-Consumer mediante internet a cualquier peer de la red.
+Una organización, autorizada a acceder a la Blockchain que no corre nodos de la red, puede conectar el Block-Consumer a cualquier peer de la red mediante internet.
 
 ![deploy-accediendo-a-nodos-remotos](images/deploy-accediendo-a-nodos-remotos.png)
 
@@ -54,7 +54,7 @@ En caso que para obtener los certiticados se utilizó `padfed-network-setup` los
 
 NOTA: podes asignarles otros nombres cualesquiera indicándolos en el [`application.conf`](#5--cre%c3%a1-el-applicationconf).
 
-### 3- Obtené los certificados de las Roots CA o intermedias de `TLS` de las organizaciones dueñas de los peers a los cuales se intente conectar
+### 3- Obtené los certificados de las Roots CA o intermedias de `TLS` de las organizaciones dueñas de los peers a los cuales se conecta
 
 Ej:
 
@@ -84,8 +84,7 @@ blockconsumer
 
 En el directorio `blockconsumer/conf` tenes que crear un `application.conf`.
 
-El `application.conf` contiene los parámetros de conexión a la base de datos, la ubicación del `client.yaml`, la ubicación de las
-credenciales de la aplicación, ...
+El `application.conf` contiene los parámetros de conexión a la base de datos, la ubicación del `client.yaml`, la ubicación de las credenciales de la aplicación, ...
 
 Podes copiar el siguiente contenido, reemplazando las properties correspondientes:
 
@@ -309,7 +308,11 @@ peers:
       path: conf/tlscas/tlsica.blockchain-tributaria.zzz.gob.ar-tls.crt
 ```
 
-### 7- Obtené la imagen docker de la aplicaciónv padfed/block-consumer:1.4.1
+### 7- Obtené la imagen de la aplicación padfed/block-consumer:1.4.1
+
+```bash
+docker pull padfed/block-consumer:1.4.1
+```
 
 ### 8- Creá un script bash para correr el contenedor
 
@@ -339,7 +342,7 @@ Podes crear otro script para detener el contenedor `blockconsumer.stop.sh` con e
 docker stop blockconsumer
 ```
 
-Alternativamente podes ejecutar la aplicacion con `docker-compose` creando un el siguiente `docker-compose.yaml`:
+Alternativamente podes ejecutar la aplicacion con `docker-compose` con el siguiente `docker-compose.yaml`:
 
 ```yaml
 version: "2"
@@ -402,11 +405,11 @@ Script | Tipo | Descripción
 
 NOTA: Para Postgres asegurarse de ejecutar `su - postgres` y a continuación los scripts antes mencionados. Otra forma es ejecutando el script automatizado `helpers\createdb-hlf.sh`.
 
-### Queries sobre la base de datos que carga el Block-Consumer
+### Queries sobre la base de datos que carga Block-Consumer
 
 #### Queries de negocio
 
-Si bien, Block-Consumer es una aplicación totalmente agnóstica al negocio (se puede utilizar para procesar bloques de cualquier Blockchain HLF), esta sección del doc contiene ejemplos de queries aplicables al modelo de datos del Padrón Federal.
+Si bien, Block-Consumer es una aplicación totalmente agnóstica al negocio (se puede utilizar para procesar bloques de cualquier Blockchain HLF), esta sección contiene ejemplos de queries aplicables al modelo de datos del Padrón Federal.
 
 Las queries propuestas utilizan condiciones de búsqueda con `LIKE`, `REGEXP_LIKE` y `REGEXP_REPLACE` aplicadas sobro los atributos `KEY` y/o `VALUE` registrados en la tabla `HLF.BC_VALID_TX_WRITE_SET`.
 
@@ -414,8 +417,9 @@ La estructura de las keys y los values están especificados en [Model](/model/RE
 
 #### Versiones vigentes de las keys
 
-Para una misma key se guarda un registro cada vez que su value es modificado.
-Para recuperar la versión vigente de cada key las queries utilizan la función analítica `ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) as persona_id_row_number` seleccionado las filas cuando `persona_id_row_number = 1`.
+Para una misma key se guarda un registro cada vez que su value es modificado. Un mismo bloque no puede contener mas de una modificacion sobre la misma key.
+
+Para recuperar la versión vigente de cada key las queries utilizan la función analítica `MAX(BLOCK) OVER(PARTITION BY KEY)` con el filtro `BLOCK = MAX_BLOCK`.
 
 #### Keys eliminadas
 
@@ -431,12 +435,12 @@ select *
 from
 (
 select i.*,
-ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number
+MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK
 from hlf.bc_valid_tx_write_set i
 where key like 'per:20000021629#%'
 and   key not like '%#wit' -- descarta el testigo
 ) x
-where persona_id_row_number = 1 and is_delete is null
+where BLOCK = MAX_BLOCK and IS_DELETE is null
 order by length(key), key
 ```
 
@@ -450,7 +454,7 @@ from hlf.bc_valid_tx_write_set i
 left join hlf.bc_valid_tx t
 using (block, txseq)
 where i.key like 'per:20000021629#per'
-order by block desc, txseq desc
+order by block desc
 ```
 
 ``` sql
@@ -463,12 +467,11 @@ from
 (
 select key,
 substr(key, 17, 3) as tag,
-ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number,
-is_delete
+MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK, BLOCK, IS_DELETE
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#___%'
 ) x
-where persona_id_row_number = 1
+where BLOCK = MAX_BLOCK
 group by tag
 order by tag
 ```
@@ -480,12 +483,11 @@ select count(*)
 from
 (
 select key,
-ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number,
-is_delete
+MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK, BLOCK, IS_DELETE
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#per'
 ) x
-where persona_id_row_number = 1 and is_delete is null
+where BLOCK = MAX_BLOCK and is_delete is null
 ```
 
 ``` sql
@@ -494,7 +496,7 @@ where persona_id_row_number = 1 and is_delete is null
 -- + cantidad de inscripciones en el impuestos
 --
 -- + para extraer la cuit/cuil desde la key: substr(key, 5, 11)
--- + para extrear el impuesto desde el value se utiliza una regexp
+-- + para extrear el impuesto desde la key se utiliza una regexp
 --
 select
 impuesto,
@@ -503,62 +505,60 @@ count(*) as personas_impuestos
 from
 (
 select key,
-to_number(regexp_replace(value, '^(\{.{0,})("impuesto":)([0-9]{1,4})(,.{1,}|\})$', '\3')) as impuesto,
-ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number, is_delete
+to_number(regexp_replace(key, '^per:\d{11}#imp:(\d+)$', '\1')) as impuesto,
+MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK, BLOCK, IS_DELETE
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#imp:%'
 ) x
-where persona_id_row_number = 1 and is_delete is null
+where BLOCK = MAX_BLOCK and is_delete is null
 group by impuesto
 order by impuesto
 ```
 
-Los componentes de tipo `domicilio` y `actividad` puede tener ítems nacionales (org 1) o jurisdiccionales (org entre 900 y 924). Para discriminar entre ítem nacionales o jurisdiccionales se introduce el id del org en el patrón del `LIKE`.
-
 ``` sql
--- Actividades nacionales (org 1)
+-- Actividades del nomenclador 883
 --
 select
 count(*)
 from
 (
 select key,
-ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number, is_delete
+MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK, BLOCK, IS_DELETE
 from hlf.bc_valid_tx_write_set
-where key like 'per:___________#act:_.%'
-or    key like 'per:___________#act:883-%' /* registros guardados en la testnet con versiones del chaincode anteriores a 0.5.x */
+where key like 'per:___________#act:1.883-%'
+or    key like 'per:___________#act:883-%' /* actividades en la Testnet registradas con versiones del chaincode anteriores a 0.5.x */
 ) x
-where persona_id_row_number = 1 and is_delete is null
+where BLOCK = MAX_BLOCK and is_delete is null
 ```
 
 ``` sql
--- Domicilios jurisdiccionales (orgs entre 900 y 924)
+-- Domicilios "no consolidados"
 --
 select
 count(*)
 from
 (
 select key,
-ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number, is_delete
+MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK, BLOCK, IS_DELETE
 from hlf.bc_valid_tx_write_set
-where key like 'per:___________#dom:9%'
+where key like 'per:___________#dom:9__.%'
 ) x
-where persona_id_row_number = 1 and is_delete is null
+where BLOCK = MAX_BLOCK and is_delete is null
 ```
 
 ``` sql
--- Domicilios jurisdiccionales informados por COMARB (org 900)
+-- Domicilios "no consolidados" informados por COMARB (org 900)
 --
 select
 count(*)
 from
 (
 select key,
-ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number, is_delete
+MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK, BLOCK, IS_DELETE
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#dom:900.%'
 ) x
-where persona_id_row_number = 1 and is_delete is null
+where BLOCK = MAX_BLOCK and is_delete is null
 ```
 
 ``` sql
@@ -602,32 +602,31 @@ from
 (
 select key,
 substr(key, 5, 11) as persona,
-regexp_replace(value, '^(\{.{0,})("provincia":)([0-9]{1,2})(,.{1,}|\})$', '\3') as provincia,
-ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number, is_delete
+regexp_replace(value, '^\{.*"provincia":(\d+).*\}$', '\1') as provincia,
+MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK, BLOCK, IS_DELETE
 from hlf.bc_valid_tx_write_set
 where key like 'per:___________#dom:%'
 ) x
-where persona_id_row_number = 1 and is_delete is null
+where BLOCK = MAX_BLOCK and is_delete is null
 ) x2
 group by provincia
-order by personas desc
+order by personas DESC
 ```
 
 ``` sql
--- Domicilios nacionales ubicados en Cordoba (provincia 3)
+-- Domicilios ubicados en Cordoba (provincia 3)
 --
 select
 count(*)
 from
 (
-select key,
-ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY block desc, txseq desc) AS persona_id_row_number,
-is_delete
+select key, value,
+MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK, BLOCK, IS_DELETE
 from hlf.bc_valid_tx_write_set
-where key like 'per:___________#dom:_.%'
-and   regexp_like(value, '^\{.{0,}"provincia":3(,.{1,}|\})$')
+where key like 'per:___________#dom:%'
 ) x
-where persona_id_row_number = 1 and is_delete is null
+where BLOCK = MAX_BLOCK and is_delete is null
+and   regexp_like(value, '^\{.*"provincia":3(,".+\}|\})$')
 ```
 
 ---
@@ -686,4 +685,4 @@ order by block desc, txseq desc
 
 - Script para resetear la base de datos Oracle sin necesidad de recrear los objetos
 - Permite configurar tamaño máximo de bloque a consumir
-- Entrypoint de monitoreo `/metrics` compatible con [Prometheus](https://prometheus.io/)
+- Entrypoint de monitoreo `/metrics` compatible con [`Prometheus`](https://prometheus.io/)
