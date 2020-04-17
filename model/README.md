@@ -50,7 +50,7 @@ donde
 | 10  | [emails](#coleccción-personaemails)                | emails                                                | colección | `ema`   | `per:20123412340#ema:2`               |       |
 | 11  | [relaciones](#colección-personarelaciones)         | relaciones con otras personas                         | colección | `rel`   | `per:20123412340#rel:20012531001.3.4` |       |
 | 12  | [jurisdicciones](#colección-personajurisdicciones) | jurisdicciones                                        | colección | `jur`   | `per:20123412340#jur:900.0`           |       |
-| 13  | [cmsedes](#colección-personacmsedes)               | provincias sedes para el convenio multilateral        | colección | `cms`   | `per:20123412340#cms:3`               |       |
+| 13  | [cmsedes](#colección-personacmsedes)               | provincias sedes para el convenio multilateral        | colección | `cms`   | `per:20123412340#cms:900.3`               |       |
 | 14  | [archivos](#colección-personaarchivos)             | archivos digitalizados                                | colección |  `arc`    |  `per:20123412340#arc:1` |
 | 18  | [testigo](#escalar-personatestigo)                 | registro unico por persona. No puede ser actualizado. | 1(uno)    | `wit`   | `per:20123412340#wit`                 |   x   |
 
