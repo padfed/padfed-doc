@@ -17,13 +17,13 @@ Una organización que corre nodos de la Blockchain, puede conectar el Block-Cons
 ## Requisitos para la instalación
 
 1. Equipo con 2 GB de RAM
-1. DOCKER 18.09 o superior
-1. DOCKER-COMPOSE 1.23.1 o superior
-1. [Archivos de configuración](conf/README.md)
+1. `DOCKER 18.09` o superior
+1. `DOCKER-COMPOSE 1.23.1` o superior
+1. Archivos de configuración [`application.conf`](#5--cre%c3%a1-el-applicationconf) y [`client.yaml`](#6--cre%c3%a1-el-clientyaml)
 1. Instancia de base de datos `Oracle`, `PostgreSQL` o `SQL Server`
 1. Espacio en base de datos para Padrón Federal: 100 GB
 1. Reglas de firewall: acceso a por lo menos un peer de la red puerto 7051, no requiere acceder al orderer
-1. Base de datos Oracle:
+1. Base de datos:
    - Schema de base de datos `HLF` creado
    - Usuario de aplicacion `BC_APP` creado con acceso a las tablas del schema `HLF`
 1. Material criptográfico Fabric:
