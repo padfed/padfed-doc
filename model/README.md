@@ -1,6 +1,6 @@
 # PADFED - Blockchain - Modelo de Datos
 
-Especificación del modelo de datos de la implementación basada en blockchain de Padrón Federal.
+Especificación del modelo de datos de la implementación basada en blockchain del Padrón Federal.
 
 El Padrón Federal mantiene registros de contribuyentes (personas físicas o jurídica) y de personas físicas que sin ser contribuyentes están relacionadas con un contribuyente.
 
@@ -8,18 +8,18 @@ Los registros se identifican por una key y se persisten en formato json.
 
 ## Convenciones generales
 
-- **key**: clave que identifica a un registro. La estructura de las keys respetan patrones establecidos. En la especificación de estos patrones sus componentes variables están encerrados entre llaves `{}`.
-- **min** y **max**: Para los strings son longitudes y para los integers son valores.
-- **ds**: Fecha de la más reciente modificación del registro en la base de datos de AFIP.
+- **`key`**: clave que identifica a un registro. La estructura de las keys respetan patrones establecidos. En la especificación de estos patrones sus componentes variables están encerrados entre llaves `{}`.
+- **`min`** y **`max`**: Para los strings son longitudes y para los integers son valores.
+- **`ds`**: Fecha de la más reciente modificación del registro en la base de datos de AFIP.
 
 ### Formatos
 
-- **#cuit**: Número de 11 dígitos que debe cumplir con la validación de dígito verificador. Puede ser una CUIT, CUIL, CDI o CIE (Clave de Inversor del Exterior).
-- **#organización**: Código de organización que puede ser `1` AFIP, `900` COMARB, `901` AGIP, `902` ARBA, etc. Esta explicado con mas profundidad en [Atributo organización](#atributo-organización)
-- **#fecha**: Es la representación textual de una fecha con formato `YYYY-MM-DD` y los valores de `DD`, `MM` y `YYYY` deben cumplir las reglas de fechas de calendario estándar.
+- **`#cuit`**: Número de 11 dígitos que debe cumplir con la validación de dígito verificador. Puede ser una CUIT, CUIL, CDI o CIE (Clave de Inversor del Exterior).
+- **`#organización`**: Código de organización explicado en [Atributo organización](#atributo-organización)
+- **`#fecha`**: Es la representación textual de una fecha con formato `YYYY-MM-DD` y los valores de `DD`, `MM` y `YYYY` deben cumplir las reglas de fechas de calendario estándar.
 - Períodos:
-  - **#periodomensual**: Formato `YYYYMM`, donde `MM` debe estar en rango [`00`, `12`] e `YYYY` debe estar en el rango [`1000`,`9999`].
-  - **#periododiario**: Formato `YYYYMMDD`, donde `MM` debe estar en rango [`00`, `12`] y `DD` puede debe ser `00` si el `MM` es `00` o bien estar en el rango [`01`,`NN`] donde `NN` es la cantidad de días correspondiente al mes `MM` e `YYYY` debe estar en el rango [`1000`,`9999`].
+  - **`#periodomensual`**: Formato `YYYYMM`, donde `MM` debe estar en rango [`00`, `12`] e `YYYY` debe estar en el rango [`1000`,`9999`].
+  - **`#periododiario`**: Formato `YYYYMMDD`, donde `MM` debe estar en rango [`00`, `12`] y `DD` puede debe ser `00` si el `MM` es `00` o bien estar en el rango [`01`,`NN`] donde `NN` es la cantidad de días correspondiente al mes `MM` e `YYYY` debe estar en el rango [`1000`,`9999`].
 
 ## Registros de una Persona
 
@@ -88,9 +88,9 @@ donde
 
 Aclaraciones:
 
-- **tipoid** C: CUIT, E: CIE, I: CDI, L: CUIT
-- **activoid**: nueva cuit que se le asignó a la persona
-- **ch**: array de nombres de campos cuyos valores fueron modificados en la mas reciente tx
+- **`tipoid`**: C: CUIT, E: CIE, I: CDI, L: CUIT
+- **`activoid`**: nueva cuit que se le asignó a la persona
+- **`ch`**: array de nombres de campos cuyos valores fueron modificados en la mas reciente tx
 
 ##### Datos de personas físicas
 
@@ -108,7 +108,7 @@ Aclaraciones:
 
 Aclaraciones:
 
-- **materno**: apellido materno
+- **`materno`**: apellido materno
 
 ##### Datos de personas jurídicas
 
@@ -125,7 +125,7 @@ Aclaraciones:
 
 Aclaraciones:
 
-- **inscripcion**：puede ser en IGJ (registro 1) o en otro registro público de sociedades
+- **`inscripcion`** puede ser en IGJ (`registro: 1`) o en otro registro público de sociedades
 
 #### Ejemplo: Persona física
 
@@ -205,8 +205,8 @@ Aclaraciones:
 
 Aclaraciones:
 
-- **estado**: AC: Activo, NA: No alcanzado, BD: Baja definitiva, EX: Exento
-- **motivo.desde/hasta**：Solamente los impuestos provinciales correspondientes regimenes simplificado de IIBB tendrán valores en estos campos
+- **`estado`**: AC: Activo, NA: No alcanzado, BD: Baja definitiva, EX: Exento
+- **`motivo.desde/hasta`**: Solamente los impuestos provinciales correspondientes regimenes simplificado de IIBB tendrán valores en estos campos
 
 #### Ejemplo: Impuesto activo (estado AC)
 
@@ -249,8 +249,6 @@ Aclaraciones:
 
 ### Colección persona.domicilios
 
-En esta colección se persisten los domicilios de AFIP (`org 1`) y los jurisdiccionales (`org` entre `900` y `924`)
-
 #### Cantidad de registros
 
 |  org  |     cantidad |
@@ -292,12 +290,12 @@ En esta colección se persisten los domicilios de AFIP (`org 1`) y los jurisdicc
 
 Aclaraciones:
 
-- **unidad** es "Oficina, Departamento o Local"
-- **nombre** es "Nombre de Fantasia"
-- **partido** es el código del partido provincial
-- **partida** es el número de partida inmobiliaria
-- **tipo** indica el tipo de domicilio para AFIP. Una persona puede tener solamente un domcilio con tipo `1` (Fiscal para AFIP), un solo domcilio con tipo `2` (Real para AFIP) y 0 a n domicilios tipo `3`; Los domicilios jurisdiccionales (`org != 1`) siempre tienen `tipo` `3`
-- **orden** comienza desde `1` para cada `org` y `tipo`
+- **`unidad`** es "Oficina, Departamento o Local"
+- **`nombre`** es "Nombre de Fantasia"
+- **`partido`** es el código del partido provincial
+- **`partida`** es el número de partida inmobiliaria
+- **`tipo`** indica el tipo de domicilio para AFIP. Una persona puede tener un único domicilio `tipo 1` (Fiscal para AFIP), un único domicilio `tipo 2` (Real para AFIP) y 0 a N domicilios `tipo 3`; Los domicilios informados por las jurisdiccionales (`org > 1`) siempre tienen `tipo 3`
+- **`orden`** comienza desde `1` para cada `org` y `tipo`
 
 #### Ejemplo: Domicilio fiscal para AFIP
 
@@ -358,12 +356,6 @@ Aclaraciones:
 | 2   | Principal de Actividades      |
 | 3   | Fiscal (en la Jurisdicción)   |
 | 4   | Otros Domicilios              |
-| 5   | Unipersonal                   |
-| 6   | Responsable de la Sociedad    |
-| 7   | Empresa en la cual se escinde |
-| 8   | Empresa en la cual se fusiona |
-| 9   | Empresa de la UTE             |
-| 10  | Sucesiones indivisas          |
 | 11  | Sin actividad                 |
 
 #### Ejemplo: Rol "Fiscal Jurisdiccional" asignado por DGR Córdoba al domicilio orden 20.
@@ -457,8 +449,6 @@ Aclaraciones:
 ---
 ### Colección persona.actividades
 
-En esta colección se persisten los actividades de AFIP (`org 1`) y las jurisdiccionales (`org` entre `900` y `924`)
-
 #### Cantidad de registros
 
 |  org  |    cantidad |
@@ -484,8 +474,8 @@ En esta colección se persisten los actividades de AFIP (`org 1`) y las jurisdic
 
 Aclaraciones:
 
-- **actividad**: compuesto por codigo de nomenclador y codigo de actividad, separados por guión medio.
-- **articulo**: utilizado solamente para las actividades de la org `900` COMARB, puede tener valor 2 o entre 6 y 13, en cuyo caso forma parte de la key.
+- **`actividad`**: compuesto por codigo de nomenclador y codigo de actividad, separados por guión medio.
+- **`articulo`**: utilizado solamente para las actividades de la org `900` COMARB, puede tener valor 2 o entre 6 y 13, en cuyo caso forma parte de la key.
 
 #### Ejemplo: Actividad primaria (orden 1) para AFIP
 
@@ -650,8 +640,8 @@ Aclaraciones:
 
 Aclaraciones:
 
-- **tipo 3**: relaciones societarias.
-- **tipo 18**: administrador de relaciones.
+- **`tipo: 3`**: relaciones societarias.
+- **`tipo: 18`**: administrador de relaciones.
 
 #### Ejemplo: Administrador de Relaciones de una Sociedad.
 
