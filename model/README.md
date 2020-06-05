@@ -27,7 +27,7 @@ Los datos correspondiente a una persona se persisten en un conjunto de registros
 
 Las keys de los registros de una persona cumplen con el siguiente patrón:
 
-    per:{id}#{tag}[:{item-id}]
+`per:{id}#{tag}[:{item-id}]`
 
 donde
 
@@ -35,41 +35,43 @@ donde
 - `{tag}` identificador del tipo de registro, formato string(3)
 - `{item-id}` identifica al ítem dentro del tipo de registro, compuesto por valores de las propiedades que conforman la clave primaria del ítem, separados por punto.
 
-| \#  | nombre                                             | desc                                                  | tipo      | key tag | key ejemplo                           |  req  |
-| --- | -------------------------------------------------- | ----------------------------------------------------- | --------- | ------- | ------------------------------------- | :---: |
-|     | id                                                 | id de la persona                                      | #cuit     |         |                                       |   x   |
-| 1   | [persona](#objeto-personapersona)                  | datos identificatorios de la persona                  | objeto    | `per`   | `per:20123412340#per`                 |   x   |
-| 2   | [impuestos](#colección-personaimpuestos)           | inscripciones en impuestos                            | colección | `imp`   | `per:20123412340#imp:20`              |       |
-| 3   | [domicilios](#colección-personadomicilios)         | domicilios                                            | colección | `dom`   | `per:20123412340#dom:900.3.4`         |       |
-| 4   | [domisroles](#colección-personadomisroles)         | roles de los domicilios                               | colección | `dor`   | `per:20123412340#dor:900.3.4.3`       |       |
-| 5   | [categorias](#colección-personacategorias)         | categorias de monotributo y autonomos                 | colección | `cat`   | `per:20123412340#cat:20.1`            |       |
-| 6   | [contribmunis](#colección-personacontribmunis)     | contribuciones municipales                            | colección | `con`   | `per:20123412340#con:5244.98`         |       |
-| 7   | [actividades](#colección-personaactividades)       | actividades económicas                                | colección | `act`   | `per:20123412340#act:1.883-123456`    |       |
-| 8   | [etiquetas](#colección-personaetiquetas)           | caracterizaciones                                     | colección | `eti`   | `per:20123412340#eti:160`             |       |
-| 9   | [telefonos](#colección-personatelefonos)           | telefonos                                             | colección | `tel`   | `per:20123412340#tel:5`               |       |
-| 10  | [emails](#coleccción-personaemails)                | emails                                                | colección | `ema`   | `per:20123412340#ema:2`               |       |
-| 11  | [relaciones](#colección-personarelaciones)         | relaciones con otras personas                         | colección | `rel`   | `per:20123412340#rel:20012531001.3.4` |       |
-| 12  | [jurisdicciones](#colección-personajurisdicciones) | jurisdicciones                                        | colección | `jur`   | `per:20123412340#jur:900.0`           |       |
-| 13  | [cmsedes](#colección-personacmsedes)               | provincias sedes para el convenio multilateral        | colección | `cms`   | `per:20123412340#cms:900.3`               |       |
-| 14  | [archivos](#colección-personaarchivos)             | archivos digitalizados                                | colección |  `arc`    |  `per:20123412340#arc:1` |
-| 18  | [testigo](#escalar-personatestigo)                 | registro unico por persona. No puede ser actualizado. | 1(uno)    | `wit`   | `per:20123412340#wit`                 |   x   |
+| \#  | nombre                                   | desc                                                  | tipo      | key tag | key ejemplo                           |  req  |
+| --- | ---------------------------------------- | ----------------------------------------------------- | --------- | ------- | ------------------------------------- | :---: |
+|     | id                                       | id de la persona                                      | #cuit     |         |                                       |   x   |
+| 1   | [persona](#personapersona)               | datos identificatorios de la persona                  | objeto    | `per`   | `per:20123412340#per`                 |   x   |
+| 2   | [impuestos](#personaimpuestos)           | inscripciones en impuestos                            | colección | `imp`   | `per:20123412340#imp:20`              |       |
+| 3   | [domicilios](#personadomicilios)         | domicilios                                            | colección | `dom`   | `per:20123412340#dom:900.3.4`         |       |
+| 4   | [domisroles](#personadomisroles)         | roles de los domicilios                               | colección | `dor`   | `per:20123412340#dor:900.3.4.3`       |       |
+| 5   | [categorias](#personacategorias)         | categorias de monotributo y autonomos                 | colección | `cat`   | `per:20123412340#cat:20.1`            |       |
+| 6   | [contribmunis](#personacontribmunis)     | contribuciones municipales                            | colección | `con`   | `per:20123412340#con:5244.98`         |       |
+| 7   | [actividades](#personaactividades)       | actividades económicas                                | colección | `act`   | `per:20123412340#act:1.883-123456`    |       |
+| 8   | [etiquetas](#personaetiquetas)           | caracterizaciones                                     | colección | `eti`   | `per:20123412340#eti:160`             |       |
+| 9   | [telefonos](#personatelefonos)           | telefonos                                             | colección | `tel`   | `per:20123412340#tel:5`               |       |
+| 10  | [emails](#personaemails)                 | emails                                                | colección | `ema`   | `per:20123412340#ema:2`               |       |
+| 11  | [relaciones](#personarelaciones)         | relaciones con otras personas                         | colección | `rel`   | `per:20123412340#rel:20012531001.3.4` |       |
+| 12  | [jurisdicciones](#personajurisdicciones) | jurisdicciones                                        | colección | `jur`   | `per:20123412340#jur:900.0`           |       |
+| 13  | [cmsedes](#personacmsedes)               | provincias sedes para el convenio multilateral        | colección | `cms`   | `per:20123412340#cms:900.3`               |       |
+| 14  | [archivos](#personaarchivos)             | archivos digitalizados                                | colección |  `arc`    |  `per:20123412340#arc:1` |
+| 18  | [testigo](#personatestigo)               | registro unico por persona. No puede ser actualizado. | 1(uno)    | `wit`   | `per:20123412340#wit`                 |   x   |
 
 ---
 
-### Objeto persona.persona
+### persona.persona
 
 #### Cantidad de registros
 
-    Total 16.200.000
+```json
+Total 16.200.000
 
-    - Contribuyentes: 15.4 millones
-    - No contribuyentes: 221.000
-    - Personas físicas: 14 millones
-    - Personas jurídicas: 1.5 millones
+- Contribuyentes: 15.4 millones
+- No contribuyentes: 221.000
+- Personas físicas: 14 millones
+- Personas jurídicas: 1.5 millones
+```
 
 #### Estructura de la key
 
-    per:{id}#per
+`per:{id}#per`
 
 #### Estructura del objeto
 
@@ -129,7 +131,7 @@ Aclaraciones:
 
 #### Ejemplo: Persona física
 
-    per:20000000168#per
+`per:20000000168#per`
 
 ```json
 {
@@ -153,7 +155,7 @@ Aclaraciones:
 
 #### Ejemplo: Persona jurídica
 
-    per:30120013439#per
+`per:30120013439#per`
 
 ```json
 {
@@ -175,7 +177,7 @@ Aclaraciones:
 
 ---
 
-### Colección persona.impuestos
+### persona.impuestos
 
 #### Cantidad de registros
 
@@ -186,7 +188,7 @@ Aclaraciones:
 
 #### Estructura de la key
 
-    per:{id}#imp:{impuesto}
+`per:{id}#imp:{impuesto}`
 
 #### Estructura de los ítems
 
@@ -210,7 +212,7 @@ Aclaraciones:
 
 #### Ejemplo: Impuesto activo (estado AC)
 
-    per:20000000168#imp:20
+`per:20000000168#imp:20`
 
 ```json
 {
@@ -228,7 +230,7 @@ Aclaraciones:
 
 #### Ejemplo: Impuesto con baja definitiva (estado BD)
 
-    per:20000000168#imp:5243
+`per:20000000168#imp:5243`
 
 ```json
 {
@@ -247,7 +249,7 @@ Aclaraciones:
 
 ---
 
-### Colección persona.domicilios
+### persona.domicilios
 
 #### Cantidad de registros
 
@@ -258,7 +260,7 @@ Aclaraciones:
 
 #### Estructura de la key
 
-    per:{id}#dom:{org}.{tipo}.{orden}
+`per:{id}#dom:{org}.{tipo}.{orden}`
 
 #### Estructura de los ítems
 
@@ -299,7 +301,7 @@ Aclaraciones:
 
 #### Ejemplo: Domicilio fiscal para AFIP
 
-    per:20000000168#dom:1.1.1
+`per:20000000168#dom:1.1.1`
 
 ```json
 {
@@ -324,19 +326,13 @@ Aclaraciones:
 
 ---
 
-### Colección persona.domisroles
+### persona.domisroles
 
-#### Cantidad de registros
+#### Estructura de la key #dor
 
-|  org  |    cantidad |
-| :---: | ----------: |
-| `900` | `2.500.000` |
+`per:{id}#dor:{org}.{tipo}.{orden}.{rol}`
 
-#### Estructura de la key
-
-    per:{id}#dor:{org}.{tipo}.{orden}.{rol}
-
-#### Estructura de los ítems
+#### Estructura de #dor
 
 | nombre | tipo          | enum | min | max  | req |
 | ------ | ------------- | ---- | --- | ---- | --- |
@@ -350,17 +346,17 @@ Aclaraciones:
 
 **rol**: rol o clasificación de domicilio.
 
-| rol | descripcón                    |
-| --- | ----------------------------- |
-| 1   | Fiscal (Jurisdicción Sede)    |
-| 2   | Principal de Actividades      |
-| 3   | Fiscal (en la Jurisdicción)   |
-| 4   | Otros Domicilios              |
-| 11  | Sin actividad                 |
+| rol | descripción                    |
+| --- | ------------------------------ |
+| 1   | Fiscal (Jurisdicción Sede)     |
+| 2   | Principal de Actividades       |
+| 3   | Fiscal (en la Jurisdicción)    |
+| 4   | Otros Domicilios con Actividad |
+| 11  | Sin Actividad                  |
 
-#### Ejemplo: Rol "Fiscal Jurisdiccional" asignado por DGR Córdoba al domicilio orden 20.
+#### Ejemplo: Rol "Fiscal Jurisdiccional" asignado por DGR Córdoba al domicilio orden 20
 
-    per:20000000168#dor:904.3.20.3
+`per:20000000168#dor:904.3.20.3`
 
 ```json
 {
@@ -374,17 +370,13 @@ Aclaraciones:
 
 ---
 
-### Colección persona.categorias
+### persona.categorias
 
-#### Cantidad de registros
+#### Estructura de la key #cat
 
-    16.000.000
+`per:{id}#cat:{impuesto}.{categoria}`
 
-#### Estructura de la key
-
-    per:{id}#cat:{impuesto}.{categoria}
-
-#### Estructura de los ítems
+#### Estructura de #cat
 
 | nombre    | tipo            | enum   | min    | max    | req |
 | --------- | --------------- | ------ | ------ | ------ | --- |
@@ -397,7 +389,7 @@ Aclaraciones:
 
 #### Ejemplo
 
-    per:20000000168#cat:20.1
+`per:20000000168#cat:20.1`
 
 ```json
 {
@@ -411,17 +403,13 @@ Aclaraciones:
 
 ---
 
-## Colección persona.contribmunis
+### persona.contribmunis
 
-#### Cantidad de registros
+#### Estructura de la key #con
 
-    Mínimo: 600.000
+`per:{id}#con:{impuesto}.{municipio}`
 
-#### Estructura de la key
-
-    per:{id}#con:{impuesto}.{municipio}
-
-#### Estructura de los ítems
+#### Estructura de #con
 
 | nombre    | tipo    | enum | min | max  | req |
 | --------- | ------- | ---- | --- | ---- | --- |
@@ -434,7 +422,7 @@ Aclaraciones:
 
 #### Ejemplo
 
-    per:20000000168#con:5244.98
+`per:20000000168#con:5244.98`
 
 ```json
 {
@@ -446,21 +434,16 @@ Aclaraciones:
     "ds": "2018-07-10"
 }
 ```
+
 ---
-### Colección persona.actividades
 
-#### Cantidad de registros
+### persona.actividades
 
-|  org  |    cantidad |
-| :---: | ----------: |
-|  `1`  | `12.700.00` |
-| `900` | `1.700.000` |
+#### Estructura de la key #act
 
-#### Estructura de la key
+`per:{id}#act:{org}.{actividad}[.{articulo}]`
 
-    per:{id}#act:{org}.{actividad}[.{articulo}]
-
-#### Estructura de los ítems
+#### Estructura de #act
 
 | nombre    | tipo          | regexp pattern            | min | max | req |
 | --------- | ------------- | ------------------------- | --- | --- | --- |
@@ -479,7 +462,7 @@ Aclaraciones:
 
 #### Ejemplo: Actividad primaria (orden 1) para AFIP
 
-    per:20000000168#act:1.883-772099
+`per:20000000168#act:1.883-772099`
 
 ```json
 {
@@ -493,7 +476,7 @@ Aclaraciones:
 
 #### Ejemplo: Actividad secundaria (orden > 1) para COMARB
 
-    per:20000000168#act:900.900-302000.7
+`per:20000000168#act:900.900-302000.7`
 
 ```json
 {
@@ -508,17 +491,13 @@ Aclaraciones:
 
 ---
 
-## Colección persona.etiquetas
+### persona.etiquetas
 
-#### Cantidad de registros
+#### Estructura de la key #eti
 
-    3.700.000
+`per:{id}#eti:{etiqueta}`
 
-#### Estructura de la key
-
-    per:{id}#eti:{etiqueta}
-
-#### Estructura de los ítems
+#### Estructura de #eti
 
 | nombre   | tipo           | enum   | min      | max      | req |
 | -------- | -------------- | ------ | -------- | -------- | --- |
@@ -529,7 +508,7 @@ Aclaraciones:
 
 #### Ejemplo
 
-    per:20000000168#eti:160
+`per:20000000168#eti:160`
 
 ```json
 {
@@ -542,17 +521,13 @@ Aclaraciones:
 
 ---
 
-## Colección persona.telefonos
+### persona.telefonos
 
-#### Cantidad de registros
+#### Estructura de la key #tel
 
-    8.700.000
+`per:{id}#tel:{orden}`
 
-#### Estructura de la key
-
-    per:{id}#tel:{orden}
-
-#### Estructura de los ítems
+#### Estructura de #tel
 
 | nombre | tipo    | enum | min | max             | req |
 | ------ | ------- | ---- | --- | --------------- | --- |
@@ -566,7 +541,7 @@ Aclaraciones:
 
 #### Ejemplo
 
-    per:20000000168#tel:1
+`per:20000000168#tel:1`
 
 ```json
 {
@@ -582,17 +557,13 @@ Aclaraciones:
 
 ---
 
-## Coleccción persona.emails
+### persona.emails
 
-#### Cantidad de registros
+#### Estructura de la key #ema
 
-    6.200.000
+`per:{id}#ema:{orden}`
 
-#### Estructura de la key
-
-    per:{id}#ema:{orden}
-
-#### Estructura de los ítems
+#### Estructura de #ema
 
 | nombre    | tipo    | enum | min | max | req |
 | --------- | ------- | ---- | --- | --- | --- |
@@ -604,7 +575,7 @@ Aclaraciones:
 
 #### Ejemplo
 
-    per:20000000168#ema:1
+`per:20000000168#ema:1`
 
 ```json
 {
@@ -618,15 +589,11 @@ Aclaraciones:
 
 ---
 
-### Colección persona.relaciones
-
-#### Cantidad de registros
-
-:soon:
+### persona.relaciones
 
 #### Estructura de la key
 
-    per:{id}#rel:{persona}.{tipo}.{subtipo}
+`per:{id}#rel:{persona}.{tipo}.{subtipo}`
 
 #### Estructura de los ítems
 
@@ -643,9 +610,9 @@ Aclaraciones:
 - **`tipo: 3`**: relaciones societarias.
 - **`tipo: 18`**: administrador de relaciones.
 
-#### Ejemplo: Administrador de Relaciones de una Sociedad.
+#### Ejemplo: Administrador de Relaciones de una Sociedad
 
-    per:30120013439#rel:20012531001.3.18
+`per:30120013439#rel:20012531001.3.18`
 
 ```json
 {
@@ -659,7 +626,7 @@ Aclaraciones:
 
 ---
 
-### Colección persona.jurisdicciones
+### persona.jurisdicciones
 
 #### Cantidad de registros
 
@@ -669,7 +636,7 @@ Aclaraciones:
 
 #### Estructura de la key
 
-    per:{id}#jur:{org}.{provincia}
+`per:{id}#jur:{org}.{provincia}`
 
 #### Estructura de los ítems
 
@@ -683,7 +650,7 @@ Aclaraciones:
 
 #### Ejemplo: Jurisdicción CABA informada por COMARB
 
-    per:30120013439#jur:900.0
+`per:30120013439#jur:900.0`
 
 ```json
 {
@@ -696,15 +663,15 @@ Aclaraciones:
 
 ---
 
-### Colección persona.cmsedes
+### persona.cmsedes
 
 #### Cantidad de registros
 
-    700.000
+`700.000`
 
 #### Estructura de la key
 
-    per:{id}#cms:{org}.{provincia}
+`per:{id}#cms:{org}.{provincia}`
 
 #### Estructura de los ítems
 
@@ -718,7 +685,7 @@ Aclaraciones:
 
 #### Ejemplo
 
-    per:30120013439#cms:900.3
+`per:30120013439#cms:900.3`
 
 ```json
 {
@@ -731,15 +698,16 @@ Aclaraciones:
 ```
 
 ---
-### Colección persona.archivos
+
+### persona.archivos
 
 #### Cantidad de registros
 
-    desconocida
+`3.000.000`
 
 #### Estructura de la key
 
-    per:{id}#arc:{orden}
+`per:{id}#arc:{orden}`
 
 #### Estructura de los ítems
 
@@ -749,9 +717,32 @@ Aclaraciones:
 | tipo      | integer |      | 1   | 99  | x   |
 | ds        | #fecha  |      |     |     |     |
 
+tipo | descripción |
+--- | ---
+ 1|CIE - Contrato Idioma Original                           |
+ 2|CIE - Contrato Traducido Español                         |
+ 3|CIE - Autorización del AR                                |
+ 4|CIE - Integrantes                                        |
+ 5|SAS - Estatutos                                          |
+ 6|PERSONA FISICA - DNI FRENTE                              |
+ 7|PERSONA FISICA - DNI CONTRAFRENTE                        |
+ 8|PERSONA FISICA - COMPROBANTE DOMICILIO                   |
+ 9|FORMULARIO INSCRIPCION                                   |
+10|CIE - Datos Administrador de la Sucesión                 |
+11|CIE - Copia del Certificado de Defunción Idioma Origen   |
+12|CIE - Copia del Certificado de Defunción Idioma Español  |
+13|CIE - Copia de Carátula del Juicio Sucesorio             |
+14|CIE - Documento de Identidad del Exterior                |
+15|CIE - Integrantes Sociedad del País                      |
+16|RESIDENCIA FISCAL - Certificado de Residencia            |
+17|Temporario                                               |
+18|PERSONA FISICA - FOTO CARNET                             |
+19|PERSONA FISICA - Corrección Datos Formulario Cuit Digital|
+20|PERSONA JURIDICA - Planchuela                            |
+
 #### Ejemplo
 
-    per:30120013439#arc:1
+`per:30120013439#arc:1`
 
 ```json
 {
@@ -763,31 +754,33 @@ Aclaraciones:
 
 ---
 
-### Escalar persona.testigo
+### persona.testigo
 
 #### Cantidad de registros
 
-    16.200.000
+`16.200.000`
 
 #### Estructura de la key
 
-    per:{id}#wit
+`per:{id}#wit`
 
 #### Estructura de los ítems
 
-    1 (uno)
+`1`
 
 #### Ejemplo
 
-    per:30120013439#wit
+`per:30120013439#wit`
 
-```
+```json
 1
 ```
 
+---
+
 ## Ejemplo completo
 
-    30643202812
+`30643202812`
 
 | key                                    | value                                                                                                                                                                                        |
 | :------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -827,11 +820,11 @@ Aclaraciones:
 
 **#organización** conforma los registros de tipo:
 
-- [domicilios](#colección-personadomicilios)
-- [domisroles](#colección-personadomisroles)
-- [actividades](#colección-personaactividades)
-- [jurisdicciones](#colección-personajurisdicciones)
-- [cmsedes](#colección-personacmsedes)
+- [domicilios](#personadomicilios)
+- [domisroles](#personadomisroles)
+- [actividades](#personaactividades)
+- [jurisdicciones](#personajurisdicciones)
+- [cmsedes](#personacmsedes)
 
 En todos los caso, un valor mayor que 1(uno) indica que los datos del registro provienen directamente de la migración de datos efectuada por la organización identificada con ese valor, mientras que un valor igual a 1(uno) indica que los datos del registro fueron generados por una aplicación o proceso de AFIP.
 
