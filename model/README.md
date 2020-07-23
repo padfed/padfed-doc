@@ -179,13 +179,6 @@ Aclaraciones:
 
 ### persona.impuestos
 
-#### Cantidad de registros
-
-|  org  |     cantidad |
-| :---: | -----------: |
-|  `1`  | `22.600.000` |
-| `900` |    `700.000` |
-
 #### Estructura de la key
 
 `per:{id}#imp:{impuesto}`
@@ -250,13 +243,6 @@ Aclaraciones:
 ---
 
 ### persona.domicilios
-
-#### Cantidad de registros
-
-|  org  |     cantidad |
-| :---: | -----------: |
-|  `1`  | `76.300.000` |
-| `900` |  `2.500.000` |
 
 #### Estructura de la key
 
@@ -612,13 +598,13 @@ Aclaraciones:
 
 #### Ejemplo: Administrador de Relaciones de una Sociedad
 
-`per:30120013439#rel:20012531001.3.18`
+`per:30120013439#rel:20012531001.18.0`
 
 ```json
 {
     "persona": 20012531001,
-    "tipo": 3,
-    "subtipo": 18,
+    "tipo": 18,
+    "subtipo": 0,
     "desde": "2009-01-12",
     "ds": "2014-04-30"
 }
@@ -627,12 +613,6 @@ Aclaraciones:
 ---
 
 ### persona.jurisdicciones
-
-#### Cantidad de registros
-
-|  org  |    cantidad |
-| :---: | ----------: |
-| `900` | `1.900.000` |
 
 #### Estructura de la key
 
@@ -665,10 +645,6 @@ Aclaraciones:
 
 ### persona.cmsedes
 
-#### Cantidad de registros
-
-`700.000`
-
 #### Estructura de la key
 
 `per:{id}#cms:{org}.{provincia}`
@@ -700,10 +676,6 @@ Aclaraciones:
 ---
 
 ### persona.archivos
-
-#### Cantidad de registros
-
-`3.000.000`
 
 #### Estructura de la key
 
@@ -755,10 +727,6 @@ tipo | descripción |
 ---
 
 ### persona.testigo
-
-#### Cantidad de registros
-
-`16.200.000`
 
 #### Estructura de la key
 
@@ -813,7 +781,7 @@ tipo | descripción |
 | `per:30643202812#jur:900.5`            | `{"provincia":5,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`                                                                                                                           |
 | `per:30643202812#jur:900.6`            | `{"provincia":6,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`                                                                                                                           |
 | `per:30643202812#jur:900.7`            | `{"provincia":7,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`                                                                                                                           |
-| `per:30643202812#rel:20083309424.3.18` | `{"persona":20083309424,"tipo":3,"subtipo":18,"desde":"2007-09-24","ds":"2007-09-24"}` |
+| `per:30643202812#rel:20083309424.18.0` | `{"persona":20083309424,"tipo":18,"subtipo":0,"desde":"2007-09-24","ds":"2007-09-24"}` |
 | `per:30643202812#arc:1`                | `{"orden":1,"tipo":16,"ds":"2007-09-24"}` |
 
 ## Atributo organización
