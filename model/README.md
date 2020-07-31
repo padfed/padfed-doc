@@ -813,7 +813,7 @@ Las organizaciones son:
 |   909   | DGR - FORMOSA             |        18 | org909
 |   910   | DPR - JUJUY               |         6 | org910
 |   911   | DGR - LA PAMPA            |        21 | org911
-|   912   | DGIP - LA RIOJA           |        18 | org912
+|   912   | DGIP - LA RIOJA           |         8 | org912
 |   913   | ATM - MENDOZA             |         7 | org913
 |   914   | DGR - MISIONES            |        19 | org914
 |   915   | DPR - NEUQUEN             |        20 | org915
@@ -823,6 +823,6 @@ Las organizaciones son:
 |   919   | DPIP - SAN LUIS           |        11 | org919
 |   920   | ASIP - SANTA CRUZ         |        23 | org920
 |   921   | API - SANTA FE            |        12 | org921
-|   922   | DGR - SANTIAGO DEL ESTERO |        19 | org922
+|   922   | DGR - SANTIAGO DEL ESTERO |        13 | org922
 |   923   | DGR - TIERRA DEL FUEGO    |        24 | org923
-|   924   | DGR - TUCUMAN             |        23 | org924
+|   924   | DGR - TUCUMAN             |        14 | org924
