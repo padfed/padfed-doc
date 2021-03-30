@@ -707,10 +707,10 @@ tipo | descripción |
 14|CIE - Documento de Identidad del Exterior                |
 15|CIE - Integrantes Sociedad del País                      |
 16|RESIDENCIA FISCAL - Certificado de Residencia            |
-17|Temporario                                               |
+17|RESIDENCIA FISCAL - Certificado de Residencia                                               |
 18|PERSONA FISICA - FOTO CARNET                             |
 19|PERSONA FISICA - Corrección Datos Formulario Cuit Digital|
-20|PERSONA JURIDICA - Planchuela                            |
+20|PERSONA JURIDICA - Estatuto                            |
 21|PERSONA JURIDICA – Estatuto con Aprobación Org. de Control |
 22|PERSONA JURIDICA – Inst. de aprobación del Org. de Control |
 23|PERSONA JURIDICA - Acta Asamblea por Mod. de datos       |
