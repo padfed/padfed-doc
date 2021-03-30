@@ -41,7 +41,7 @@ donde
 | 1   | [persona](#personapersona)               | datos identificatorios de la persona                  | objeto    | `per`   | `per:20123412340#per`                 |   x   |
 | 2   | [impuestos](#personaimpuestos)           | inscripciones en impuestos                            | colección | `imp`   | `per:20123412340#imp:20`              |       |
 | 3   | [domicilios](#personadomicilios)         | domicilios                                            | colección | `dom`   | `per:20123412340#dom:900.3.4`         |       |
-| 4   | [domisroles](#personadomisroles)         | roles de los domicilios                               | colección | `dor`   | `per:20123412340#dor:900.3.4.3`       |       |
+| 4   | [domisroles](#personadomisroles)         | roles de domicilios                                   | colección | `dor`   | `per:20123412340#dor:900.3.4.3`       |       |
 | 5   | [categorias](#personacategorias)         | categorias de monotributo y autonomos                 | colección | `cat`   | `per:20123412340#cat:20.1`            |       |
 | 6   | [contribmunis](#personacontribmunis)     | contribuciones municipales                            | colección | `con`   | `per:20123412340#con:5244.98`         |       |
 | 7   | [actividades](#personaactividades)       | actividades económicas                                | colección | `act`   | `per:20123412340#act:1.883-123456`    |       |
@@ -179,11 +179,11 @@ Aclaraciones:
 
 ### persona.impuestos
 
-#### Estructura de la key
+#### Estructura de la key #imp
 
 `per:{id}#imp:{impuesto}`
 
-#### Estructura de los ítems
+#### Estructura #imp
 
 | nombre       | tipo            | enum           | min | max    | req |
 | ------------ | --------------- | -------------- | --- | ------ | --- |
@@ -244,11 +244,11 @@ Aclaraciones:
 
 ### persona.domicilios
 
-#### Estructura de la key
+#### Estructura de la key #dom
 
 `per:{id}#dom:{org}.{tipo}.{orden}`
 
-#### Estructura de los ítems
+#### Estructura de #dom
 
 | nombre         | tipo          | enum | min | max     | req |
 | -------------- | ------------- | ---- | --- | ------- | --- |
@@ -406,7 +406,7 @@ Aclaraciones:
 | hasta     | #fecha  |      |     |      |
 | ds        | #fecha  |      |     |      |
 
-#### Ejemplo
+#### Ejemplo de #con
 
 `per:20000000168#con:5244.98`
 
@@ -492,7 +492,7 @@ Aclaraciones:
 | estado   | string         | AC, BD |          |          | x   |
 | ds       | #fecha         |        |          |          |     |
 
-#### Ejemplo
+#### Ejemplo de #eti
 
 `per:20000000168#eti:160`
 
@@ -525,7 +525,7 @@ Aclaraciones:
 | linea  | integer |      | 1   | 999             |     |
 | ds     | #fecha  |      |     |                 |     |
 
-#### Ejemplo
+#### Ejemplo de #tel
 
 `per:20000000168#tel:1`
 
@@ -559,7 +559,7 @@ Aclaraciones:
 | estado    | integer |      | 1   | 99  |     |
 | ds        | #fecha  |      |     |     |     |
 
-#### Ejemplo
+#### Ejemplo de #ema
 
 `per:20000000168#ema:1`
 
@@ -577,11 +577,11 @@ Aclaraciones:
 
 ### persona.relaciones
 
-#### Estructura de la key
+#### Estructura de la key #rel
 
 `per:{id}#rel:{persona}.{tipo}.{subtipo}`
 
-#### Estructura de los ítems
+#### Estructura de #rel
 
 | nombre  | tipo    | enum | min | max | req |
 | ------- | ------- | ---- | --- | --- | --- |
@@ -614,11 +614,11 @@ Aclaraciones:
 
 ### persona.jurisdicciones
 
-#### Estructura de la key
+#### Estructura de la key #jur
 
 `per:{id}#jur:{org}.{provincia}`
 
-#### Estructura de los ítems
+#### Estructura de #jur
 
 | nombre    | tipo          | enum | min | max | req |
 | --------- | ------------- | ---- | --- | --- | --- |
@@ -645,11 +645,11 @@ Aclaraciones:
 
 ### persona.cmsedes
 
-#### Estructura de la key
+#### Estructura de la key #cms
 
 `per:{id}#cms:{org}.{provincia}`
 
-#### Estructura de los ítems
+#### Estructura de #cms
 
 | nombre    | tipo    | enum   | min | max | req |
 | --------- | ------- | ----   | --- | --- | --- |
@@ -659,7 +659,7 @@ Aclaraciones:
 | hasta     | #fecha  |        |     |     |     |
 | ds        | #fecha  |        |     |     |     |
 
-#### Ejemplo
+#### Ejemplo de #cms
 
 `per:30120013439#cms:900.3`
 
@@ -677,11 +677,11 @@ Aclaraciones:
 
 ### persona.archivos
 
-#### Estructura de la key
+#### Estructura de la key #arc
 
 `per:{id}#arc:{orden}`
 
-#### Estructura de los ítems
+#### Estructura de #arc
 
 | nombre    | tipo    | enum | min | max | req |
 | --------- | ------- | ---- | --- | --- | --- |
@@ -712,7 +712,7 @@ tipo | descripción |
 19|PERSONA FISICA - Corrección Datos Formulario Cuit Digital|
 20|PERSONA JURIDICA - Planchuela                            |
 
-#### Ejemplo
+#### Ejemplo de #arc
 
 `per:30120013439#arc:1`
 
@@ -728,15 +728,15 @@ tipo | descripción |
 
 ### persona.testigo
 
-#### Estructura de la key
+#### Estructura de la key #wit
 
 `per:{id}#wit`
 
-#### Estructura de los ítems
+#### Estructura de #wit
 
 `1`
 
-#### Ejemplo
+#### Ejemplo de #wit
 
 `per:30120013439#wit`
 
