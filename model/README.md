@@ -283,7 +283,23 @@ Aclaraciones:
 - **`partido`** es el código del partido provincial
 - **`partida`** es el número de partida inmobiliaria
 - **`tipo`** indica el tipo de domicilio para AFIP. Una persona puede tener un único domicilio `tipo 1` (Fiscal para AFIP), un único domicilio `tipo 2` (Real para AFIP) y 0 a N domicilios `tipo 3`; Los domicilios informados por las jurisdiccionales (`org > 1`) siempre tienen `tipo 3`
-- **`orden`** comienza desde `1` para cada `org` y `tipo`
+- **`orden`** número secuencial comenzando desde `1` para cada `org` y `tipo`
+
+| estado | descripción                |
+| -----: | -------------------------- |
+|      1 | CONFIRMADO                 |
+|      2 | NO CONFIRMADO              |
+|      3 | ERRONEO                    |
+|      4 | INACTIVO                   |
+|      5 | INEXISTENTE - DESCONOCIDO  |
+|      6 | DECLARADO                  |
+|      7 | CONSTITUIDO DE OFICIO      |
+|      8 | SIN CORRESP TIPO DOMICILIO |
+|      9 | NO DENUNCIADO              |
+|     10 | NO NOTIFICADO              |
+|     11 | DECLARADO POR INTERNET     |
+|     12 | ARCHIVADO                  |
+|     13 | MIGRADO POR COMARB/ATL     |
 
 #### Ejemplo: Domicilio fiscal para AFIP
 
@@ -330,10 +346,8 @@ Aclaraciones:
 
 Aclaraciones:
 
-**rol**: rol o clasificación de domicilio.
-
 | rol | descripción                    |
-| --- | ------------------------------ |
+| ---: | ------------------------------ |
 | 1   | Fiscal (Jurisdicción Sede)     |
 | 2   | Principal de Actividades       |
 | 3   | Fiscal (en la Jurisdicción)    |
