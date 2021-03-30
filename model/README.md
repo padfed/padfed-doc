@@ -711,6 +711,10 @@ tipo | descripción |
 18|PERSONA FISICA - FOTO CARNET                             |
 19|PERSONA FISICA - Corrección Datos Formulario Cuit Digital|
 20|PERSONA JURIDICA - Planchuela                            |
+21|PERSONA JURIDICA – Estatuto con Aprobación Org. de Control |
+22|PERSONA JURIDICA – Inst. de aprobación del Org. de Control |
+23|PERSONA JURIDICA - Acta Asamblea por Mod. de datos       |
+24|PERSONA JURIDICA – Acta de Directorio por Mod. de datos  |
 
 #### Ejemplo de #arc
 
