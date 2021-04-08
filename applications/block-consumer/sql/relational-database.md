@@ -21,7 +21,7 @@ Los bloques Fabric pueden contener **txs inválidas** (quedaron registradas en e
 
 ## Diagrama de entidades y relaciones
 
-![diagrama-de-entidad-relaciones](../images/diagrama-de-entidad-relaciones.png)
+![entity-relationship-diagram](../images/entity-relationship-diagram.png)
 
 ## Diccionario de datos
 
