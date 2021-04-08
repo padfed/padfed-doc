@@ -1,0 +1,71 @@
+name: "Network"
+version: "1.0"
+x-loggingLevel: trace
+
+client:
+  # Reemplazar <MSPID> por MSPID de la organización que corre el blockconsumer
+  # Ej: ARBA, CBA, COMARB, org905, org906, ...
+  organization: <MSPID>
+
+channels:
+  padfedchannel:
+    # Block-Consumer accede a los peers con ledgerQuery true
+    peers:
+      peer0.afip:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+      peer1.afip:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+      peer0.comarb:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+      peer1.comarb:
+        endorsingPeer: false
+        chaincodeQuery: false
+        ledgerQuery: true
+        eventSource: false
+
+organizations:
+  AFIP:
+    mspid: AFIP
+    peers:
+      - peer0.afip
+      - peer1.afip
+
+  COMARB:
+    mspid: COMARB
+    peers:
+      - peer0.comarb
+      - peer1.comarb
+
+peers:
+  # Reemplazar <FQDN> por el FQDN de cada peer
+  peer0.afip:
+    url: grpcs://<FQDN>:7051
+    tlsCACerts:
+      path: conf/tlscas/tlsica.blockchain-tributaria.xxx.gob.ar-tls.crt
+
+  peer1.afip:
+    url: grpcs://<FQDN>:7051
+    tlsCACerts:
+      path: conf/tlscas/tlsica.blockchain-tributaria.xxx.gob.ar-tls.crt
+
+  peer0.comarb:
+    url: grpcs://<FQDN>:7051
+    tlsCACerts:
+      path: conf/tlscas/tlsica.blockchain-tributaria.yyy.gob.ar-tls.crt
+
+  peer1.comarb:
+    url: grpcs://<FQDN>:7051
+    tlsCACerts:
+      path: conf/tlscas/tlsica.blockchain-tributaria.yyy.gob.ar-tls.crt
