@@ -1,33 +1,32 @@
 @startuml deploy-accediendo-a-nodos-remotos
 
-title Block-Consumer accediendo a nodos remotos
+title **block-consumer** accediendo a nodos remotos
 
 note as N1
-Esquema de deploy para organizaciones 
+Esquema de deploy para organizaciones
 que no corren peers de la Blockchain.
 
-Block-Consumer instalado localmente
-accede a cualquier peer de la red 
-para recuperar nuevos bloques.
+**block-consumer** instalado localmente
+accede a cualquier peer de la red.
 end note
 
 package Blockchain {
     [peer0.afip]
     [peer1.afip]
-    [peer0.xxxx]
-    [peer1.xxxx]
-} 
+    [peer0.comarb]
+    [peer1.comarb]
+}
 
 package DataCenter {
-    component [Block-Consumer] as BlockConsumer 
-    database "Oracle o\nPostgres\n" as db 
-} 
+    component [block-consumer] as BlockConsumer
+    database "\nRDBMS\n" as db
+}
 
 cloud internet
 
-BlockConsumer ..> internet 
-BlockConsumer ..> db : jdbc (write)
-internet ..> Blockchain : gRPCs (read)
+BlockConsumer ..> internet
+BlockConsumer ..> db : jdbc\n(read/write)
+internet ..> Blockchain : gRPCs\n(read)
 
 Blockchain -[hidden]left- DataCenter
 
