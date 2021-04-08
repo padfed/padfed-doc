@@ -13,7 +13,7 @@ El modelo de base de datos relacional de **block-consumer** representa el conten
 * un bloque contiene un set de transacciones (txs)
 * una tx contiene un [read_write_set](https://hyperledger-fabric.readthedocs.io/en/release-1.4/readwrite.html)
 
-![fabric-block](images/fabric-block.png)
+![fabric-block](../images/fabric-block.png)
 
 La información mas útil es el contenido del `write_set` de la txs válidas que se persiste en la tabla `BC_VALID_TX_WRITE_SET`. Desde esta tabla facilmente se puede recuperar el estado actual (state) y la historia de cambios aplicados sobre el valor de una key.
 
@@ -21,7 +21,7 @@ Los bloques Fabric pueden contener **txs inválidas** (quedaron registradas en e
 
 ## Diagrama de entidades y relaciones
 
-![diagrama-de-entidad-relaciones](images/diagrama-de-entidad-relaciones.png)
+![diagrama-de-entidad-relaciones](../images/diagrama-de-entidad-relaciones.png)
 
 ## Diccionario de datos
 

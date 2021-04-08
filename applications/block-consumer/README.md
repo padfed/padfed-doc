@@ -132,7 +132,7 @@ En una base de datos Oracle, PostgreSQL o SQL Server necesitas crear:
 - una package o funciones intermediarias que son invocadas desde `block-consumer` para insertar filas
 - un usuario de base de datos para que `block-consumer` pueda ejecutar la package o las funciones
 
-Mas info: [base de datos](relational-database.md)
+Mas info: [base de datos](sql/relational-database.md)
 
 ---
 
