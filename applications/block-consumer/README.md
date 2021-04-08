@@ -136,7 +136,7 @@ En una base de datos Oracle, PostgreSQL o SQL Server necesitas crear:
 
 ## Funcionamiento de block-consumer
 
-Cuando arranca `block-consumer` se conecta a la base de datos e invoca a la función de base de datos `block_height()` para obtener el máximo número de bloque registrado en la tabla `BC_BLOCK`.
+Cuando arranca `block-consumer` invoca a la función de base de datos `block_height()` para obtener el máximo número de bloque registrado en la tabla `BC_BLOCK`.
 
 A continuación se conecta a la Blockchain y comienza a leer secuencialmente los bloques desde el número obtenido con  `block_height()` + 1.
 
