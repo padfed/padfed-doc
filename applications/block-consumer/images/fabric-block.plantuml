@@ -1,0 +1,20 @@
+@startuml fabric-block
+
+left to right direction
+
+rectangle "block 5578" {
+
+map "txseq: 0 txid: a6bd3640f431dc97ca75db9dd11..." as tx0 {
+ per:20123456780#imp:30 => W {"impuesto":5900,"inscripcion":"2015-01-01","estado":"AC",...
+ per:20123456780#imp:10 => W {"impuesto":10,"inscripcion":"2015-01-01","estado":"AC",...
+}
+
+map "txseq: 1 txid: c4856ae7fd2dce997a564d4f53e80..." as tx1 {
+ per:30123456789#imp:30 => W {"impuesto":30,"inscripcion":"2021-01-01","estado":"AC",...
+ per:30643202812#imp:10 => W {"impuesto":10,"inscripcion":"2021-02-01","estado":"AC",...
+ per:30643202812#per    => W {"tipo":"J","id":30643202812,"tipoid":"C","estado":"A",...
+}
+
+}
+
+@enduml
