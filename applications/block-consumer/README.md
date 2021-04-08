@@ -136,7 +136,7 @@ En una base de datos Oracle, PostgreSQL o SQL Server necesitas crear:
 
 ## Funcionamiento de block-consumer
 
-Cuando arranca `block-consumer` invoca a la función de base de datos `block_height()` para obtener el máximo número de bloque registrado en la tabla `BC_BLOCK`.
+Cuando arranca invoca a la función de base de datos `block_height()` para obtener el máximo número de bloque registrado en la tabla `BC_BLOCK`.
 
 A continuación se conecta a la Blockchain y comienza a leer secuencialmente los bloques desde el número obtenido con  `block_height()` + 1.
 
@@ -150,9 +150,12 @@ Por cada bloque leido:
 
 En caso que la tx fue invalidada (no logró actualizar el state del Blockchain) la info de la tx y de las keys que leyó y las que intentó actualizar se registran respectivamente en  `BC_INVALID_TX` y en  `BC_INVALID_TX_SET`.
 
+
 777777777777777777777777777777777777777777777777777777777
 
 ### Modelo de Datos
+
+https://hyperledger-fabric.readthedocs.io/en/release-1.4/readwrite.html
 
 ![diagrama-de-entidad-relaciones](images/diagrama-de-entidad-relaciones.png)
 
@@ -445,24 +448,4 @@ order by block desc, txseq desc
 
 ### Changelog
 
----
-1.4.1
-
-- bugfix: #65730 - PostgreSQL: Error al intentar insertar caracter null (0x00)
-
-1.4.0
-
-- Se permite definir un límite de memoria a la JVM utilizada dentro de la imagen docker. Se incluyen ejemplos de inicio
-- Soporte de SQL Server para persistir modelo de datos. Se incorporan scripts de creación del modelo de datos para dicho motor
-- Se reapunta endpoint para metricas de monitoreo desde el endpoint "/metrics" a "/blockconsumer/metrics"
-
-1.3.1
-
-- Conexiones jdbc: asegurar cierre de conexión cuando se producen errores en las invocaciones sql
-- Fix error violates check constraint "check_valid_tx_value" en bloques que cotienen txs con deletes
-
-1.3.0
-
-- Script para resetear la base de datos Oracle sin necesidad de recrear los objetos
-- Permite configurar tamaño máximo de bloque a consumir
-- Entrypoint de monitoreo `/metrics` compatible con [`Prometheus`](https://prometheus.io/)
+[changelog](CHANGELOG.md)
