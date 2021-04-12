@@ -189,7 +189,7 @@ docker run  -it  -v ${PWD}/conf:/conf padfed/block-consumer:2.0.0-SNAPSHOT previ
 
 # Issues conocidos
 
-## Problemas de conectividad JDBC debido a escenarios de baja entropia sobre ambientes virtualizados (mas info https://oraculix.com/2017/06/16/jdbc-linux-and-entropy/)
+### Problemas de conectividad JDBC debido a escenarios de baja entropia sobre ambientes virtualizados (mas info https://oraculix.com/2017/06/16/jdbc-linux-and-entropy/)
  
 Es posible mitigar errores aleatoros de tipo *Connection Reset* o similares al tratar de establecer una conexión JDBC incorporando un variable de ambiente como la siguiente al script de arranque de la aplicación
 
