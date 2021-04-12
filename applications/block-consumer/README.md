@@ -150,7 +150,7 @@ Por cada bloque leido:
   - por cada key actualizada por la tx (exceptuando la primera)
     - invoca a la función `add_tx()` para insertar una fila en  `BC_VALID_TX_WRITE_SET`
 
-En caso que la tx fue invalidada (no logró actualizar el state de la Blockchain) la info de la tx y de las keys que leyó y las que intentó actualizar se registran respectivamente en  `BC_INVALID_TX` y en  `BC_INVALID_TX_SET`.
+En caso que la tx fue invalidada (no logró actualizar el state de la Blockchain) la info de la tx y de las keys que leyó y de las que intentó actualizar se registran respectivamente en `BC_INVALID_TX` y en `BC_INVALID_TX_SET`.
 
 ---
 
