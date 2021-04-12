@@ -146,11 +146,11 @@ Por cada bloque leido:
 
 - invoca a la función de base de datos `add_block()` que inserta una fila en `BC_BLOCK`
 - por cada tx contenida en el bloque
-  - invoca a la función `add_tx()` que inserta una fila en `BC_VALID_TX` con la info de la tx y otra en `BC_VALID_TX_WRITE_SET` con la info de la primera key actualizada por la tx
+  - invoca a la función `add_tx()` para insertar una fila en `BC_VALID_TX` con la info de la tx y otra en `BC_VALID_TX_WRITE_SET` con la info de la primera key actualizada por la tx
   - por cada key actualizada por la tx (exceptuando la primera)
-    - invoca a la función `add_tx()` que insert una fila en  `BC_VALID_TX_WRITE_SET`
+    - invoca a la función `add_tx()` para insertar una fila en  `BC_VALID_TX_WRITE_SET`
 
-En caso que la tx fue invalidada (no logró actualizar el state del Blockchain) la info de la tx y de las keys que leyó y las que intentó actualizar se registran respectivamente en  `BC_INVALID_TX` y en  `BC_INVALID_TX_SET`.
+En caso que la tx fue invalidada (no logró actualizar el state de la Blockchain) la info de la tx y de las keys que leyó y las que intentó actualizar se registran respectivamente en  `BC_INVALID_TX` y en  `BC_INVALID_TX_SET`.
 
 ---
 
