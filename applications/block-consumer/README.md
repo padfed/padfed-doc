@@ -154,6 +154,50 @@ En caso que la tx fue invalidada (no logró actualizar el state del Blockchain) 
 
 ---
 
+
+# BlockWalker CLI
+
+Desde la versión V2 se incluye una herramienta de línea de comandos muy útil para extraer información de analisis de la Blockchain permitiendo consumir
+en un rango de bloques determinado. Algunos de los casos de uso interesantes de esta herramienta son:
+  - Extraer información en formato CSV de un conjunto de bloques a elección para su analisis manual o de sistemas no integrados a la blockchain S2S.
+  - Realizar pruebas de conectividad y/o rendimiento
+  - Evaluar el correcto funcionamiento de reglas de exclusión aplicadas usando la nueva propiedad *bussiness.exclusionKeys*
+
+
+## Forma de uso
+
+~~~
+Usage: BlockWalker CLI [-hV] --conf=application.conf [--csvFile=File path]
+                       --from=read from [--to=read up to]
+      --conf=application.conf
+                            configuration file (mandatory)
+      --csvFile=File path   Optional file to write the output
+      --from=read from      block number that The BlockWalker will use to start
+                              reading (mandatory)
+  -h, --help                Show this help message and exit.
+      --to=read up to       The block number that The BlockWalker will read up
+                              to
+  -V, --version             Print version information and exit.
+~~~
+
+### Invocación 
+
+~~~
+docker run  -it  -v ${PWD}/conf:/conf padfed/block-consumer:2.0.0-SNAPSHOT preview --conf /conf/application.conf --from=1 --to=1000 --csvFile=output-1-from-1000.csv
+~~~
+
+
+# Issues conocidos
+
+## Problemas de conectividad JDBC debido a escenarios de baja entropia sobre ambientes virtualizados (mas info https://oraculix.com/2017/06/16/jdbc-linux-and-entropy/)
+ 
+Es posible mitigar errores aleatoros de tipo *Connection Reset* o similares al tratar de establecer una conexión JDBC incorporando un variable de ambiente como la siguiente al script de arranque de la aplicación
+
+~~~
+-e DOCKER_JAVA_OPTS='-Djava.security.egd=file:/dev/./urandom'
+~~~
+
+---
 ### Changelog
 
 [changelog](CHANGELOG.md)
