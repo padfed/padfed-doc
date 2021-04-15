@@ -1,6 +1,7 @@
-# block-consumer: base de datos relacional
+# block-consumer: persistencia en la base de datos relacional
 
 * [Introducción](#introducción)
+* [Setup de la base de datos](#setup-de-la-base-de-datos)
 * [Diagrama de entidad y relaciones](#diagrama-de-entidades-y-relaciones)
 * [Diccionario de datos](#diccionario-de-datos)
 * [Funciones de base de datos mediadoras](#funciones-de-base-de-datos-mediadoras)
@@ -13,15 +14,34 @@ El modelo de base de datos relacional de **block-consumer** representa el conten
 * un bloque contiene un set de transacciones (txs)
 * una tx contiene un [read_write_set](https://hyperledger-fabric.readthedocs.io/en/release-1.4/readwrite.html)
 
-![fabric-block](../images/fabric-block.png)
+![fabric-block](images/fabric-block.png)
 
 La información mas útil es el contenido del `write_set` de la txs válidas que se persiste en la tabla `BC_VALID_TX_WRITE_SET`. Desde esta tabla facilmente se puede recuperar el estado actual (state) y la historia de cambios aplicados sobre el valor de una key.
 
 Los bloques Fabric pueden contener **txs inválidas** (quedaron registradas en el ledger pero no lograron actualizar el state). **block-consumer** separa su contenido y lo persiste en `BC_INVALID_TX` y `BC_INVALID_TX_SET` para facilitar el análisis del error que causó la invalidación. Su contenido no tiene validez para el negocio y se puede depurar periodicamente.
 
+## Setup de la base de datos
+
+Cada organización puede cambiar los nombres de base de datos, esquema y usuarios para adpatarlos a sus estandares.
+
+Para facilitar el tratamiento de errores recomendamos mantener los nombres de tablas, columnas, índices.
+
+Es responsabilidad de cada organización:
+
+* configurar el storage de las tables e índices
+* cambiar password de los usuarios
+
+[oracle](scripts/oracle/README.md)
+
+[postgresql](scripts/postgresql/README.md)
+
+[sqlsever](scripts/sqlserver/README.md)
+
+---
+
 ## Diagrama de entidades y relaciones
 
-![entity-relationship-diagram](../images/entity-relationship-diagram.png)
+![entity-relationship-diagram](images/entity-relationship-diagram.png)
 
 ## Diccionario de datos
 
@@ -84,6 +104,7 @@ FUNCTION | DESC
 
 ---
 
+
 ### Queries de ejemplos
 
 #### Queries de negocio
@@ -115,7 +136,7 @@ and   IS_DELETE is null
 
 ##### Versión vigente de cada key
 
-Para una misma key se guarda un registro cada vez que su value es modificado. Un mismo bloque no puede contener mas de una modificacion sobre la misma key. Entonces para recuperar la versión vigente de cada key la query utiliza la función analítica `MAX(BLOCK) OVER(PARTITION BY KEY) AS MAX_BLOCK_OVER` y el filtro `BLOCK = MAX_BLOCK_OVER`.
+Para una misma key se guarda un registro cada vez que su value es modificado. Un mismo bloque no puede contener mas de una modificacion sobre la misma key. Para recuperar la versión vigente de cada key la query utiliza la función analítica `MAX(BLOCK) OVER(PARTITION BY KEY) AS MAX_BLOCK_OVER` y el filtro `BLOCK = MAX_BLOCK_OVER`.
 
 ##### Keys eliminadas
 
@@ -126,8 +147,8 @@ El query, una vez que recupera la versión vigente cada key, verifican que no ha
 
 ``` sql
 select block, txseq, t.timestamp, i.key, i.value, i.is_delete
-from bc_valid_tx_write_set i
-left join bc_valid_tx t
+from hlf.bc_valid_tx_write_set i
+left join hlf.bc_valid_tx t
 using (block, txseq)
 where i.key = 'per:20000021629#per'
 order by block desc
@@ -137,7 +158,7 @@ Para obtener el timestamp de cada version de la key el query joinea `BC_VALID_TX
 
 #### Query: Cantidad de keys agrupadas por tag
 
-(FULL SCAN)
+`(full-scan)`
 
 ``` sql
 select tag,
@@ -148,7 +169,7 @@ from
 select key,
 substr(key, 17, 3) as tag,
 MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK_OVER, BLOCK, IS_DELETE
-from  bc_valid_tx_write_set
+from  hlf.bc_valid_tx_write_set
 where key like 'per:___________#___%'
 ) x
 where BLOCK = MAX_BLOCK_OVER
@@ -158,7 +179,7 @@ order by tag
 
 #### Query: Cantidad de personas
 
-(FULL SCAN)
+`(full-scan)`
 
 ``` sql
 select count(*)
@@ -166,7 +187,7 @@ from
 (
 select key,
 MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK_OVER, BLOCK, IS_DELETE
-from bc_valid_tx_write_set
+from  hlf.bc_valid_tx_write_set
 where key like 'per:___________#wit'
 ) x
 where BLOCK = MAX_BLOCK_OVER
@@ -175,7 +196,7 @@ and   is_delete is null
 
 #### Query: Cantidad de contribuyentes inscriptos en Convenio Multilateral agrupados por estado
 
-(FULL SCAN)
+`(full-scan)`
 
 ``` sql
 select
@@ -184,12 +205,12 @@ count(distinct cuit) as casos
 from
 (
 select
-distinct substr(key, 5, 11) as cuit,
+substr(key, 5, 11) as cuit,
 regexp_replace(value, '^{.*"estado":"([A-Z]{2})".*}', '\1') as estado,
 MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK_OVER,
 BLOCK,
 IS_DELETE
-from bc_valid_tx_write_set
+from  hlf.bc_valid_tx_write_set
 where key like 'per:___________#imp:5900'
 ) x
 where BLOCK = MAX_BLOCK_OVER
@@ -200,7 +221,32 @@ order by estado
 
 ### Queries para monitoreo
 
-#### Query: Ultimos 100 bloques procesados
+#### Query: Tiempo de procesamiento de los primeros 1000 bloques
+
+`(para PostgreSQL)`
+
+```sql
+SELECT max(block),
+       min(consuming_time),
+       max(consuming_time),
+       EXTRACT(EPOCH FROM max(consuming_time)) -
+       EXTRACT(EPOCH FROM min(consuming_time)) as seconds
+FROM   hlf.BC_BLOCK
+WHERE  block <= 1000
+```
+
+`(para Oracle)`
+
+```sql
+SELECT max(block),
+       min(consuming_time),
+       max(consuming_time),
+       trunc((max(consuming_time) - min(CONSUMING_TIME))*60*60*24)
+FROM   hlf.BC_BLOCK
+WHERE  block <= 1000
+```
+
+#### Query: Últimos 100 bloques procesados
 
 ``` sql
 with max_block as
@@ -208,34 +254,20 @@ with max_block as
 select max(block) as max_block from bc_block
 )
 select *
-from  bc_block, max_block
+from  hlf.bc_block, max_block
 where block between max_block.max_block-100 and max_block.max_block
 order by block desc
 ```
 
 #### Query: Txs que actualizaron el chaincode
 
-(FULL SCAN)
+`(full-scan)`
 
 ``` sql
 select *
-from  bc_valid_tx tx
+from  hlf.bc_valid_tx tx
 where chaincode = 'lscc'
 order by block desc
 ```
 
 ---
-
-## Creación del Esquema HLF y de los usuarios de base de datos
-
-Para crear el esquema `HLF` y se pueden ejecutar los scripts correspondientes a Oracle (`sql-oracle`) o a Postgres (`sql-postgresql`).
-
-Script | Tipo | Descripción
---- | --- | ---
-`inc/001_dcl_create_user_hlf.sql` | dcl | crea el usuario dueño del schema `HLF`
-`inc/002_ddl_create_schema_hlf.sql` | ddl | crea tablas, índices y restricciones en el schema `HLF`
-`inc/003_ddl_create_pkg.sql` | ddl | invoca al script `../rep/bc_pkg.sql`
-`inc/004_dcl_create_apps_user.sql` | dcl | crea usuarios `BC_APP` y (opcional) `ROSI_APP`
-`rep/bc_pkg.sql` | ddl | create de la package `HLF.BC_PKG` que utiliza Block-Consumer leer y actualizar las tablas del schema `HLF`
-
-NOTA: Para Postgres asegurarse de ejecutar `su - postgres` y a continuación los scripts antes mencionados. Otra forma es ejecutando el script automatizado `helpers\createdb-hlf.sh`.
