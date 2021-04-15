@@ -221,16 +221,16 @@ Algunos de los casos de uso interesantes de esta herramienta son:
 - Realizar pruebas de conectividad y/o rendimiento
 - Evaluar el correcto funcionamiento de reglas de exclusión aplicadas usando la nueva propiedad *bussiness.exclusionKeys*
 
-## Forma de uso
+### Forma de uso
 
 ```txt
 Usage: BlockWalker CLI [-hV] --conf=<file> [--csvFile=<file>] --from=<number> [--to=<number]
-      --conf=<file>      configuration file (mandatory)
+      --conf=<file>      configuration file
       --csvFile=<file>   file to write the output
-      --from=<number>    block number that The BlockWalker will use to start reading (mandatory)
-      -h, --help         Show this help message and exit.
-      --to=read up to    The block number that The BlockWalker will read up to
-      -V, --version      Print version information and exit.
+      --from=<number>    block number that The BlockWalker will use to start reading
+      -h, --help         show this help message and exit.
+      --to=read up to    block number that The BlockWalker will read up to
+      -V, --version      print version information and exit.
 ```
 
 ### Invocación
