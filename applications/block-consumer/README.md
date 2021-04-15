@@ -144,7 +144,7 @@ A continuación se conecta a la Blockchain y comienza a leer secuencialmente los
 
 Por cada bloque leido:
 
-- invoca a la función de base de datos `add_block()` que inserta una fila en `BC_BLOCK`
+- invoca a la función de base de datos `add_block()` para insertar una fila en `BC_BLOCK`
 - por cada tx contenida en el bloque
   - invoca a la función `add_tx()` para insertar una fila en `BC_VALID_TX` con la info de la tx y otra en `BC_VALID_TX_WRITE_SET` con la info de la primera key actualizada por la tx
   - por cada key actualizada por la tx (exceptuando la primera)
