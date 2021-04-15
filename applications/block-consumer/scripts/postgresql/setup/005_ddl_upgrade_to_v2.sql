@@ -48,7 +48,4 @@ alter table bc_invalid_tx add   column excluded_read_keys  numeric(5);
 
 alter table bc_invalid_tx add   column excluded_write_keys numeric(5);
 
---------------------------------------------------------
--- BC_INVALID_TX_SET
---------------------------------------------------------
 create index bc_invalid_key_idx on bc_invalid_tx_set(key);
