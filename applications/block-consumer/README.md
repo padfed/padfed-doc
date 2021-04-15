@@ -1,4 +1,4 @@
-# Block-Consumer
+# block-consumer
 
 Aplicación (imagen docker) que lee bloques desde un channel de una red de Blockchain [Hyperledger Fabric 1.4 LTS](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html), procesa su contenido y lo persiste en una base de datos relacional Oracle, PostgreSQL o SQL Server.
 
@@ -154,6 +154,95 @@ En caso que la tx fue invalidada (no logró actualizar el state de la Blockchain
 
 ---
 
-### Changelog
+## Filtrado de keys
+
+`(desde V2)`
+
+Una organización puede configurar `block-consumer` para que filtre registros que no le resulta de interés reduciendo el consumo de espacio en su base de datos.
+
+Por ejemplo, la organizacion `911` decide no registrar en su base de datos:
+
+- información de Contribuciones Municipales
+- jurisdicciones migradas por otras organizaciones exceptuando las migradas por la Comisión Arbitral (org `900`)
+- domicilios migrados por otras organizaciones exceptuando los migrados por la Comisión Arbitral
+- actividades económicas migradas por otras organizaciones exceptuando las migradas por la Comisión Arbitral
+
+Para que `block-consumer` filtre las correspondientes keys puede agregar en el `application.conf` el siguiente array de regexps:
+
+```json
+business {
+
+exclusionKeys = [
+"^per:\\d{11}#con:.*$",
+"^(per:\\d{11}#)(dom|dor|jur):(?!(1|900|911)\\.)(.*)$",
+"^(per:\\d{11}#act:)(?!(1|900|911)\\.(883|900|911)-)(.*)$"
+]
+
+}
+```
+
+`block-consumer` va a excluir (no va a insertar en la base de datos) los registros del `read_write_set` que matchean contra alguna de las regexps.
+
+La cantidad de keys excluidas en cada tx queda registrada en `BC_VALID_TX.EXCLUDED_WRITE_KEYS`.
+
+`block-consumer` logea las keys exluidas:
+
+```txt
+...
+2021-03-30 12:09:03 INFO pool-3-thread-1 BlockWalker:262 - Write key [per:30503390376#act:902.902-681097] excluded
+2021-03-30 12:09:03 INFO pool-3-thread-1 BlockWalker:262 - Write key [per:30503390376#dom:902.3.1] excluded
+2021-03-30 12:09:03 INFO pool-3-thread-1 BlockWalker:262 - Write key [per:30503390376#dom:902.3.2] excluded
+2021-03-30 12:09:03 INFO pool-3-thread-1 BlockWalker:262 - Write key [per:30503390376#dor:902.3.1.1] excluded
+2021-03-30 12:09:03 INFO pool-3-thread-1 BlockWalker:262 - Write key [per:30503390376#dor:902.3.2.2] excluded
+2021-03-30 12:09:03 INFO pool-3-thread-1 BlockWalker:262 - Write key [per:30503390376#jur:902.1] excluded
+2021-03-30 12:09:03 INFO pool-3-thread-1 BlockWalker:262 - Write key [per:30503416073#act:902.902-11119] excluded
+2021-03-30 12:09:03 INFO pool-3-thread-1 BlockWalker:262 - Write key [per:30503416073#act:902.902-14113] excluded
+2021-03-30 12:09:03 INFO pool-3-thread-1 BlockWalker:262 - Write key [per:30503416073#act:902.902-14610] excluded
+2021-03-30 12:09:03 INFO pool-3-thread-1 BlockWalker:262 - Write key [per:30503416073#act:902.902-681099] excluded
+2021-03-30 12:09:03 INFO pool-3-thread-1 BlockWalker:262 - Write key [per:30503416073#dom:902.3.1] excluded
+2021-03-30 12:09:03 INFO pool-3-thread-1 BlockWalker:262 - Write key [per:30503416073#dom:902.3.2] excluded
+2021-03-30 12:09:03 INFO pool-3-thread-1 BlockWalker:262 - Write key [per:30503416073#dor:902.3.1.1] excluded
+2021-03-30 12:09:03 INFO pool-3-thread-1 BlockWalker:262 - Write key [per:30503416073#dor:902.3.2.2] excluded
+2021-03-30 12:09:03 INFO pool-3-thread-1 BlockWalker:262 - Write key [per:30503416073#jur:902.1] excluded
+...
+```
+
+---
+
+## Solución de problemas
+
+#### IO Error: Connection reset
+
+Cuando ocurre el siguiente error durante el arranque de la aplicación:
+
+```txt
+Exception in thread "main" java.sql.SQLRecoverableException: IO Error: Connection reset
+        at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:498)
+        at oracle.jdbc.driver.PhysicalConnection.<init>(PhysicalConnection.java:553)
+        at oracle.jdbc.driver.T4CConnection.<init>(T4CConnection.java:254)
+        at oracle.jdbc.driver.T4CDriverExtension.getConnection(T4CDriverExtension.java:32)
+        at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:528)
+        at java.sql.DriverManager.getConnection(DriverManager.java:664)
+        at java.sql.DriverManager.getConnection(DriverManager.java:247)
+        at afip.bc.fabric.blockconsumer.BlockConsumer.main(BlockConsumer.java:229)
+Caused by: java.net.SocketException: Connection reset
+        at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:115)
+        ...
+        at oracle.jdbc.driver.T4CTTIoauthenticate.doOSESSKEY(T4CTTIoauthenticate.java:407)
+        at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:416)
+        ... 7 more
+```
+
+una posible solución es agregar una environment con una directiva para java en el `docker run`:
+
+``` bash
+-e DOCKER_JAVA_OPTS='-Djava.security.egd=file:/dev/./urandom'
+```
+
+requiere `block-consumer:2.0.0` o superior.
+
+---
+
+## Changelog
 
 [changelog](CHANGELOG.md)
