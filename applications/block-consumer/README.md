@@ -209,11 +209,43 @@ La cantidad de keys excluidas en cada tx queda registrada en `BC_VALID_TX.EXCLUD
 
 ---
 
+## block-walker cli
+
+`(desde V2)`
+
+Herramienta de línea de comandos que permite procesar un rango de bloques desde la Blockchain sin impactar en la base de datos.
+
+Algunos de los casos de uso interesantes de esta herramienta son:
+
+- Extraer información en formato CSV de un conjunto de bloques a elección para su analisis manual o de sistemas no integrados a la blockchain S2S.
+- Realizar pruebas de conectividad y/o rendimiento
+- Evaluar el correcto funcionamiento de reglas de exclusión aplicadas usando la nueva propiedad *bussiness.exclusionKeys*
+
+## Forma de uso
+
+```txt
+Usage: BlockWalker CLI [-hV] --conf=<file> [--csvFile=<file>] --from=<number> [--to=<number]
+      --conf=<file>      configuration file (mandatory)
+      --csvFile=<file>   file to write the output
+      --from=<number>    block number that The BlockWalker will use to start reading (mandatory)
+      -h, --help         Show this help message and exit.
+      --to=read up to    The block number that The BlockWalker will read up to
+      -V, --version      Print version information and exit.
+```
+
+### Invocación
+
+~~~
+docker run  -it  -v ${PWD}/conf:/conf padfed/block-consumer:2.0.0-SNAPSHOT preview --conf /conf/application.conf --from=1 --to=1000 --csvFile=output-1-from-1000.csv
+~~~
+
+---
+
 ## Solución de problemas
 
 #### IO Error: Connection reset
 
-Cuando ocurre el siguiente error durante el arranque de la aplicación:
+Cuando ocurren este tipo de error:
 
 ```txt
 Exception in thread "main" java.sql.SQLRecoverableException: IO Error: Connection reset
@@ -240,6 +272,8 @@ una posible solución es agregar una environment con una directiva para java en 
 ```
 
 requiere `block-consumer:2.0.0` o superior.
+
+Mas info <https://oraculix.com/2017/06/16/jdbc-linux-and-entropy/>
 
 ---
 
