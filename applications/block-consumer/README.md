@@ -74,13 +74,13 @@ El `application.conf` contiene:
 - ubicación del material criptográfico propio del `block-consumer`
 - (opcional) filtros de keys
 
-Ejemplo: [application.conf](application.conf)
+Ejemplo: [application.conf](conf/application.conf)
 
 ### 4) client.yaml
 
 El `client.yaml` es un archivo de configuración estándar de Fabric que describe la red.
 
-Ejemplo: [client.yaml](client.yaml)
+Ejemplo: [client.yaml](conf/client.yaml)
 
 ### 5) Estructura de directorios de deploy
 
