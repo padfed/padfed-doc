@@ -224,12 +224,12 @@ Algunos de los casos de uso de `preview` puede ser:
 #### Opciones
 
 ```txt
-  --conf=<file>    config file.
-  --csvFile=<file> output file.
-  --from=<number>  block number to start reading.
-  --to=<number>    block number to stop reading.
-  -h, --help       show help and exit.
-  -V, --version    print version information and exit.
+    --conf=<file>    path to config file.
+    --csvFile=<file> path to output file.
+    --from=<number>  block number to start.
+    --to=<number>    block number to stop.
+-h, --help           show help and quit.
+-V, --version        print version information and quit.
 ```
 
 #### Invocación
