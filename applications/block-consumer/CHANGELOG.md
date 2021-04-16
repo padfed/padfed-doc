@@ -1,4 +1,4 @@
-# block-consume - changelog
+# block-consumer - changelog
 
 ## 2.0.0
 
