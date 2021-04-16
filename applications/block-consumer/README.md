@@ -62,8 +62,8 @@ Tenes que solicitarle a AFIP los certficados de las CAs que emitieron los certif
 
 Ejemplo:
 
-- `tlsica.blockchain-tributaria.afip.gob.ar-tls.crt`
-- `tlsica.blockchain-tributaria.comarb.gob.ar-tls.crt`
+- `afip-blockchain-tls-ca.crt`
+- `comarb-blockchain-tls-ca.crt`
 
 ### 3) application.conf
 
@@ -102,8 +102,8 @@ block-consumer
           │   ├── blockconsumer@blockchain-tributaria.xxx.gob.ar-tls-client.key
           │   └── blockconsumer@blockchain-tributaria.xxx.gob.ar-tls-client.crt
           └── tlscas
-              ├── tlsica.blockchain-tributaria.afip.gob.ar-tls.crt
-              └── tlsica.blockchain-tributaria.comarb.gob.ar-tls.crt
+              ├── afip-blockchain-tls-ca.crt
+              └── comarb-blockchain-tls-ca.crt
 ```
 
 ### 6) script para correr el contenedor
