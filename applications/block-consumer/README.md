@@ -224,20 +224,20 @@ Algunos de los casos de uso de `preview` puede ser:
 #### Opciones
 
 ```txt
-    --conf=<file>    path to config file.
-    --csvFile=<file> path to output file.
-    --from=<number>  block number to start.
-    --to=<number>    block number to stop.
--h, --help           show help and quit.
--V, --version        print version information and quit.
+    --conf=<file>     path to config file.
+    --csvFile=<file>  path to output file.
+    --from=<number>   block number to start.
+    --to=<number>     block number to stop.
+-h, --help            show help and quit.
+-V, --version         print version information and quit.
 ```
 
 #### Invocación
 
 ```bash
 docker run -it \
-       -v ${PWD}/conf:/conf \
-       -v ${PWD}/output:/output \
+       -v "${PWD}/conf:/conf" \
+       -v "${PWD}/output:/output" \
        -e TZ=America/Argentina/Buenos_Aires \
        padfed/block-consumer:2.0.0 \
        preview --conf=/conf/application.conf \
