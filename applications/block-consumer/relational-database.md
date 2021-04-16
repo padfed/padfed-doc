@@ -74,7 +74,7 @@ COLUMN | DESC | NOT NULL | PK | UK
 
 #### Table BC_VALID_TX_WRITE_SET
 
-En esta tabla se guarda el contenido del `write_set`de las txs válidas. El `read_set` (versiones de keys leídas por el chaincode) no se persiste en la base de datos. Con lo cual el contenido de la tabla siempre corresponde a actualizaciones. Dada una key el registro con mayor número de bloque corresponde al de su estado actual (última version).
+En esta tabla se guarda el contenido del `write_set`de las txs válidas. El `read_set` (versiones de keys leídas por el chaincode) no se persiste en la base de datos. Con lo cual el contenido de la tabla siempre corresponde a actualizaciones. Dada una key el registro con mayor número de bloque corresponde al de su estado actual (última versión).
 
 COLUMN | DESC | NOT NULL | PK | INDEX
 --- | --- | --- | --- | ---
@@ -104,7 +104,6 @@ FUNCTION | DESC
 
 ---
 
-
 ### Queries de ejemplos
 
 #### Queries de negocio
@@ -113,110 +112,194 @@ Si bien `block-consumer` es una aplicación agnóstica al negocio (se puede util
 
 La estructura de las keys y los values del Padrón Federal está especificado en [Model](/model/README.md)
 
-* [Query: Estado actual de una persona](#query-estado-actual-de-una-persona)
-* [Query: Historia de una key](#query-historia-de-una-key)
-* [Query: Cantidad de keys agrupadas por tag](#query-cantidad-de-keys-agrupadas-por-tag)
-* [Query: Cantidad de personas](#query-cantidad-de-personas)
-* [Query: Cantidad de contribuyentes inscriptos en CM agrupados por estado](#query-cantidad-de-contribuyentes-inscriptos-en-convenio-multilateral-agrupados-por-estado)
-
-#### Query: Estado actual de una persona
+##### Query: Estado actual de una persona
 
 ``` sql
 select *
 from
 (
 select i.*,
-MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK_OVER
-from  bc_valid_tx_write_set i
-where key like 'per:20000021629#%'
+       ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY BLOCK DESC, TXSEQ DESC) AS RNO
+from   bc_valid_tx_write_set i
+where  key like 'per:20000021629#%'
 ) x
-where BLOCK = MAX_BLOCK_OVER
-and   IS_DELETE is null
+where  RNO = 1 and is_delete is null
 ```
 
-##### Versión vigente de cada key
+* **Versión vigente de una key**
 
-Para una misma key se guarda un registro cada vez que su value es modificado. Un mismo bloque no puede contener mas de una modificacion sobre la misma key. Para recuperar la versión vigente de cada key la query utiliza la función analítica `MAX(BLOCK) OVER(PARTITION BY KEY) AS MAX_BLOCK_OVER` y el filtro `BLOCK = MAX_BLOCK_OVER`.
+  Para una misma key se guarda un registro cada vez que su value es modificado. Para recuperar la versión vigente de cada key la query utiliza la función analítica `ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY BLOCK DESC, TXSEQ DESC) AS RNO` junto con el filtro `RNO = 1`, seleccionando la fila con mayor `BLOCK` y `TXSEQ`.
 
-##### Keys eliminadas
+* **Keys eliminadas**
 
-Las keys eliminadas quedan marcadas con `BC_VALID_TX_WRITE_SET.IS_DELETE='T'`.
-El query, una vez que recupera la versión vigente cada key, verifican que no haya sido eliminada aplicando `IS_DELETE IS NULL`.
+  Las keys eliminadas quedan marcadas con `BC_VALID_TX_WRITE_SET.IS_DELETE='T'`.
+  El query, una vez que recupera la versión vigente cada key, verifican que no haya sido eliminada aplicando `IS_DELETE IS NULL`. Como alterantiva se obtiene el mismo resultado aplicando `VALUE IS NOT NULL` porque únicamente las keys eliminadas pueden tener su `VALUE` vacio.
 
-#### Query: Historia de una key
+##### Query: Historia de una key
 
 ``` sql
 select block, txseq, t.timestamp, i.key, i.value, i.is_delete
-from hlf.bc_valid_tx_write_set i
+from   hlf.bc_valid_tx_write_set i
 left join hlf.bc_valid_tx t
-using (block, txseq)
-where i.key = 'per:20000021629#per'
-order by block desc
+using  (block, txseq)
+where  i.key = 'per:20000021629#per'
+order by block desc, txseq desc
 ```
 
-Para obtener el timestamp de cada version de la key el query joinea `BC_VALID_TX` y `BC_VALID_TX_WRITE_SET`.
+Para obtener el timestamp de cada versión de la key el query joinea `BC_VALID_TX` y `BC_VALID_TX_WRITE_SET`.
 
-#### Query: Cantidad de keys agrupadas por tag
+##### Query: Cantidad de personas agrupadas por tipo de clave y estado
+
+`(full-scan)`
+
+``` sql
+select tipoid, estado, count(*)
+from
+(
+select key,
+       regexp_replace(value, '^{.*"tipoid":"([A-Z]{1})".*}', '\1') as tipoid,
+       regexp_replace(value, '^{.*"estado":"([A-Z]{1})".*}', '\1') as estado,
+       ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY BLOCK DESC, TXSEQ DESC) AS RNO,
+       is_delete
+from   hlf.bc_valid_tx_write_set
+where  key like 'per:___________#per'
+) x
+where  RNO = 1 and is_delete is null
+group by tipoid, estado
+order by tipoid, estado
+```
+
+##### Query: Cantidad de inscripciones activas en impuestos
+
+`(full-scan)`
+
+```sql
+select impuesto, count(*)
+from
+(
+select key,
+       value,
+       block,
+       to_number(regexp_replace(key, '^per:\d{11}#imp:(\d+)$', '\1')) as impuesto,
+       ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY BLOCK DESC, TXSEQ DESC) AS RNO
+from   hlf.bc_valid_tx_write_set
+where  key like 'per:___________#imp:%'
+) x
+where  RNO = 1
+AND    value LIKE '%"estado":"AC"%'
+group by impuesto
+order by impuesto
+```
+
+##### Query: Contribuyentes inscriptos en Convenio Multilateral agrupados por estado
+
+`(full-scan)`
+
+``` sql
+select estado, count(*)
+from
+(
+select substr(key, 5, 11) as cuit,
+       regexp_replace(value, '^{.*"estado":"([A-Z]{2})".*}', '\1') as estado,
+       ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY BLOCK DESC, TXSEQ DESC) AS RNO,
+       is_delete
+from   hlf.bc_valid_tx_write_set
+where  key like 'per:___________#imp:5900'
+) x
+where  RNO = 1 and is_delete is null
+group by estado
+order by estado
+```
+
+##### Query: Domicilios migrados por COMARB (org 900) pendientes de consolidar
+
+`(full-scan)`
+
+```sql
+select count(*)
+from
+(
+select key,
+       ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY BLOCK DESC, TXSEQ DESC) AS RNO,
+       is_delete
+from   hlf.bc_valid_tx_write_set
+where  key like 'per:___________#dom:900.%'
+) x
+where  RNO = 1 and is_delete is null
+```
+
+##### Query: Monotributistas (impuesto 20) activos (estado AC) con domicilio fiscal de AFIP en provincia de Buenos Aires (provincia: 1)
+
+`(full-scan)`
+
+```sql
+WITH imp20 AS
+     (
+     SELECT KEY, value
+     from
+     (
+     SELECT KEY, value,
+            ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY BLOCK DESC, TXSEQ DESC) AS RNO
+     from   hlf.bc_valid_tx_write_set i1
+     where  KEY LIKE 'per:___________#imp:20'
+     ) x
+     where  RNO = 1
+     AND    VALUE LIKE '%"estado":"AC"%'
+     )
+SELECT count(*)
+--     substr(x.KEY, 5, 11) AS cuit,
+--     imp_value,
+--     dom_value
+FROM
+(
+SELECT dom.KEY,
+       dom.block,
+       dom.value   AS dom_value,
+       imp20.VALUE AS imp_value,
+       ROW_NUMBER() OVER(PARTITION BY dom.KEY ORDER BY dom.BLOCK DESC, dom.TXSEQ DESC) AS RNO
+FROM   hlf.bc_valid_tx_write_set dom
+JOIN   imp20 ON dom.KEY = substr(imp20.KEY, 1, 16)||'dom:1.1.1'
+) x
+where  RNO = 1
+AND    regexp_like(dom_value, '^\{.*"provincia":1(,".+\}|\})$')
+```
+
+##### Query: Contribuyentes con domicilio fiscal de AFIP en Córdoba (provincia 3)
+
+`(full-scan)`
+
+```sql
+select count(*)
+from
+(
+select key, value,
+       ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY BLOCK DESC, TXSEQ DESC) AS RNO
+from   hlf.bc_valid_tx_write_set
+where  key like 'per:___________#dom:1.1.1'
+) x
+where  RNO = 1
+and    regexp_like(value, '^\{.*"provincia":3(,".+\}|\})$')
+```
+
+##### Query: Cantidad de keys agrupadas por tag
 
 `(full-scan)`
 
 ``` sql
 select tag,
-sum(case is_delete when 'T' then 0 else 1 end) as count_no_deleted,
-sum(case is_delete when 'T' then 1 else 0 end) as count_deleted
+       sum(case is_delete when 'T' then 0 else 1 end) as count_no_deleted,
+       sum(case is_delete when 'T' then 1 else 0 end) as count_deleted
 from
 (
-select key,
-substr(key, 17, 3) as tag,
-MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK_OVER, BLOCK, IS_DELETE
-from  hlf.bc_valid_tx_write_set
-where key like 'per:___________#___%'
+select substr(key, 17, 3) as tag,
+       ROW_NUMBER() OVER(PARTITION BY KEY ORDER BY BLOCK DESC, TXSEQ DESC) AS RNO,
+       is_delete
+from   hlf.bc_valid_tx_write_set
+where  key like 'per:___________#___%'
 ) x
-where BLOCK = MAX_BLOCK_OVER
+where  RNO = 1 and is_delete is null
 group by tag
 order by tag
-```
-
-#### Query: Cantidad de personas
-
-`(full-scan)`
-
-``` sql
-select count(*)
-from
-(
-select key,
-MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK_OVER, BLOCK, IS_DELETE
-from  hlf.bc_valid_tx_write_set
-where key like 'per:___________#wit'
-) x
-where BLOCK = MAX_BLOCK_OVER
-and   is_delete is null
-```
-
-#### Query: Cantidad de contribuyentes inscriptos en Convenio Multilateral agrupados por estado
-
-`(full-scan)`
-
-``` sql
-select
-estado,
-count(distinct cuit) as casos
-from
-(
-select
-substr(key, 5, 11) as cuit,
-regexp_replace(value, '^{.*"estado":"([A-Z]{2})".*}', '\1') as estado,
-MAX(BLOCK) OVER(PARTITION BY KEY) as MAX_BLOCK_OVER,
-BLOCK,
-IS_DELETE
-from  hlf.bc_valid_tx_write_set
-where key like 'per:___________#imp:5900'
-) x
-where BLOCK = MAX_BLOCK_OVER
-and   is_delete is null
-group by estado
-order by estado
 ```
 
 ### Queries para monitoreo
