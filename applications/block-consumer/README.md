@@ -169,7 +169,7 @@ Por ejemplo, la organizacion `911` decide no registrar en su base de datos infor
 
 Para que `block-consumer` filtre las correspondientes keys puede agregar en el `application.conf` el siguiente array de regexps:
 
-```json
+```
 business {
 
 exclusionKeys = [
