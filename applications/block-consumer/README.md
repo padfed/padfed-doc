@@ -209,35 +209,42 @@ La cantidad de keys excluidas en cada tx queda registrada en `BC_VALID_TX.EXCLUD
 
 ---
 
-## block-walker cli
+## Modo preview
 
 `(desde V2)`
 
-Herramienta de línea de comandos que permite procesar un rango de bloques desde la Blockchain sin impactar en la base de datos.
+Permite procesar un rango de bloques sin impactar en la base de datos.
 
-Algunos de los casos de uso interesantes de esta herramienta son:
+Algunos de los casos de uso de `preview` puede ser:
 
-- Extraer información en formato CSV de un conjunto de bloques a elección para su analisis manual o de sistemas no integrados a la blockchain S2S.
-- Realizar pruebas de conectividad y/o rendimiento
-- Evaluar el correcto funcionamiento de reglas de exclusión aplicadas usando la nueva propiedad *bussiness.exclusionKeys*
+- Registar información en formato CSV
+- Realizar pruebas de conectividad con la Blockchain y de rendimiento
+- Evaluar el funcionamiento de reglas de exclusión configuradas mediante `bussiness.exclusionKeys`
 
-### Forma de uso
+#### Opciones
 
 ```txt
-Usage: BlockWalker CLI [-hV] --conf=<file> [--csvFile=<file>] --from=<number> [--to=<number]
-      --conf=<file>      configuration file
-      --csvFile=<file>   file to write the output
-      --from=<number>    block number that The BlockWalker will use to start reading
-      -h, --help         show this help message and exit.
-      --to=read up to    block number that The BlockWalker will read up to
-      -V, --version      print version information and exit.
+  --conf=<file>    config file.
+  --csvFile=<file> output file.
+  --from=<number>  block number to start reading.
+  --to=<number>    block number to stop reading.
+  -h, --help       show help and exit.
+  -V, --version    print version information and exit.
 ```
 
-### Invocación
+#### Invocación
 
-~~~
-docker run  -it  -v ${PWD}/conf:/conf padfed/block-consumer:2.0.0-SNAPSHOT preview --conf /conf/application.conf --from=1 --to=1000 --csvFile=output-1-from-1000.csv
-~~~
+```bash
+docker run -it \
+       -v ${PWD}/conf:/conf \
+       -v ${PWD}/output:/output \
+       -e TZ=America/Argentina/Buenos_Aires \
+       padfed/block-consumer:2.0.0 \
+       preview --conf /conf/application.conf \
+               --from=1 \
+               --to=1000 \
+               --csvFile=/output/from-1-to-1000.csv
+```
 
 ---
 

@@ -6,7 +6,7 @@ Abril 2021
 
 * Exclusión de keys
 * Registra el timestamp del bloque en BC_BLOCK.TIMESTAMP
-* Generación de CSV
+* Modo preview, generación de CSV
 * Permite configurar [options] para el comando java de openjdk:8
 * Permite configurar la invocación a una funciín sql para verificar integridad (no recomendado para ambiente de Producción)
 * Soporta values con tamaños mayores de 4 KB (no necesario para Padrón Federal)
