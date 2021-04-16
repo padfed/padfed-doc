@@ -252,7 +252,7 @@ docker run -it \
 
 #### IO Error: Connection reset
 
-Cuando ocurren este tipo de error:
+Cuando ocurre este tipo de error:
 
 ```txt
 Exception in thread "main" java.sql.SQLRecoverableException: IO Error: Connection reset
@@ -272,7 +272,7 @@ Caused by: java.net.SocketException: Connection reset
         ... 7 more
 ```
 
-una posible solución es agregar una environment con una directiva para java en el `docker run`:
+una posible solución es agregar la siguiente environment con una directiva para java en el `docker run`:
 
 ``` bash
 -e DOCKER_JAVA_OPTS='-Djava.security.egd=file:/dev/./urandom'
