@@ -160,12 +160,12 @@ En caso que la tx fue invalidada (no logró actualizar el state de la Blockchain
 
 Una organización puede configurar `block-consumer` para que filtre registros que no le resulta de interés reduciendo el consumo de espacio en su base de datos.
 
-Por ejemplo, la organizacion `911` decide no registrar en su base de datos:
+Por ejemplo, la organizacion `911` decide no registrar en su base de datos información de:
 
-- información de Contribuciones Municipales
-- jurisdicciones migradas por otras organizaciones exceptuando las migradas por la Comisión Arbitral (org `900`)
-- domicilios migrados por otras organizaciones exceptuando los migrados por la Comisión Arbitral
-- actividades económicas migradas por otras organizaciones exceptuando las migradas por la Comisión Arbitral
+- Contribuciones municipales
+- Jurisdicciones migradas por otras organizaciones exceptuando las migradas por la Comisión Arbitral (org `900`)
+- Domicilios migrados por otras organizaciones exceptuando los migrados por la Comisión Arbitral
+- Actividades económicas migradas por otras organizaciones exceptuando las migradas por la Comisión Arbitral
 
 Para que `block-consumer` filtre las correspondientes keys puede agregar en el `application.conf` el siguiente array de regexps:
 
@@ -240,7 +240,7 @@ docker run -it \
        -v ${PWD}/output:/output \
        -e TZ=America/Argentina/Buenos_Aires \
        padfed/block-consumer:2.0.0 \
-       preview --conf /conf/application.conf \
+       preview --conf=/conf/application.conf \
                --from=1 \
                --to=1000 \
                --csvFile=/output/from-1-to-1000.csv
