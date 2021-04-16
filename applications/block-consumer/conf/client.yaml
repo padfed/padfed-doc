@@ -53,19 +53,19 @@ peers:
   peer0.afip:
     url: grpcs://<FQDN>:7051
     tlsCACerts:
-      path: conf/tlscas/tlsica.blockchain-tributaria.xxx.gob.ar-tls.crt
+      path: conf/tlscas/afip-blockchain-tls-ca.crt
 
   peer1.afip:
     url: grpcs://<FQDN>:7051
     tlsCACerts:
-      path: conf/tlscas/tlsica.blockchain-tributaria.xxx.gob.ar-tls.crt
+      path: conf/tlscas/afip-blockchain-tls-ca.crt
 
   peer0.comarb:
     url: grpcs://<FQDN>:7051
     tlsCACerts:
-      path: conf/tlscas/tlsica.blockchain-tributaria.yyy.gob.ar-tls.crt
+      path: conf/tlscas/comarb-blockchain-tls-ca.crt
 
   peer1.comarb:
     url: grpcs://<FQDN>:7051
     tlsCACerts:
-      path: conf/tlscas/tlsica.blockchain-tributaria.yyy.gob.ar-tls.crt
+      path: conf/tlscas/comarb-blockchain-tls-ca.crt
