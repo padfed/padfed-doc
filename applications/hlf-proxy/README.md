@@ -1,18 +1,18 @@
-# HLF-Proxy
+# hlf-proxy
 
-Aplicación que expone endpoints REST que permiten invocar las funciones de los chaincodes de negocio (ejemplo `padfedcc`) y del Query System Chaincode [QSCC](https://github.com/hyperledger/fabric/tree/master/core/scc/qscc) en una red de Blockchain [Hyperledger Fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html).
+Aplicación que expone una API REST que permite invocar las funciones de los chaincodes de apliación (ejemplo `padfedcc`) y del Query System Chaincode [QSCC](https://github.com/hyperledger/fabric/tree/master/core/scc/qscc) en una red de blockchain [Hyperledger Fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html).
 
 Provee una Swagger UI que atiende en `[FQDN]:[port configurado en application.conf]/swagger#/`
 
 ## Esquemas de deploy
 
-Una organización autorizada a acceder a la Blockchain que no corre nodos de la red, puede utilizar HLF-Proxy para invocar via REST las funciones del chaincode. HLF-Proxy se conecta mediante internet a los nodos de la red. 
+Una organización autorizada a acceder a la Blockchain que no corre nodos de la red, puede utilizar HLF-Proxy para invocar via REST las funciones del chaincode. HLF-Proxy se conecta mediante internet a los nodos de la red.
 
 ![](images/deploy-accediendo-a-nodos-remotos.png)
 
 Una organización que corre nodos de la Blockchain, puede utilizar un HLF-Proxy conectado a sus propios peers para tener mejor tiempo de respuesta en consultas.
 
-Para la actualizar la Blockchain requiere que HLF-Proxy este conectado mediante internet al orderer y a los peers remotos de otras organzasiones. 
+Para la actualizar la Blockchain requiere que HLF-Proxy este conectado mediante internet al orderer y a los peers remotos de otras organzasiones.
 
 ![](images/deploy-accediendo-a-nodos-locales.png)
 
@@ -36,6 +36,7 @@ Para la actualizar la Blockchain requiere que HLF-Proxy este conectado mediante 
 ```
 http://dominio:8085/hlfproxy/api/v1/invoke/padfedchannel/padfedcc?waitForEventSeconds=100&verbose=true
 ```
+
 ### query e  invoke: Body del Request
 
 **Content-type:** `application/json`
@@ -51,7 +52,7 @@ Ej: invoke a la function "getPersona" que recibe como argumento una cuit.
 
 ``` json
 {"function":"getPersona","args":[20104249729]}
-``` 
+```
 
 ### HTTP Status Code
 
@@ -128,16 +129,16 @@ Step del flujo de la tx donde ocurrió el error.
 
 ### Campo ccResponse
 
-Campo String que contiene el payload de la respuesta del chaincode.   
+Campo String que contiene el payload de la respuesta del chaincode.
 Al ser un campo String los delimitadores `"` quedan escapeados.
 
 En caso de txs tipo query, el resultado debe recuperarse desde este campo.
-Tipicamente las funciones queries del chaincode **padfedcc** generan un json array de pares {Key-Record}. 
+Tipicamente las funciones queries del chaincode **padfedcc** generan un json array de pares {Key-Record}.
 Ejemplo:
 
 ``` json
 {"function":"queryPersona","Args":[20104249729]}
-``` 
+```
 
 ``` json
 {
@@ -156,11 +157,11 @@ Para correr la aplicacion se requiere que el equipo tenga instalado:
 
 - DOCKER 18.09 o superior
 
-- DOCKER-COMPOSE 1.23.1 o superior
+- DOCKER-COMPOSE 1.23.1 o superior (opcional)
 
-La imagen se puede obtener mediante `docker pull`
-
-    $ docker pull padfed/bc-proxy:latest
+```sh
+docker pull padfed/hlf-proxy:1.7.0
+```
 
 ### Opción 1 - Ejecución mediante docker run
 
@@ -176,7 +177,7 @@ La imagen se puede obtener mediante `docker pull`
  -v ${PWD}/conf:/conf \
  -p 8085:8085 \
  -d \
- padfed/bc-proxy:latest
+ padfed/hlf-proxy:1.7.0
 
 ```
 
@@ -192,7 +193,7 @@ services:
     labels:
       app: hlf-proxy
     container_name: hlf-proxy
-    image: padfed/bc-proxy:latest
+    image: padfed/hlf-proxy:1.7.0
     read_only: true
     environment:
       - TZ=America/Argentina/Buenos_Aires
@@ -257,11 +258,11 @@ netty {
   #server.threads.Max default --> Math.max(32, availableProcessors * 8)
   #overwrite like system property --> -Dserver.threads.Max
   workerThreads = ${server.threads.Max}
-  
+
   http {
     #overwrite max body size (413 Request Entity Too Large)
     MaxContentLength = ${server.http.MaxRequestSize}
-  }  
+  }
 }
 
 server {
@@ -423,9 +424,9 @@ peers:
 1.4.4
 
 - Se incluye nueva propiedad `MaxContentLength` en la configuración para facilitar ajustar el tamaño máximo de un request (413 Request Entity Too Large)
-  
+
 - Mejora de inicialización para evitar error NPE en escenarios de falla de conexión a los Peers en el arranque de la aplicación
-  
+
 - Soporta recibir `function` o `Function` como así también `args` o `Args` en el json del request body
 
 1.4.3
