@@ -52,7 +52,7 @@ donde
 | 12  | [jurisdicciones](#personajurisdicciones) | jurisdicciones                                        | colección | `jur`   |       |
 | 13  | [cmsedes](#personacmsedes)               | provincias sedes para el convenio multilateral        | colección | `cms`   |       |
 | 14  | [archivos](#personaarchivos)             | archivos digitalizados                                | colección | `arc`   |       |
-| 14  | [puntosventa](#personapuntosventa)       | puntos de venta                                       | colección | `pve`   |       |
+| 15  | [puntosventa](#personapuntosventa)       | puntos de venta                                       | colección | `pve`   |       |
 | 16  | [testigo](#personatestigo)               | registro unico por persona. No puede ser actualizado. | 1(uno)    | `wit`   |   x   |
 
 ---
