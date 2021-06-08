@@ -5,6 +5,16 @@
 
 ---
 
+### version 1.0.0 - 2021 junio
+
+- agrega [puntosventa](../model/README.md#personapunbtosventa)
+
+- aplica controles mas estrictos sobre el formato de las keys
+
+- corrige los codigos de las provincias LA RIOJA, SANTIAGO DEL ESTERO y TUCUMAN que responden las functions `GetOrganizacion` y `GetOrganizacionAll`.
+
+---
+
 ### version 0.8.8 - 2020 abril
 
 - `cms`: agrega atributo `org` en la key y en el objeto
@@ -36,4 +46,4 @@ efecto del cambio implementado en v0.8.8:
 }
 ```
 
-El cambio permite determinar si el registro fue informado por la COMARB en el proceso de migracion (`"org":900`) o si fue actualizado por el contribuyente desde la webapp de RUT (`"org":1`).
+El cambio permite determinar si el registro fue informado por la COMARB mediante el proceso de migración (`org: 900`) o si fue actualizado por el contribuyente desde la webapp de RUT (`org: 1`).
