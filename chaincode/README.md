@@ -7,7 +7,7 @@
 
 ### version 1.0.0 - 2021 junio
 
-- agrega [puntosventa](../model/README.md#personapunbtosventa)
+- agrega [puntosventa](../model/README.md#personapuntosventa)
 
 - aplica controles mas estrictos sobre el formato de las keys
 
