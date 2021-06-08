@@ -747,9 +747,7 @@ tipo | descripción |
 
 ### persona.puntosventa
 
-Un domicilio, identificado por `domitipo` y `domiorden`, puede tener varios puntos de venta con distintos sistemas de facturación (`sistema`).
-
-Los domicilios referenciados son siempre del organismo AFIP (`"org": 1`).
+Cada punto de venta tiene un determinado sistema de facturacion (`sistema`) y corresponde a un domicilio referenciado por `domitipo` y `domiorden`. Los domicilios referenciados son siempre del organismo AFIP (`org: 1`).
 
 subkey | `pve:{domitipo}.{domiorden}.{numero}`
 --- | ---
