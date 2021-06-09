@@ -1,0 +1,32 @@
+@startuml hlf-proxy-deploy-2
+
+title hlf-proxy conectado a nodos remotos
+
+skinparam componentStyle rectangle
+
+component "blockchain\nnetwork" as network {
+    [peer0.yyy]
+    [peer1.yyy]
+    [peer0.zzz]
+    [peer1.zzz]
+    [orderer]
+
+    [peer0.yyy] -[hidden]down- [peer0.zzz]
+    [peer1.yyy] -[hidden]down- [peer1.zzz]
+    [peer0.yyy] -[hidden]right- [peer1.yyy]
+    [peer0.zzz] -[hidden]down- [orderer]
+}
+
+package "org xxx" as orgxxx {
+    component [hlf-proxy] as proxy #SkyBlue
+    component [aplicación\npropia] as app
+
+    app .right.> proxy : REST API
+}
+
+cloud internet
+
+proxy ..> internet
+internet ..> network : gRPCs
+
+@enduml

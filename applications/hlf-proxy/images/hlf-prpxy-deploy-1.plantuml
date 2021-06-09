@@ -1,0 +1,36 @@
+@startuml hlf-proxy-deploy-1
+
+title hlf-proxy conectado a nodos propios y remotos
+
+skinparam componentStyle rectangle
+
+component "nodos remotos" as remotepeers {
+    [peer0.yyy]
+    [peer1.yyy]
+    [peer0.zzz]
+    [peer1.zzz]
+    [orderer]
+
+    [peer0.yyy] -[hidden]down- [peer0.zzz]
+    [peer1.yyy] -[hidden]down- [peer1.zzz]
+    [peer0.yyy] -[hidden]right- [peer1.yyy]
+    [peer0.zzz] -[hidden]down- [orderer]
+}
+
+package "org xxx" as orgxxx {
+    component [hlf-proxy] as proxy #SkyBlue
+    component [aplicación\npropia] as app
+    component "peers propios" as ownpeers {
+        [peer0.xxx]
+        [peer1.xxx]
+    }
+    app .right.> proxy : REST API
+    proxy ..> ownpeers : gRPCs
+}
+
+cloud internet
+
+proxy ..> internet
+internet ..> remotepeers : gRPCs
+
+@enduml

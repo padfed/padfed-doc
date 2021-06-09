@@ -1,157 +1,378 @@
 # hlf-proxy
 
-Aplicación que expone una API REST que permite invocar las funciones de los chaincodes de apliación (ejemplo `padfedcc`) y del Query System Chaincode [QSCC](https://github.com/hyperledger/fabric/tree/master/core/scc/qscc) en una red de blockchain [Hyperledger Fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html).
+Aplicación que expone una API REST que permite invocar las funciones de los chaincodes de aplicación (en PADFED usamos el chaincode `padfedcc`) y del Query System Chaincode [qscc](https://github.com/hyperledger/fabric/tree/master/core/scc/qscc) en una red de blockchain [Hyperledger Fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html).
 
-Provee una Swagger UI que atiende en `[FQDN]:[port configurado en application.conf]/swagger#/`
+El chaincode `padfedcc` ofrece funciones que permiten consultar el estado actual de una persona, la historia de de los assets que componen una persona, la lista de funciones disponibles, etc.
 
-## Esquemas de deploy
+Por otro lado, el chaincode `qscc` ofrece funciones que permiten obtener información de la blockchain, el contenido de un bloque, el contenido de una transaccion.
 
-Una organización autorizada a acceder a la Blockchain que no corre nodos de la red, puede utilizar HLF-Proxy para invocar via REST las funciones del chaincode. HLF-Proxy se conecta mediante internet a los nodos de la red.
+**hlf-proxy** permite invocar las funciones de los chaincodes (ya sea `padfedcc`, `qscc` o cualquier otro) mediente el recurso `/query`.
 
-![](images/deploy-accediendo-a-nodos-remotos.png)
+AFIP tambien utiliza `padfedcc` para actualizar el estado de una persona mediante el recurso `/invoke`.
 
-Una organización que corre nodos de la Blockchain, puede utilizar un HLF-Proxy conectado a sus propios peers para tener mejor tiempo de respuesta en consultas.
+Adicionalmente, **hlf-proxy** ofrece el recurso `/ledgers` con endpoints que facilitan consultar el contenido de un bloque, el estado de transacciones y la cantidad de bloques que tiene un peer.
 
-Para la actualizar la Blockchain requiere que HLF-Proxy este conectado mediante internet al orderer y a los peers remotos de otras organzasiones.
+Ya sea mediante el endpoint `/query/{channel}/qscc` invocando a la function `GetBlockByNumber` o el endpoint `/ledger/blocks/{channel}/{blockNumner}`, se puede utilizar **hlf-proxy** para consumir bloque a bloque el contenido de la blockchain sustituyendo el uso de **hlf-block-consumer**.
 
-![](images/deploy-accediendo-a-nodos-locales.png)
+**hlf-proxy** implementa una interfaz Swagger que atiende en `[FQDN]:[port configurado en application.conf]/swagger#/`
 
 ---
 
 ## Endpoints
 
-| Endpoints                                                  | Método | Acción                                                                                                                                                                                        |
-| ---------------------------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/hlfproxy/api/v1/query/{channel}/{cc}[/{peer}][?{params}]`  | `POST`   | Invoca funciones del chaincode {cc} en el channel {channel} en el PEER {peer} o en los PEERs configurados en el **xxx.client.yaml** con `chaincodeQuery:true`. No envía la tx a los ORDERERs. |
-| `/hlfproxy/api/v1/invoke/{channel}/{cc}[/{peer}][?{params}]` | `POST`   | Invoca funciones del chaincode {cc} en el channel {channel} en el PEER {peer} o en los PEERs configurados en el **xxx.client.yaml** con `endorsingPeer:true`.  Envia la tx al ORDERERs.       |
-| `/hlfproxy/api/v1/ledger/blockheight/{channel}/{peer}`       | `GET`    | Recupera el número de bloque mas reciente o el mas alto desde el PEER {peer} o desde los PEERs configurados en el **xxx.client.yaml** con `ledgerQuery:true`.                                 |
+Todas las urls comienzan con `/hlfproxy/api/v1` y contienen un parámetro `{channel}` para indicar el channel al que se accede (en PADFED el channel es `padfedchannel`).
 
-| Params                 | Endpoints      | Descripción                                                                                                                                                                                       | Default                                                                               |
-| ---------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `waitForEventSeconds=n`  | invoke         | Tiempo en segundos que debe esperar por el evento de validación de la tx. Para que la espera funcione debe configurarse un único PEER en el archivo  **xxx.client.yaml**  con `eventSource:true`. | Valor configurado en el **application.conf** property ``fabric.waitForEventSeconds``. |
-| `verbose=[true o false]` | query e invoke | true: agrega mas información en el json del response.                                                                                                                                             | false                                                                                 |
+metodo | enpoint | desc
+---    | --- | ---
+`POST` | `/query/{channel}/{cc}[/{peer}]`         | Invoca una function del chaincode `{cc}` en el peer `{peer}` o en los peers configurados en el deploy.
+`POST` | `/invoke/{channel}/{cc}`                 | Invoca una function del chaincode `{cc}` y envia los respaldos obtenidos desde los peers al orderer.
+`GET`  | `/ledger/blockheight/{channel}[/{peer}]` | Recupera el número de bloque mas alto desde el peer `{peer}` o desde alguno de los peers configurados en el deploy.
+`GET`  | `/ledger/blocks/{channel}/{blockNumber}` | Recupera el contenido del bloque `{blockNumber}`.
+`GET`  | `/ledger/transactions/{channel}/{txId}`  | Recupera el estado de la transacción `{txId}`.
+`POST` | `/ledger/transactions/{channel}`         | Recupera el estado de las transacciones cuyos ids se informan en el body.
 
-**ejemplo:**
+---
 
-```
-http://dominio:8085/hlfproxy/api/v1/invoke/padfedchannel/padfedcc?waitForEventSeconds=100&verbose=true
-```
+### Recurso `/query`
 
-### query e  invoke: Body del Request
+Se utiliza para obtener información desde la blockchain.
 
-**Content-type:** `application/json`
+`POST` | `/query/{channel}/{cc}[/{peer}][?{verbose}]`
+--- | :---
 
-El body del request debe ser un json object con la siguientes estructura:
+Invoca una function del chaincode `{cc}` en el peer `{peer}` o en los peers configurados en el deploy.
 
-| Campo    | Descripción                                                        |
-| -------- | ------------------------------------------------------------------ |
-| `function` | Nombre de la función del chaincode.          |
-| `args`     | Json array con los parámetros que recibe la función del chaincode. |
+El query string `verbose=true` agrega info adicional en la respuesta.
 
-Ej: invoke a la function "getPersona" que recibe como argumento una cuit.
+**request body:**
 
-``` json
-{"function":"getPersona","args":[20104249729]}
-```
+El nombre de la function del chaincode y sus argumentos se informan en el body en un objeto JSON con ítems:
 
-### HTTP Status Code
+ítem       | tipo   | desc
+--------   | ---    | ---
+`function` | string | Nombre de la function.
+`args`     | array  | Argumentos que espera la funcion.
 
-Basado en [List of HTTP status codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
+Ejemplos:
 
-| Valor | Nombre                | Descripción                                                                                                                                                                                                                                                    |
-| ----- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 200   | OK (VALID)            | quey ok o tx invoke avalada por los Peers y validada por los Committers (actualizó el State).                                                                                                                                                                  |
-| 202   | ACCEPTED              | Tx invoke avalada por los Peers y procesada por el Orderer. Se desconoce si fue validada por los Committers.                                                                                                                                                   |
-| 400   | BAD REQUEST           | Error atribuible al cliente.                                                                                                                                                                                                                                   |
-| 403   | FORBIDDEN             | El cliente intentó ejecutar una función del chaincode para la cual no tiene privilegios.                                                                                                                                                                       |
-| 404   | NOT FOUND             | El cliente mediante una funcion get intentó obtener un registro inexistente.                                                                                                                                                                                   |
-| 409   | CONFLICT              | Tx invoke avalada por los Peers pero posteriormente invalidada por los Committers. La tx fue agregada en un bloque pero quedó marcada como inválida. No actualizó el State. [Ver txflow](https://hyperledger-fabric.readthedocs.io/en/release-1.4/txflow.html) |
-| 500   | INTERNAL SERVER ERROR | Error interno del sistema.                                                                                                                                                                                                                                     |
-| 501   | NOT IMPLEMENTED       | El cliente invoco una función inexistente.                                                                                                                                                                                                                     |
-
-### query e invoke: Response
-
-**Content-type:** `application/json`
-
-El body del response contiene un json object con la siguiente estructura:
-
-(se considera SUCCESS cuando txStatus es VALID o ACCEPTED)
-
-| Campo                 | SUCCESS verbose=false | SUCCESS verbose=true | ERROR | Desc                                                                                                                                                                                                                                                         |
-| --------------------- | --------------------- | -------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| status                | X                     | X                    | X     | [Ver HTTP Status Code]                                                                                                                                                                                                                                       |
-| block                 | X                     | X                    | X     | Numero de bloque en que quedó incluida la tx. Solo se informa cuando el proxy espera por el evento de validación de la tx `waitForEventSeconds>0`                                                                                                            |
-| txId                  | X                     | X                    | X     | id de la tx fabric                                                                                                                                                                                                                                           |
-| time                  | X                     | X                    | X     | timestamp UTC en formato `yyyy-MM-dd HH:mm:ss`, ej: `2018-07-23 14:31:56`                                                                                                                                                                                    |
-| channel               |                       | X                    | X     | Nombre del channel                                                                                                                                                                                                                                           |
-| chaincode             |                       | X                    | X     | Nombre del chaincode                                                                                                                                                                                                                                         |
-| txStatus              |                       | X                    | X     | [Ver Campo txStatus]                                                                                                                                                                                                                                         |
-| step                  |                       |                      | X     | [Ver Campo step]                                                                                                                                                                                                                                             |
-| errMsg                |                       |                      | X     | Mensaje de error generado en el step.                                                                                                                                                                                                                        |
-| thread                |                       | X                    | X     | Nombre del thread que procesó la tx                                                                                                                                                                                                                          |
-| client                |                       | X                    | X     | Integration api utilizada. Ej: `afip.bc.fabric.api`                                                                                                                                                                                                          |
-| simulatingMs          |                       | X                    | X     | Milisegundos que demoró la simulación                                                                                                                                                                                                                        |
-| ordererMs             |                       | X                    | X     | Milisegundos que demoró el envió a los ORDERERs. Solo se informa cuando el proxy no se queda esperado el evento de validación de la tx.                                                                                                                      |
-| eventMs               |                       | X                    | X     | Milisegundos que demoró el envió a los ORDERERs + el evento de validación de la tx                                                                                                                                                                           |
-| ccResponse            |                       | X                    | X     | [Ver Campo ccResponse]                                                                                                                                                                                                                                       |
-| peers                 |                       | X                    | X     | Array de objetos peer                                                                                                                                                                                                                                        |
-| peer.name             |                       | X                    | X     | Nombre del peer. Ej: `peer0.xxx.com`                                                                                                                                                                                                                         |
-| peer.url              |                       | X                    | X     | URL del peer incluyendo el port Ej: `peer0.xxx.com:7051`                                                                                                                                                                                                     |
-| peer.simulatingStatus |                       | X                    | X     | Resultado de la simulación ( SUCCESS o FAILURE )                                                                                                                                                                                                             |
-| peer.eventStatus      |                       | X                    | X     | Resultado de la validación de los COMMITERs ( VALID, ENDORSEMENT_POLICY_FAILURE, MVCC_READ_CONFLICT, ...) [Ver lista de errores en peer.transaction.proto](https://github.com/hyperledger/fabric-sdk-java/blob/master/src/main/proto/peer/transaction.proto) |
-| peer.errMsg           |                       |                      | X     | Mensaje de error                                                                                                                                                                                                                                             |
-
-### Campo txStatus
-
-| Valor    | Desc                                                                                                                                         |
-| -------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| REFUSED  | tx rechazada                                                                                                                                 |
-| VALID    | tx avalada y validada exitosamente                                                                                                           |
-| INVALID  | tx avalada e invalidada por los COMMITTERs                                                                                                   |
-| ACCEPTED | tx procesada por el ORDERER, pero se desconoce si fue validada por los COMMITTERs                                                            |
-| UNKNOW   | tx respaldada por los PEERs, pero se desconoce si fue procesada por el ORDERER                                                               |
-| PANIC    | tx procesada por el ORDERER, pero algunos COMMITTERs la validaron y otros la invalidaron (por ahora este error no es detectado por el proxy) |
-
-### Campo step
-
-Step del flujo de la tx donde ocurrió el error.
-
-| Valor                   | Desc                                                                                                                                                                                                                                                                    |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| VALIDATING_REQUEST      | Error validando el request del cliente.                                                                                                                                                                                                                                 |
-| CREATING_TX             | Error construyendo la tx fabric.                                                                                                                                                                                                                                        |
-| SENDING_TX_TO_PEER      | Ningún PEER pudo ser invocado (timeout, handshake TLS, etc).                                                                                                                                                                                                            |
-| SIMULATING_TX           | Error detectado por el chaincode.                                                                                                                                                                                                                                       |
-| PROCESSING_ENDORSEMENTS | Error procesando las respuestas de los PEERs. Ej. las respuesta obtenidas son distintas.                                                                                                                                                                                |
-| SENDING_TO_ORDERER      | Error enviando la tx al ORDERER                                                                                                                                                                                                                                         |
-| WAITING_FOR_EVENT       | Error esperando la validación de la tx (timeout)                                                                                                                                                                                                                        |
-| VALIDATING_TX           | Error detectado en la validación de la tx. Ej: ENDORSEMENT_POLICY_FAILURE, MVCC_READ_CONFLICT, PHANTOM_READ_CONFLICT, ... [Ver lista de errores en transaction.proto](https://github.com/hyperledger/fabric-sdk-java/blob/master/src/main/proto/peer/transaction.proto) |
-
-### Campo ccResponse
-
-Campo String que contiene el payload de la respuesta del chaincode.
-Al ser un campo String los delimitadores `"` quedan escapeados.
-
-En caso de txs tipo query, el resultado debe recuperarse desde este campo.
-Tipicamente las funciones queries del chaincode **padfedcc** generan un json array de pares {Key-Record}.
-Ejemplo:
-
-``` json
-{"function":"queryPersona","Args":[20104249729]}
+```json
+{"function":"GetPersona","args":[20123456780]}
 ```
 
-``` json
+```json
+{"function":"GetVersion","args":[]}
+```
+
+```json
+{"function":"queryPersona","args":[20123456780,true]}
+```
+
+**Ejemplo de request:**
+
+```sh
+curl -X POST "https:/domain/hlfproxy/api/v1/query/padfedchannel/padfedcc?verbose=true" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"function\":\"queryPersona\",\"args\":[20123456780,true]}"
+```
+
+**response:**
+
+Los endpoints responden con un objeto JSON con ítems:
+
+item         | type    | desc
+---          | ---     | ---
+`txId`       | string  | id de la transacción generada por **hlf-proxy** para invocar al chaincode
+`time`       | string  | fecha y horario en que se ejecutó la transacción en formato ISO 8601
+`status`     | integer | http status code
+`ccResponde` | string  | contenido de la respuesta del chaincode
+
+En caso de falla (`status != 200`) o `?verbose=true` **hlf-prpoxy** agrega otros ítems que permiten obtener mas info sobre la ejecución de la transacción.
+
+**ejemplo de response:**
+
+http status code | 200
+--- | ---
+
+```json
 {
-  "txId": "75c271b6604c8ce7cc280cc35d3c03e90a412a83238dba3666eb973f08ab3555",
-  "time": "2019-06-11 23:45:12",
+  "txId": "a371c36a85fe494933c14d72bcf2ec9d6c87f12653c3a2fddbc8291b2b95e468",
+  "time": "2021-06-09T15:52:37.361Z",
   "status": 200,
-  "ccResponse": "[{\"Key\":\"per:20104249729#per\",\"Record\":{\"tipo\":\"F\",\"id\":20104249729,\"tipoid\":\"C\",\"estado\":\"A\",\"nombre\":\"XXXXXXXXXXXX\",\"apellido\":\"XXXXXXXX\",\"materno\":\"XXXXXXX\",\"sexo\":\"M\",\"documento\":{\"tipo\":96,\"numero\":\"XXXXXXXX\"},\"nacimiento\":\"1952-05-25\"}}]"
+  "ccResponse": "[{\"Key\":\"per:20176058650#dom:1.1.1\",\"Record\":{\"orden\":1,\"org\":1,\"tipo\":1,\"estado\":2,\"calle\":\"XXXXXXX\",\"numero\":49,\"provincia\":1,\"localidad\":\"ACASSUSO\",\"cp\":\"1641\",\"nomenclador\":\"110\",\"ds\":\"2004-02-26\"}},{\"Key\":\"per:20176058650#dom:1.2.1\",\"Record\":{\"orden\":1,\"org\":1,\"tipo\":2,\"estado\":9,\"calle\":\"XXXXXXX\",\"numero\":50,\"provincia\":1,\"localidad\":\"ACASSUSO\",\"cp\":\"1641\",\"nomenclador\":\"110\",\"ds\":\"2014-07-03\"}},{\"Key\":\"per:20176058650#ema:1\",\"Record\":{\"direccion\":\"XXXXXXXXXXXXXX@XXXX.XXX.XX\",\"orden\":1,\"tipo\":8,\"ds\":\"2016-06-16\"}},{\"Key\":\"per:20176058650#ema:2\",\"Record\":{\"direccion\":\"XXXXXXXXXXXXXX@XXXX.XXX.XX\",\"orden\":2,\"tipo\":8,\"ds\":\"2016-06-16\"}},{\"Key\":\"per:20176058650#per\",\"Record\":{\"tipo\":\"F\",\"id\":20176058650,\"tipoid\":\"C\",\"estado\":\"A\",\"ds\":\"2013-01-29\",\"nombre\":\"XXXXX XXXXX\",\"apellido\":\"XXXXX\",\"sexo\":\"M\",\"documento\":{\"tipo\":96,\"numero\":\"XXXXXXXX\"},\"nacimiento\":\"1965-11-01\"}},{\"Key\":\"per:20176058650#tel:1\",\"Record\":{\"orden\":1,\"pais\":200,\"area\":11,\"numero\":99999999,\"tipo\":6,\"linea\":1,\"ds\":\"2013-12-16\"}},{\"Key\":\"per:20176058650#wit\",\"Record\":1}]"
 }
 ```
 
+---
+
+### Recurso `/invoke`
+
+Se utiliza para actualizar la información de la blockchain invocando a funciones de un chaincode de aplicación. En PADFED, AFIP utiliza este recurso para mantener actualizada la blockchain, invocando a la function `PutPersonaList` del chaincode `padfedcc`.
+
+`POST` | `/invoke/{channel}/{cc}[?{verbose}&{waitForEventSeconds}]`
+--- | :---
+
+Invoca una function del chaincode `{cc}`, obtiene los respaldos desde los peer y los envia al orderer para que la transacción quede agregada en un nuevo bloque.
+
+El query string `verbose=true` agrega info adicional en la respuesta.
+
+El query string `waitForEventSeconds={integer}` indica la cantidad de segundos que **hlf-proxy** espera hasta que la transacción quede agregada en un nuevo bloque.
+
+Al igual que los enpoints de `/query`, los de `/invoke` requieren un body con un objeto JSON con ítems `function` y `args`.
+
+**response:**
+
+Los endpoints responden con un objeto JSON con ítems:
+
+item         | type    | desc
+---          | ---     | ---
+`txId`       | string  | id de la transacción generada por **hlf-proxy** para invocar al chaincode.
+`time`       | string  | fecha y horario en que se ejecutó la transacción en formato ISO 8601.
+`status`     | integer | http status code.
+`block`      | integer | Bloque en que quedó agregada y validada exitosamente la transacción. Este ítem no se agrega en caso que se haya utilizado el query string `waitForEventSeconds=0`.
+
+En caso de falla (`status != 200 y 202`) o `verbose=true` **hlf-prpoxy** agrega otros ítems que permiten obtener mas info sobre la ejecución de la transacción.
+
+**http status code:**
+
+Basado en [List of HTTP status codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
+
+code | nombre           | desc
+---- | :---             | :---
+200  | OK               | Transacción OK, actualizó el state.
+202  | ACCEPTED         | Transacción respaldada por los peers y enviada al orderer.
+400  | BAD REQUEST      | Error atribuible al cliente.
+403  | FORBIDDEN        | Se invocó una function del chaincode para la cual el MSP de **hlf-proxy** no tiene privilegios.
+404   | NOT FOUND       | El chaincode respondío con status 404 indicando que no existe el assets que se intentó recuperar.
+409   | CONFLICT        | Transacción invalidada por los committers.
+500   | INTERNAL ERROR  | Error interno del sistema.
+501   | NOT IMPLEMENTED | El chaincode respondío con status 501 indicando que la function invocada no existe.
+504   | TIMEOUT         | Timeout accediendo al orderer.
+
+Para entender mas sobre los status OK, ACCEPTED y CONFLICT: [fabric-txflow](https://hyperledger-fabric.readthedocs.io/en/release-1.4/txflow.html)
+
+---
+
+### Recurso `/ledger/blocks`
+
+Se utiliza para obtener información de un bloque.
+
+`GET` | `/ledger/blocks/{channel}/{blockNumner}[?{onlyvalidtxs}]`
+--- | :---
+
+El query string `onlyvalidtxs=true` indica que unicamente se recupere información de las transacciones validas que fueron las que lograron actualizar el state.
+
+**response:**
+
+Los endpoints responden con un objeto JSON con ítems:
+
+ítem               | tipo    | desc
+---                | ---     | ---
+`block`            | integer | Número de bloque.
+`channel`          | string  | Nombre del channel.
+`timestamp`        | integer | Timestamp del bloque.
+`validSystemTxs`   | integer | Cantidad de transacciones de gestion del sistema válidas.
+`invalidSystemTxs` | integer | Cantidad de transacciones de gestion del sistema invalidas.
+`validUserTxs`     | integer | Cantidad de transacciones de aplicación validas.
+`invalidUserTxs`   | integer | Cantidad de transacciones de aplicación invalidas.
+`transactions`     | array   | Transacciones incluidas en la blockchain.
+
+**ítems de transaction:**
+
+ítem               | tipo    | desc
+---                | ---     | ---
+`id`               | string  | id de la transacción.
+`txSeq`            | integer | Número de secuencial de la transacción dentro del bloque, desde 1(uno).
+`valid`            | boolean | `true`: transacción válida, actualizó el state.
+`function`         | string  | Function invocada.
+`chaincode`        | string  | Chaincode invocado.
+`readSet`          | objecto | Set de `{key}:{version}` leídas.
+`writeSet`         | objecto | Set de `{key}:{value}` actualizadas.
+`deleteSet`        | array   | Array de `{key}` eliminadas.
+
+Si el bloque no existe responde con http status code 404 NOT FOUND.
+
+**ejemplo de response:**
+
+http status code | 200
+--- | ---
+
+```json
+{
+  "block": 1000,
+  "channel": "padfedchannel",
+  "timestamp": "2020-06-30T17:23:57.430Z",
+  "validSystemTxs": 0,
+  "invalidSystemTxs": 0,
+  "validUserTxs": 2,
+  "invalidUserTxs": 0,
+  "transactions": [
+    {
+      "txSeq": 1,
+      "valid": true,
+      "timestamp": "2020-06-30T17:23:41.330Z",
+      "function": "PutPersonaList",
+      "id": "e37ed6f177e05ce64aa1a78ea294912805b7c4db47d0b370691ecb600c9379ed",
+      "chaincode": "padfedcc",
+      "readSet": {
+        "per:20123456780#wit": "1:0",
+        "per:20121212120#wit": "1:0"
+      },
+      "writeSet": {
+        "per:20123456780#imp:5900": "{\"impuesto\":5900,\"inscripcion\":\"2020-08-01\",\"estado\":\"AC\",\"dia\":1,\"periodo\":202008,\"motivo\":{\"id\":551},\"ds\":\"2021-05-19\"}",
+        "per:20121212120#jur:1.0": "{\"provincia\":0,\"desde\":\"2021-04-01\",\"org\":1,\"ds\":\"2021-06-08\"}"
+      },
+      "deleteSet": []
+    },
+    {
+      "txSeq": 2,
+      "valid": true,
+      "timestamp": "2020-06-30T17:23:57.430Z",
+      "function": "PutPersonaList",
+      "id": "153685886318f3224fe620213146dd110d3fb8f3c7a8ba54514910e6963adb60",
+      "chaincode": "padfedcc",
+      "readSet": {
+        "per:20171234560#wit": "1:0"
+      },
+      "writeSet": {
+        "per:20171234560#ema:1": "{\"direccion\":\"pepe@gmail.com\",\"orden\":1,\"tipo\":8,\"ds\":\"2016-06-16\"}"
+      },
+      "deleteSet": ["per:20171234560#ema:2", "per:20171234560#ema:3"]
+    }
+  ]
+}
+```
+
+### Recurso `/ledger/transactions`
+
+Se utiliza para obtener información del estado de una o mas transacciones.
+
+`GET` | `/ledger/transactions/{channel}/{txId}`
+--- | :---
+
+**response:**
+
+Los endpoints de `/ledger/transactions` responden con un objeto JSON con ítems:
+
+ítem    | tipo    | desc
+---     | ---     | ---
+`txId`  | string  | Id de la transacción.
+`valid` | boolean | `true`: transacción válida, actualizó el state.
+
+Si la transacción no existe responde con http status code 404 NOT FOUND.
+
+**ejemplo de response:**
+
+http status code | 200
+--- | ---
+
+```json
+{
+  "txId": "e37ed6f177e05ce64aa1a78ea294912805b7c4db47d0b370691ecb600c9379ed",
+  "valid": true
+}
+```
+
+`POST` | `/ledger/transactions/{channel}`
+---    | :---
+
+Requieren que el body del request tenga un array JSON con los ids de las transacciones.
+
+**response:**
+
+Responden con un objeto JSON con ítems:
+
+777777777777777777777777777777777777777777777777777777777777
+
+ítem               | tipo    | desc
+---                | ---     | ---
+`block`            | integer | Número de bloque.
+`channel`          | string  | Nombre del channel.
+`timestamp`        | integer | Timestamp del bloque.
+`validSystemTxs`   | integer | Cantidad de transacciones de gestion del sistema válidas.
+`invalidSystemTxs` | integer | Cantidad de transacciones de gestion del sistema invalidas.
+`validUserTxs`     | integer | Cantidad de transacciones de aplicación validas.
+`invalidUserTxs`   | integer | Cantidad de transacciones de aplicación invalidas.
+`transactions`     | array   | Transacciones incluidas en la blockchain.
+
+**ítems de transaction:**
+
+ítem               | tipo    | desc
+---                | ---     | ---
+`id`               | string  | id de la transacción.
+`txSeq`            | integer | Número de secuencial de la transacción dentro del bloque, desde 1(uno).
+`valid`            | boolean | `true`: transacción válida, actualizó el state.
+`function`         | string  | Function invocada.
+`chaincode`        | string  | Chaincode invocado.
+`readSet`          | objecto | Set de `{key}:{version}` leídas.
+`writeSet`         | objecto | Set de `{key}:{value}` actualizadas.
+`deleteSet`        | array   | Array de `{key}` eliminadas.
+
+**ejemplo de response:**
+
+http status code | 200
+--- | ---
+
+```json
+{
+  "block": 1000,
+  "channel": "padfedchannel",
+  "timestamp": "2020-06-30T17:23:57.430Z",
+  "validSystemTxs": 0,
+  "invalidSystemTxs": 0,
+  "validUserTxs": 2,
+  "invalidUserTxs": 0,
+  "transactions": [
+    {
+      "txSeq": 1,
+      "valid": true,
+      "timestamp": "2020-06-30T17:23:41.330Z",
+      "function": "PutPersonaList",
+      "id": "e37ed6f177e05ce64aa1a78ea294912805b7c4db47d0b370691ecb600c9379ed",
+      "chaincode": "padfedcc",
+      "readSet": {
+        "per:20123456780#wit": "1:0",
+        "per:20121212120#wit": "1:0"
+      },
+      "writeSet": {
+        "per:20123456780#imp:5900": "{\"impuesto\":5900,\"inscripcion\":\"2020-08-01\",\"estado\":\"AC\",\"dia\":1,\"periodo\":202008,\"motivo\":{\"id\":551},\"ds\":\"2021-05-19\"}",
+        "per:20121212120#jur:1.0": "{\"provincia\":0,\"desde\":\"2021-04-01\",\"org\":1,\"ds\":\"2021-06-08\"}"
+      },
+      "deleteSet": []
+    },
+    {
+      "txSeq": 2,
+      "valid": true,
+      "timestamp": "2020-06-30T17:23:57.430Z",
+      "function": "PutPersonaList",
+      "id": "153685886318f3224fe620213146dd110d3fb8f3c7a8ba54514910e6963adb60",
+      "chaincode": "padfedcc",
+      "readSet": {
+        "per:20171234560#wit": "1:0"
+      },
+      "writeSet": {
+        "per:20171234560#ema:1": "{\"direccion\":\"pepe@gmail.com\",\"orden\":1,\"tipo\":8,\"ds\":\"2016-06-16\"}"
+      },
+      "deleteSet": ["per:20171234560#ema:2", "per:20171234560#ema:3"]
+    }
+  ]
+}
+```
+
+---
+
+## Deploy
+
+Una organización autorizada a acceder a la Blockchain que no corre nodos de la red, puede utilizar **hlf-proxy** conectóndolo mediante internet a cualquier nodo de la red.
+
+![hlf-proxy-deploy-2](images/hlf-proxy-deploy-2.png)
+
+Una organización que corre nodos de la Blockchain, puede utilizar **hlf-proxy** conectándolo a sus propios peers para tener mejor tiempo de respuesta y a cualquier otro nodo de la red para tener alta disponibilidad.
+
+![hlf-proxy-deploy-1](images/hlf-proxy-deploy-1.png)
+
+Para la actualizar la Blockchain **hlf-proxy** requiere una conexion con el orderer.
+
 ## Como correr la aplicación
 
-HLF-Proxy esta disponible como imgen docker.
+**hlf-proxy** esta disponible como imgen docker.
 
 Para correr la aplicacion se requiere que el equipo tenga instalado:
 
