@@ -1,0 +1,43 @@
+@startuml integration-applications
+
+skinparam componentStyle rectangle
+
+package "organizacion X" as org {
+    component [hlf-proxy] as proxy #SkyBlue
+    component [hlf-block-\nconsumer] as consumer #SkyBlue
+    component [aplicación\npropia] as app1
+    component [aplicación\npropia] as app2
+    database "\nRDBMS\n" as db
+
+    app1 .right.> proxy : REST API
+    app2 ..> db : read
+    consumer ..> db : write
+
+
+    app1 -[hidden]down- app2
+    proxy -[hidden]down- consumer
+
+}
+
+
+component "peer N" as peer {
+    component "padfed\nchaincode" as padfedcc
+    component "system\nchaincode" as systemcc
+    database ledger
+    database state as state1
+
+    padfedcc -[hidden]down- ledger
+    systemcc -[hidden]down- state1
+}
+
+component orderer {
+    database state as state2
+}
+
+proxy ..> padfedcc 
+proxy ..> systemcc : gRPCs
+proxy ..> orderer
+consumer ..> systemcc
+
+
+@enduml
