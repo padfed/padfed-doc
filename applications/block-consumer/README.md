@@ -6,11 +6,11 @@ Los bloques son leidos en orden ascendente desde el bloque 0(cero) o Genesis Blo
 
 Una organización, autorizada a acceder a la Blockchain que no corre nodos de la red, puede conectar el `block-Consumer` a cualquier peer de la red mediante internet.
 
-![deploy-accediendo-a-nodos-remotos](images/block-consumer-deploy-1.png)
+![deploy-accediendo-a-nodos-remotos](images/block-consumer-deploy-2.png)
 
 Una organización que corre nodos de la Blockchain, puede conectar el `block-Consumer` a sus peers locales para lograr mejor performance de procesamiento.
 
-![deploy-accediendo-a-nodos-locales](images/block-consumer-deploy-2.png)
+![deploy-accediendo-a-nodos-locales](images/block-consumer-deploy-1.png)
 
 ---
 
@@ -26,7 +26,7 @@ Una organización que corre nodos de la Blockchain, puede conectar el `block-Con
 
 ## Instrucciones de instalación
 
-### 1) Material criptográfico propio del block-consumer
+### 1) Material criptográfico propio
 
 Son dos pares de clave-privada/certificado para:
 
