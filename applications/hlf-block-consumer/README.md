@@ -1,16 +1,16 @@
 # block-consumer
 
-Aplicación (imagen docker) que lee bloques desde un channel de una red de Blockchain [Hyperledger Fabric 1.4 LTS](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html), procesa su contenido y lo persiste en una base de datos relacional Oracle, PostgreSQL o SQL Server.
+Aplicación que lee bloques desde un channel de una red de Blockchain [Hyperledger Fabric 1.4 LTS](https://hyperledger-fabric.readthedocs.io/en/release-1.4/index.html), procesa su contenido y lo persiste en una base de datos relacional Oracle, PostgreSQL o SQL Server.
 
 Los bloques son leidos en orden ascendente desde el bloque 0(cero) o Genesis Block, hasta el bloque mas reciente.
 
 Una organización, autorizada a acceder a la Blockchain que no corre nodos de la red, puede conectar el `block-Consumer` a cualquier peer de la red mediante internet.
 
-![deploy-accediendo-a-nodos-remotos](images/deploy-accediendo-a-nodos-remotos.png)
+![deploy-accediendo-a-nodos-remotos](images/block-consumer-deploy-1.png)
 
 Una organización que corre nodos de la Blockchain, puede conectar el `block-Consumer` a sus peers locales para lograr mejor performance de procesamiento.
 
-![deploy-accediendo-a-nodos-locales](images/deploy-accediendo-a-nodos-locales.png)
+![deploy-accediendo-a-nodos-locales](images/block-consumer-deploy-2.png)
 
 ---
 

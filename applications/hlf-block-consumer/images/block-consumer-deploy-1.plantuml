@@ -1,0 +1,30 @@
+@startuml block-consumer-deploy-1
+
+title block-consumer conectado a nodos propios y remotos
+
+skinparam componentStyle rectangle
+
+package "peers remotos" as remotos {
+    [peer0.yyy]
+    [peer1.yyy]
+    [peer0.zzz]
+    [peer1.zzz]
+}
+
+package "org xxx" as orgxxx {
+    component [block-consumer] as BlockConsumer #SkyBlue
+    database "\nRDBMS\n" as db
+    package "peers propios" as locales {
+    [peer0.xxx]
+    [peer1.xxx]
+}
+}
+
+cloud internet
+
+BlockConsumer ..> locales : gRPCs\n(read)
+BlockConsumer ..> internet
+BlockConsumer ..> db : jdbc\n(read/write)
+internet ..> remotos : gRPCs\n(read)
+
+@enduml
