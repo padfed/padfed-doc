@@ -9,12 +9,10 @@ component "nodos remotos" as remotepeers {
     [peer1.yyy]
     [peer0.zzz]
     [peer1.zzz]
-    [orderer]
 
     [peer0.yyy] -[hidden]down- [peer0.zzz]
     [peer1.yyy] -[hidden]down- [peer1.zzz]
     [peer0.yyy] -[hidden]right- [peer1.yyy]
-    [peer0.zzz] -[hidden]down- [orderer]
 }
 
 package "org xxx" as orgxxx {
