@@ -855,7 +855,7 @@ En todos los caso, un valor mayor que 1(uno) indica que los datos del registro p
 
 Las organizaciones son:
 
-| coddigo | nombre                    | provincia | MSP
+| código  | nombre                    | provincia | MSP-id
 | :-----: | ------------------------- | --------: | ---
 |    1    | AFIP                      |           | AFIP
 |   900   | COMISION ARBITRAL         |           | COMARB
