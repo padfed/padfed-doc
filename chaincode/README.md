@@ -4,6 +4,11 @@
 - Lenguaje: `Golang`
 
 ---
+### version 1.0.1 - 2021 julio
+
+- `cms`: soporta formato legacy de la key `{provincia}` para permitir deletes. El formato desde v0.8.8 es `{org}.{provincia}`.
+
+---
 
 ### version 1.0.0 - 2021 junio
 
