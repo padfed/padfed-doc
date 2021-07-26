@@ -6,7 +6,7 @@
 ---
 ### version 1.0.1 - 2021 julio
 
-- `cms`: soporta formato legacy de la key `{provincia}` para permitir deletes. El formato desde v0.8.8 es `{org}.{provincia}`.
+- `cms`: soporta formato legacy de la key (`{provincia}`) para permitir deletes. Desde v0.8.8 el formato de la key es `{org}.{provincia}`.
 
 ---
 
