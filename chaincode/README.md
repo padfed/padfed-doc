@@ -4,13 +4,20 @@
 - Lenguaje: `Golang`
 
 ---
-### version 1.0.1 - 2021 julio
+
+### v1.0.4 - 2021 agosto
+
+- resuelve bug panic en GetStatesHistory que ocurria en versiones 1.0.0 y 1.0.1
+
+---
+
+### v1.0.1 - 2021 julio
 
 - `cms`: soporta formato legacy de la key (`{provincia}`) para permitir deletes. Desde v0.8.8 el formato de la key es `{org}.{provincia}`.
 
 ---
 
-### version 1.0.0 - 2021 junio
+### v1.0.0 - 2021 junio
 
 - agrega [puntosventa](../model/README.md#personapuntosventa)
 
@@ -20,7 +27,7 @@
 
 ---
 
-### version 0.8.8 - 2020 abril
+### v0.8.8 - 2020 abril
 
 - `cms`: agrega atributo `org` en la key y en el objeto
 
