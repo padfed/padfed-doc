@@ -5,7 +5,29 @@
 
 ---
 
-### version 0.8.8 - 2020 abril
+### v1.0.4 - 2021 agosto
+
+- resuelve bug panic en GetStatesHistory que ocurria en versiones 1.0.0 y 1.0.1
+
+---
+
+### v1.0.1 - 2021 julio
+
+- `cms`: soporta formato legacy de la key (`{provincia}`) para permitir deletes. Desde v0.8.8 el formato de la key es `{org}.{provincia}`.
+
+---
+
+### v1.0.0 - 2021 junio
+
+- agrega [puntosventa](../model/README.md#personapuntosventa)
+
+- aplica controles mas estrictos sobre el formato de las keys
+
+- corrige los codigos de las provincias LA RIOJA, SANTIAGO DEL ESTERO y TUCUMAN que responden las functions `GetOrganizacion` y `GetOrganizacionAll`.
+
+---
+
+### v0.8.8 - 2020 abril
 
 - `cms`: agrega atributo `org` en la key y en el objeto
 
@@ -36,4 +58,4 @@ efecto del cambio implementado en v0.8.8:
 }
 ```
 
-El cambio permite determinar si el registro fue informado por la COMARB en el proceso de migracion (`"org":900`) o si fue actualizado por el contribuyente desde la webapp de RUT (`"org":1`).
+El cambio permite determinar si el registro fue informado por la COMARB mediante el proceso de migración (`org: 900`) o si fue actualizado por el contribuyente desde la webapp de RUT (`org: 1`).

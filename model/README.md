@@ -35,24 +35,25 @@ donde
 - `{tag}` identificador del tipo de registro, formato string(3)
 - `{item-id}` identifica al ítem dentro del tipo de registro, compuesto por valores de las propiedades que conforman la clave primaria del ítem, separados por punto.
 
-| \#  | nombre                                   | desc                                                  | tipo      | key tag | key ejemplo                           |  req  |
-| --- | ---------------------------------------- | ----------------------------------------------------- | --------- | ------- | ------------------------------------- | :---: |
-|     | id                                       | id de la persona                                      | #cuit     |         |                                       |   x   |
-| 1   | [persona](#personapersona)               | datos identificatorios de la persona                  | objeto    | `per`   | `per:20123412340#per`                 |   x   |
-| 2   | [impuestos](#personaimpuestos)           | inscripciones en impuestos                            | colección | `imp`   | `per:20123412340#imp:20`              |       |
-| 3   | [domicilios](#personadomicilios)         | domicilios                                            | colección | `dom`   | `per:20123412340#dom:900.3.4`         |       |
-| 4   | [domisroles](#personadomisroles)         | roles de domicilios                                   | colección | `dor`   | `per:20123412340#dor:900.3.4.3`       |       |
-| 5   | [categorias](#personacategorias)         | categorias de monotributo y autonomos                 | colección | `cat`   | `per:20123412340#cat:20.1`            |       |
-| 6   | [contribmunis](#personacontribmunis)     | contribuciones municipales                            | colección | `con`   | `per:20123412340#con:5244.98`         |       |
-| 7   | [actividades](#personaactividades)       | actividades económicas                                | colección | `act`   | `per:20123412340#act:1.883-123456`    |       |
-| 8   | [etiquetas](#personaetiquetas)           | caracterizaciones                                     | colección | `eti`   | `per:20123412340#eti:160`             |       |
-| 9   | [telefonos](#personatelefonos)           | telefonos                                             | colección | `tel`   | `per:20123412340#tel:5`               |       |
-| 10  | [emails](#personaemails)                 | emails                                                | colección | `ema`   | `per:20123412340#ema:2`               |       |
-| 11  | [relaciones](#personarelaciones)         | relaciones con otras personas                         | colección | `rel`   | `per:20123412340#rel:20012531001.3.4` |       |
-| 12  | [jurisdicciones](#personajurisdicciones) | jurisdicciones                                        | colección | `jur`   | `per:20123412340#jur:900.0`           |       |
-| 13  | [cmsedes](#personacmsedes)               | provincias sedes para el convenio multilateral        | colección | `cms`   | `per:20123412340#cms:900.3`               |       |
-| 14  | [archivos](#personaarchivos)             | archivos digitalizados                                | colección |  `arc`    |  `per:20123412340#arc:1` |
-| 18  | [testigo](#personatestigo)               | registro unico por persona. No puede ser actualizado. | 1(uno)    | `wit`   | `per:20123412340#wit`                 |   x   |
+| \#  | nombre                                   | desc                                                  | tipo      | key tag |  req  |
+| --- | ---------------------------------------- | ----------------------------------------------------- | --------- | ------- | :---: |
+|     | id                                       | id de la persona                                      | #cuit     |         |   x   |
+| 1   | [persona](#personapersona)               | datos identificatorios de la persona                  | objeto    | `per`   |   x   |
+| 2   | [impuestos](#personaimpuestos)           | inscripciones en impuestos                            | colección | `imp`   |       |
+| 3   | [domicilios](#personadomicilios)         | domicilios                                            | colección | `dom`   |       |
+| 4   | [domisroles](#personadomisroles)         | roles de domicilios                                   | colección | `dor`   |       |
+| 5   | [categorias](#personacategorias)         | categorias de monotributo y autonomos                 | colección | `cat`   |       |
+| 6   | [contribmunis](#personacontribmunis)     | contribuciones municipales                            | colección | `con`   |       |
+| 7   | [actividades](#personaactividades)       | actividades económicas                                | colección | `act`   |       |
+| 8   | [etiquetas](#personaetiquetas)           | caracterizaciones                                     | colección | `eti`   |       |
+| 9   | [telefonos](#personatelefonos)           | telefonos                                             | colección | `tel`   |       |
+| 10  | [emails](#personaemails)                 | emails                                                | colección | `ema`   |       |
+| 11  | [relaciones](#personarelaciones)         | relaciones con otras personas                         | colección | `rel`   |       |
+| 12  | [jurisdicciones](#personajurisdicciones) | jurisdicciones                                        | colección | `jur`   |       |
+| 13  | [cmsedes](#personacmsedes)               | provincias sedes para el convenio multilateral        | colección | `cms`   |       |
+| 14  | [archivos](#personaarchivos)             | archivos digitalizados                                | colección | `arc`   |       |
+| 15  | [puntosventa](#personapuntosventa)       | puntos de venta                                       | colección | `pve`   |       |
+| 16  | [testigo](#personatestigo)               | registro unico por persona. No puede ser actualizado. | 1(uno)    | `wit`   |   x   |
 
 ---
 
@@ -61,7 +62,7 @@ donde
 #### Cantidad de registros
 
 ```json
-Total 16.200.000
+Total: 16.200.000
 
 - Contribuyentes: 15.4 millones
 - No contribuyentes: 221.000
@@ -744,6 +745,44 @@ tipo | descripción |
 
 ---
 
+### persona.puntosventa
+
+Cada punto de venta tiene un determinado sistema de facturacion (`sistema`) y corresponde a un domicilio referenciado por `domitipo` y `domiorden`. Los domicilios referenciados son siempre del organismo AFIP (`org: 1`).
+
+subkey | `pve:{domitipo}.{domiorden}.{numero}`
+--- | ---
+
+| prop   | desc    |tipo    | minLen | maxLen | min | max   | req |
+| :--- | :--- | --- | ---: | ---: | ---: | ---:   | :---: |
+| domitipo  | tipo de domicilio | integer |     |     | 1   | 3     | x   |
+| domiorden | orden de domicilio | integer |     |     | 1   | 9999  | x   |
+| numero    | número de punto de venta | integer |     |     | 1   | 99999 | x   |
+| sistema   |  sistema de facturación [csv](csv/puntoventa.sistema.csv) | string  | 1   | 10  |     |       | x   |
+| uso       | día en que se comenzó a usar | #fecha
+| bloqueo   | día en que fue bloqueado | #fecha
+| baja      | día en que fue dado de baja | #fecha
+| ds        | | #fecha
+
+**ejemplo:**
+
+La persona `30120013439` tiene un punto de venta con el sistema de facturación "Comprobantes de Exportacion - Web Services". Lo está utilizando desde `2020-11-07`.
+
+key | `per:30120013439#pve:1.1.14`
+--- | ---
+
+```json
+{
+    "domiorden": 1,
+    "domitipo": 1,
+    "numero": 14,
+    "sistema": "FEEWS",
+    "uso": "2020-11-07",
+    "ds": "2020-11-07"
+}
+```
+
+---
+
 ### persona.testigo
 
 #### Estructura de la key #wit
@@ -816,7 +855,7 @@ En todos los caso, un valor mayor que 1(uno) indica que los datos del registro p
 
 Las organizaciones son:
 
-| coddigo | nombre                    | provincia | MSP
+| código  | nombre                    | provincia | MSP-id
 | :-----: | ------------------------- | --------: | ---
 |    1    | AFIP                      |           | AFIP
 |   900   | COMISION ARBITRAL         |           | COMARB
