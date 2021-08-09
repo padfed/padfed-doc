@@ -106,16 +106,18 @@ block-consumer
               └── comarb-blockchain-tls-ca.crt
 ```
 
-### 6) script para correr el contenedor
+### 6) script para correr la apliación
+
+**block-consumer** esta disponible como imagen docker.
 
 En el directorio `block-consumer` crea un script `docker-run.sh` con el siguiente contenido:
 
 ```sh
 #!/bin/bash
 
-docker run --log-opt max-size=10m \
+docker run --log-driver json-file \
+           --log-opt max-size=10m \
            --log-opt max-file=10 \
-           --rm \
            --name block-consumer \
            --tmpfs /tmp:exec \
            -v "${PWD}/conf:/conf" \

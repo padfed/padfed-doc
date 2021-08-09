@@ -64,6 +64,10 @@ Ejemplos:
 ```
 
 ```json
+{"function":"GetStatesHistory","args":["per:20123456780#per"]}
+```
+
+```json
 {"function":"queryPersona","args":[20123456780,true]}
 ```
 
@@ -80,9 +84,9 @@ Los endpoints responden con un objeto JSON con ítems:
 item         | type    | desc
 ---          | ---     | ---
 `txId`       | string  | id de la transacción generada por **hlf-proxy** para invocar al chaincode
-`time`       | string  | fecha y horario en que se ejecutó la transacción en formato ISO 8601
+`time`       | string  | fecha y horario (ISO 8601) en que se ejecutó la transacción
 `status`     | integer | http status code
-`ccResponde` | string  | contenido de la respuesta del chaincode
+`ccResponse` | string  | contenido de la respuesta del chaincode
 
 En caso de falla (`status != 200`) o `?verbose=true` **hlf-prpoxy** agrega otros ítems que permiten obtener mas info sobre la ejecución de la transacción.
 
@@ -376,7 +380,9 @@ En un equipo donde tengas instalado `docker` crea la siguiente estructura de dir
 
 En `conf/crypto/client` ubicas el material criptográfico propio del `hlf-proxy`.
 
-En `conf/crypto/tlscas` ubicas los certificados de las CAs emisoras de los certificados de `TLS` de los peers a los que `hlf-proxy` se va a conectar. Con la estructura de ejemplo, `hlf-proxy` se puede conectar a los peers de AFIP y de COMARB.
+En `conf/crypto/tlscas` ubicas los certificados de las CAs emisoras de los certificados de `TLS` de los peers a los que `hlf-proxy` se va a conectar.
+
+Con la siguiente estructura de ejemplo, `hlf-proxy` se puede conectar a los peers de AFIP y de COMARB.
 
 ``` txt
 hlf-proxy
@@ -394,86 +400,34 @@ hlf-proxy
               └── comarb-blockchain-tls-ca.crt
 ```
 
-## Como correr la aplicación
+### 6) Script para correr la aplicación
 
 **hlf-proxy** esta disponible como imagen docker.
 
-Para correr la aplicacion se requiere que el equipo tenga instalado:
-
-- DOCKER 18.09 o superior
-
-- DOCKER-COMPOSE 1.23.1 o superior (opcional)
+En el directorio `hlf-proxy` crea un script `docker-run.sh` (asignale permiso de ejecución) con el siguiente contenido:
 
 ```sh
-docker pull padfed/hlf-proxy:1.7.0
-```
+#!/bin/bash
 
-### Opción 1 - Ejecución mediante docker run
-
-``` sh
- docker run \
- --log-driver json-file \
- --log-opt max-size=100m \
- --log-opt max-file=10 \
- -m 512m \
- --rm \
- --name hlf-proxy \
- --tmpfs /tmp:exec \
- -v ${PWD}/conf:/conf \
- -p 8085:8085 \
- -d \
- padfed/hlf-proxy:1.7.0
+docker run --log-driver json-file \
+           --log-opt max-size=10m \
+           --log-opt max-file=10 \
+           --name hlf-proxy \
+           --tmpfs /tmp:exec \
+           -v "${PWD}/conf:/conf" \
+           -e TZ=America/Argentina/Buenos_Aires \
+           -p 8085:8085 \
+           -d padfed/hlf-proxy:1.7.0
 
 ```
 
-### Opción 2 - Ejecución mediante docker-compose up
+---
 
-Archivo `docker-comnpose.yaml`:
+## Funcionamiento de hlf-proxy
 
-``` sh
-version: "2"
+Cuando arranca se conecta a la Blockchain y queda atendiendo en el port indicado en la option `-p` del `docker run`.
 
-services:
-  hlf-proxy:
-    labels:
-      app: hlf-proxy
-    container_name: hlf-proxy
-    image: padfed/hlf-proxy:1.7.0
-    read_only: true
-    environment:
-      - TZ=America/Argentina/Buenos_Aires
-    mem_limit: 512m
-    ports:
-      - 8085:8085
-    tmpfs: /tmp:exec
-    volumes:
-      - "./conf:/conf"
-
-Logging overwrite
-   logging:
-     driver: "json-file"
-     options:
-       max-size: "100m"
-       max-file: "10"
-```
-
-    $ docker-compose up
-
-## Requerimientos de networking
-
-Acceso por protocolo gRPC sobre TLS a los nodos peers y orderer configurados en xxx.client.yaml:
-
-## Archivos requeridos
-
-| Archivo                          | Descripción                                                                                                                    | Ubicación                     |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------------- |
-| application.conf                 | Archivo de configuración de la aplicación                                                                                      | ${PWD}/conf/                  |
-| xxx.client.yaml                  | Archivo que describe la red                                                                                                    | Indicada en application.conf. |
-| hlfproxy@{DOMAIN}-msp-client.key | Clave privada para MSP de la aplicaciòn                                                                                        | Indicada en application.conf. |
-| hlfproxy@{DOMAIN}-msp-client.crt | Certificado para MSP de la aplicaciòn                                                                                          | Indicada en application.conf. |
-| hlfproxy@{DOMAIN}-tls-client.key | Clave privada para TLS de la aplicaciòn                                                                                        | Indicada en application.conf. |
-| hlfproxy@{DOMAIN}-tls-client.crt | Certificado para TLS de la aplicaciòn                                                                                          | Indicada en application.conf.    |
-| \*-tls.crt                       | Certificados de las CAs raíces o intermedias para TLS de las organizaciones que corren nodos a los cuales se requiere acceder | Indicadas en xxx.client.yaml. |
+Para ambientes de homologación ofrece una interface swagger que atiene en `/swagger`.
 
 ### application.conf
 
