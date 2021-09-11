@@ -70,67 +70,58 @@ Total: 16.200.000
 - Personas jurídicas: 1.5 millones
 ```
 
-#### Estructura de la key
+| subkey | `per:{id}#per` |
+| ------ | -------------- |
 
-`per:{id}#per`
+**Items comunes**:
 
-#### Estructura del objeto
-
-##### Datos comunes
-
-| nombre   | tipo     | enum       | min | max | req |
-| -------- | -------- | ---------- | --- | --- | --- |
-| id       | #cuit    |            |     |     | x   |
-| tipoid   | string   | C, E, I, L |     |     | x   |
-| tipo     | string   | F, J       |     |     | x   |
-| estado   | string   | A, I       |     |     | x   |
-| pais     | integer  |            | 100 | 999 |     |
-| activoid | #cuit    |            |     |     |     |
-| ch       | []string |            |     |     |     |
-| ds       | #fecha   |            |     |     |     |
-
-Aclaraciones:
+| item     | tipo     | enum       | min | max |  req  |
+| -------- | -------- | ---------- | --- | --- | :---: |
+| id       | #cuit    |            |     |     |   x   |
+| tipoid   | string   | C, E, I, L |     |     |   x   |
+| tipo     | string   | F, J       |     |     |   x   |
+| estado   | string   | A, I       |     |     |   x   |
+| pais     | integer  |            | 100 | 999 |       |
+| activoid | #cuit    |            |     |     |       |
+| ch       | []string |            |     |     |       |
+| ds       | #fecha   |            |     |     |       |
 
 - **`tipoid`**: C: CUIT, E: CIE, I: CDI, L: CUIT
 - **`activoid`**: nueva cuit que se le asignó a la persona
 - **`ch`**: array de nombres de campos cuyos valores fueron modificados en la mas reciente tx
 
-##### Datos de personas físicas
+**Items de personas físicas:**
 
-| nombre           | tipo    | enum | min | max | req |
-| ---------------- | ------- | ---- | --- | --- | --- |
-| apellido         | string  |      | 1   | 200 | x   |
-| nombre           | string  |      | 1   | 200 |     |
-| materno          | string  |      | 1   | 200 |     |
-| sexo             | string  | M, F |     |     |     |
-| documento        | object  |      |     |     |     |
-| documento.tipo   | integer |      | 1   | 99  | x   |
-| documento.numero | string  |      |     |     | x   |
-| nacimiento       | #fecha  |      |     |     |     |
-| fallecimiento    | #fecha  |      |     |     |     |
-
-Aclaraciones:
+| item             | tipo    | enum |  min |  max |  req  |
+| ---------------- | ------- | ---- | ---: | ---: | :---: |
+| apellido         | string  |      |    1 |  200 |   x   |
+| nombre           | string  |      |    1 |  200 |       |
+| materno          | string  |      |    1 |  200 |       |
+| sexo             | string  | M, F |      |      |       |
+| documento        | object  |      |      |      |       |
+| documento.tipo   | integer |      |    1 |   99 |   x   |
+| documento.numero | string  |      |      |      |   x   |
+| nacimiento       | #fecha  |      |      |      |       |
+| fallecimiento    | #fecha  |      |      |      |       |
 
 - **`materno`**: apellido materno
 
-##### Datos de personas jurídicas
+**items de personas jurídicas:**
 
-| nombre               | tipo    | enum | min | max          | req |
-| -------------------- | ------- | ---- | --- | ------------ | --- |
-| razonsocial          | string  |      | 1   | 200          | x   |
-| formajuridica        | integer |      | 1   | 999          |     |
-| mescierre            | integer |      | 1   | 12           |     |
-| contratosocial       | #fecha  |      |     |              |     |
-| duracion             | integer |      | 1   | 999          |     |
-| inscripcion          | object  |      |     |              |     |
-| inscripcion.registro | integer |      | 1   | 99           |     |
-| inscripcion.numero   | integer |      | 1   | 999999999999 | x   |
-
-Aclaraciones:
+| nombre               | tipo    | enum |  min |          max |  req  |
+| -------------------- | ------- | ---- | ---: | -----------: | :---: |
+| razonsocial          | string  |      |    1 |          200 |   x   |
+| formajuridica        | integer |      |    1 |          999 |       |
+| mescierre            | integer |      |    1 |           12 |       |
+| contratosocial       | #fecha  |      |      |              |       |
+| duracion             | integer |      |    1 |          999 |       |
+| inscripcion          | object  |      |      |              |       |
+| inscripcion.registro | integer |      |    1 |           99 |       |
+| inscripcion.numero   | integer |      |    1 | 999999999999 |   x   |
 
 - **`inscripcion`** puede ser en IGJ (`registro: 1`) o en otro registro público de sociedades
 
-#### Ejemplo: Persona física
+**ejemplo de persona física:**
 
 `per:20000000168#per`
 
@@ -154,7 +145,7 @@ Aclaraciones:
 }
 ```
 
-#### Ejemplo: Persona jurídica
+**ejemplo de persona jurídica**:
 
 `per:30120013439#per`
 
@@ -180,31 +171,27 @@ Aclaraciones:
 
 ### persona.impuestos
 
-#### Estructura de la key #imp
+| subkey | `per:{id}#imp:{impuesto}` |
+| ------ | ------------------------- |
 
-`per:{id}#imp:{impuesto}`
+| item         | tipo            | enum           |  min |    max |  req  |
+| ------------ | --------------- | -------------- | ---: | -----: | :---: |
+| impuesto     | integer         |                |    1 |   9999 |   x   |
+| estado       | string          | AC, NA, BD, EX |      |        |   x   |
+| periodo      | #periodomensual |                |      |        |   x   |
+| dia          | integer         |                |    1 |     31 |       |
+| motivo       | object          |                |      |        |       |
+| motivo.id    | integer         |                |    1 | 999999 |   x   |
+| motivo.desde | #fecha          |                |      |        |       |
+| motivo.hasta | #fecha          |                |      |        |       |
+| inscripcion  | #fecha          |                |      |        |       |
+| ds           | #fecha          |                |      |        |       |
 
-#### Estructura #imp
-
-| nombre       | tipo            | enum           | min | max    | req |
-| ------------ | --------------- | -------------- | --- | ------ | --- |
-| impuesto     | integer         |                | 1   | 9999   | x   |
-| estado       | string          | AC, NA, BD, EX |     |        | x   |
-| periodo      | #periodomensual |                |     |        | x   |
-| dia          | integer         |                | 1   | 31     |     |
-| motivo       | object          |                |     |        |     |
-| motivo.id    | integer         |                | 1   | 999999 | x   |
-| motivo.desde | #fecha          |                |     |        |     |
-| motivo.hasta | #fecha          |                |     |        |     |
-| inscripcion  | #fecha          |                |     |        |     |
-| ds           | #fecha          |                |     |        |     |
-
-Aclaraciones:
-
+- **`impuesto`**: [descripciones - csv](csv/impuesto.csv)
 - **`estado`**: AC: Activo, NA: No alcanzado, BD: Baja definitiva, EX: Exento
-- **`motivo.desde/hasta`**: Solamente los impuestos provinciales correspondientes regimenes simplificado de IIBB tendrán valores en estos campos
+- **`motivo.desde/hasta`**: Solamente los impuestos provinciales correspondientes regimenes simplificado de IIBB tienen valores en estos campos
 
-#### Ejemplo: Impuesto activo (estado AC)
+**ejemplo de impuesto activo (estado AC):**
 
 `per:20000000168#imp:20`
 
@@ -222,7 +209,7 @@ Aclaraciones:
 }
 ```
 
-#### Ejemplo: Impuesto con baja definitiva (estado BD)
+**ejemplo de impuesto con baja definitiva (estado BD):**
 
 `per:20000000168#imp:5243`
 
@@ -251,42 +238,41 @@ Aclaraciones:
 
 #### Estructura de #dom
 
-| nombre         | tipo          | enum | min | max     | req |
-| -------------- | ------------- | ---- | --- | ------- | --- |
-| org            | #organización |      |     |         | x   |
-| tipo           | integer       |      | 1   | 3       | x   |
-| orden          | integer       |      | 1   | 9999    | x   |
-| estado         | integer       |      | 1   | 99      |     |
-| calle          | string        |      |     | 200     |     |
-| numero         | integer       |      | 1   | 999999  |     |
-| piso           | string        |      |     | 5       |     |
-| sector         | string        |      |     | 200     |     |
-| manzana        | string        |      |     | 200     |     |
-| torre          | string        |      |     | 200     |     |
-| unidad         | string        |      |     | 5       |     |
-| provincia      | integer       |      | 0   | 24      |     |
-| localidad      | string        |      |     | 200     |     |
-| cp             | string        |      |     | 8       |     |
-| nomenclador    | string        |      |     | 9       |     |
-| nombre         | string        |      |     | 200     |     |
-| adicional      | object        |      |     |         |     |
-| adicional.tipo | integer       |      | 1   | 99      | x   |
-| adicional.dato | string        |      |     | 200     | x   |
-| baja           | #fecha        |      |     |         |     |
-| partido        | integer       |      | 1   | 999     |     |
-| partida        | integer       |      | 1   | 9999999 |     |
-| ds             | #fecha        |      |     |         |     |
+| nombre         | tipo          | enum |  min |     max |  req  |
+| -------------- | ------------- | ---- | ---: | ------: | :---: |
+| org            | #organización |      |      |         |   x   |
+| tipo           | integer       |      |    1 |       3 |   x   |
+| orden          | integer       |      |    1 |    9999 |   x   |
+| estado         | integer       |      |    1 |      99 |       |
+| calle          | string        |      |      |     200 |       |
+| numero         | integer       |      |    1 |  999999 |       |
+| piso           | string        |      |      |       5 |       |
+| sector         | string        |      |      |     200 |       |
+| manzana        | string        |      |      |     200 |       |
+| torre          | string        |      |      |     200 |       |
+| unidad         | string        |      |      |       5 |       |
+| provincia      | integer       |      |    0 |      24 |       |
+| localidad      | string        |      |      |     200 |       |
+| cp             | string        |      |      |       8 |       |
+| nomenclador    | string        |      |      |       9 |       |
+| nombre         | string        |      |      |     200 |       |
+| adicional      | object        |      |      |         |       |
+| adicional.tipo | integer       |      |    1 |      99 |   x   |
+| adicional.dato | string        |      |      |     200 |   x   |
+| baja           | #fecha        |      |      |         |       |
+| partido        | integer       |      |    1 |     999 |       |
+| partida        | integer       |      |    1 | 9999999 |       |
+| ds             | #fecha        |      |      |         |       |
 
-Aclaraciones:
+- **`unidad`**: "Oficina, Departamento o Local"
+- **`nombre`**: "Nombre de Fantasia"
+- **`partido`**: código del partido provincial
+- **`partida`**: número de partida inmobiliaria
+- **`tipo`**: tipo de domicilio para AFIP. Una persona puede tener un único domicilio `tipo 1` (Fiscal para AFIP), un único domicilio `tipo 2` (Real para AFIP) y 0 a N domicilios `tipo 3`; Los domicilios informados por las jurisdiccionales (`org > 1`) siempre tienen `tipo 3`
+- **`orden`**: número secuencial comenzando desde `1` para cada `org` y `tipo`
+- **`estado`**:
 
-- **`unidad`** es "Oficina, Departamento o Local"
-- **`nombre`** es "Nombre de Fantasia"
-- **`partido`** es el código del partido provincial
-- **`partida`** es el número de partida inmobiliaria
-- **`tipo`** indica el tipo de domicilio para AFIP. Una persona puede tener un único domicilio `tipo 1` (Fiscal para AFIP), un único domicilio `tipo 2` (Real para AFIP) y 0 a N domicilios `tipo 3`; Los domicilios informados por las jurisdiccionales (`org > 1`) siempre tienen `tipo 3`
-- **`orden`** número secuencial comenzando desde `1` para cada `org` y `tipo`
-
-| estado | descripción                |
+| estado | desc                       |
 | -----: | -------------------------- |
 |      1 | CONFIRMADO                 |
 |      2 | NO CONFIRMADO              |
@@ -331,31 +317,30 @@ Aclaraciones:
 
 ### persona.domisroles
 
-#### Estructura de la key #dor
+| subkey | `per:{id}#dor:{org}.{tipo}.{orden}.{rol}` |
+| ------ | ----------------------------------------- |
 
-`per:{id}#dor:{org}.{tipo}.{orden}.{rol}`
+| nombre | tipo          | enum |  min |  max |  req  |
+| ------ | ------------- | ---- | ---: | ---: | :---: |
+| org    | #organización |      |    1 |  924 |   x   |
+| tipo   | integer       |      |    1 |    3 |   x   |
+| orden  | integer       |      |    1 | 9999 |   x   |
+| rol    | integer       |      |    1 |   99 |   x   |
+| ds     | #fecha        |      |      |      |       |
 
-#### Estructura de #dor
+- **`rol`**:
 
-| nombre | tipo          | enum | min | max  | req |
-| ------ | ------------- | ---- | --- | ---- | --- |
-| org    | #organización |      | 1   | 924  | x   |
-| tipo   | integer       |      | 1   | 3    | x   |
-| orden  | integer       |      | 1   | 9999 | x   |
-| rol    | integer       |      | 1   | 99   | x   |
-| ds     | #fecha        |      |     |      |     |
-
-Aclaraciones:
-
-| rol | descripción                    |
+|  rol | desc                           |
 | ---: | ------------------------------ |
-| 1   | Fiscal (Jurisdicción Sede)     |
-| 2   | Principal de Actividades       |
-| 3   | Fiscal (en la Jurisdicción)    |
-| 4   | Otros Domicilios con Actividad |
-| 11  | Sin Actividad                  |
+|    1 | Fiscal (Jurisdicción Sede)     |
+|    2 | Principal de Actividades       |
+|    3 | Fiscal (en la Jurisdicción)    |
+|    4 | Otros Domicilios con Actividad |
+|   11 | Sin Actividad                  |
 
-#### Ejemplo: Rol "Fiscal Jurisdiccional" asignado por DGR Córdoba al domicilio orden 20
+**ejemplo:**
+
+ Rol de domicilio "Fiscal Jurisdiccional" asignado por DGR Córdoba al domicilio orden 20:
 
 `per:20000000168#dor:904.3.20.3`
 
@@ -373,22 +358,19 @@ Aclaraciones:
 
 ### persona.categorias
 
-#### Estructura de la key #cat
+| subkey | `per:{id}#cat:{impuesto}.{categoria}` |
+| ------ | ------------------------------------- |
 
-`per:{id}#cat:{impuesto}.{categoria}`
+| item      | tipo            | enum   |    min |    max |  req  |
+| --------- | --------------- | ------ | -----: | -----: | :---: |
+| impuesto  | integer         |        |      1 |   9999 |   x   |
+| categoria | integer         |        |      1 |    999 |   x   |
+| estado    | string          | AC, BD |        |        |   x   |
+| periodo   | #periodomensual |        | 100000 | 999912 |   x   |
+| motivo    | #motivo         |        |      1 | 999999 |       |
+| ds        | #fecha          |        |        |        |       |
 
-#### Estructura de #cat
-
-| nombre    | tipo            | enum   | min    | max    | req |
-| --------- | --------------- | ------ | ------ | ------ | --- |
-| impuesto  | integer         |        | 1      | 9999   | x   |
-| categoria | integer         |        | 1      | 999    | x   |
-| estado    | string          | AC, BD |        |        | x   |
-| periodo   | #periodomensual |        | 100000 | 999912 | x   |
-| motivo    | #motivo         |        | 1      | 999999 |     |
-| ds        | #fecha          |        |        |        |     |
-
-#### Ejemplo
+**ejemplo:**
 
 `per:20000000168#cat:20.1`
 
@@ -406,22 +388,19 @@ Aclaraciones:
 
 ### persona.contribmunis
 
-#### Estructura de la key #con
+| subkey | `per:{id}#con:{impuesto}.{municipio}` |
+| ------ | ------------------------------------- |
 
-`per:{id}#con:{impuesto}.{municipio}`
+| ítem      | tipo    | enum |  min |  max |  req  |
+| --------- | ------- | ---- | ---: | ---: | :---: |
+| impuesto  | integer |      |    1 | 9999 |   x   |
+| municipio | integer |      |    1 | 9999 |   x   |
+| provincia | integer |      |    0 |   24 |   x   |
+| desde     | #fecha  |      |      |      |   x   |
+| hasta     | #fecha  |      |      |      |
+| ds        | #fecha  |      |      |      |
 
-#### Estructura de #con
-
-| nombre    | tipo    | enum | min | max  | req |
-| --------- | ------- | ---- | --- | ---- | --- |
-| impuesto  | integer |      | 1   | 9999 | x   |
-| municipio | integer |      | 1   | 9999 | x   |
-| provincia | integer |      | 0   | 24   | x   |
-| desde     | #fecha  |      |     |      | x   |
-| hasta     | #fecha  |      |     |      |
-| ds        | #fecha  |      |     |      |
-
-#### Ejemplo de #con
+**ejemplo:**
 
 `per:20000000168#con:5244.98`
 
@@ -440,28 +419,25 @@ Aclaraciones:
 
 ### persona.actividades
 
-#### Estructura de la key #act
+| subkey | `per:{id}#act:{org}.{actividad}[.{articulo}]` |
+| ------ | --------------------------------------------- |
 
-`per:{id}#act:{org}.{actividad}[.{articulo}]`
-
-#### Estructura de #act
-
-| nombre    | tipo          | regexp pattern            | min | max | req |
-| --------- | ------------- | ------------------------- | --- | --- | --- |
-| org       | #organización |                           |     |     | x   |
-| actividad | string        | `^[0-9]{1,3}-[0-9]{3,8}$` |     |     | x   |
-| orden     | integer       |                           | 1   | 999 | x   |
-| desde     | #fecha        |                           |     |     | x   |
-| hasta     | #fecha        |                           |     |     |     |
-| articulo  | integer       |                           | 2   | 13  |     |
-| ds        | #fecha        |                           |     |     |     |
-
-Aclaraciones:
+| item      | tipo          | regexp pattern            |  min |  max |  req  |
+| --------- | ------------- | ------------------------- | ---: | ---: | :---: |
+| org       | #organización |                           |      |      |   x   |
+| actividad | string        | `^[0-9]{1,3}-[0-9]{3,8}$` |      |      |   x   |
+| orden     | integer       |                           |    1 |  999 |   x   |
+| desde     | #fecha        |                           |      |      |   x   |
+| hasta     | #fecha        |                           |      |      |       |
+| articulo  | integer       |                           |    2 |   13 |       |
+| ds        | #fecha        |                           |      |      |       |
 
 - **`actividad`**: compuesto por codigo de nomenclador y codigo de actividad, separados por guión medio.
 - **`articulo`**: utilizado solamente para las actividades de la org `900` COMARB, puede tener valor 2 o entre 6 y 13, en cuyo caso forma parte de la key.
 
-#### Ejemplo: Actividad primaria (orden 1) para AFIP
+**ejemplos:**
+
+Actividad primaria (orden 1) para AFIP
 
 `per:20000000168#act:1.883-772099`
 
@@ -475,7 +451,7 @@ Aclaraciones:
 }
 ```
 
-#### Ejemplo: Actividad secundaria (orden > 1) para COMARB
+Actividad secundaria (orden > 1) para COMARB
 
 `per:20000000168#act:900.900-302000.7`
 
@@ -494,20 +470,17 @@ Aclaraciones:
 
 ### persona.etiquetas
 
-#### Estructura de la key #eti
+| subkey | `per:{id}#eti:{etiqueta}` |
+| ------ | ------------------------- |
 
-`per:{id}#eti:{etiqueta}`
+| item     | tipo           | enum   |      min |      max |  req  |
+| -------- | -------------- | ------ | -------: | -------: | :---: |
+| etiqueta | integer        |        |        1 |     9999 |   x   |
+| periodo  | #periododiario |        | 10000000 | 99991231 |   x   |
+| estado   | string         | AC, BD |          |          |   x   |
+| ds       | #fecha         |        |          |          |       |
 
-#### Estructura de #eti
-
-| nombre   | tipo           | enum   | min      | max      | req |
-| -------- | -------------- | ------ | -------- | -------- | --- |
-| etiqueta | integer        |        | 1        | 9999     | x   |
-| periodo  | #periododiario |        | 10000000 | 99991231 | x   |
-| estado   | string         | AC, BD |          |          | x   |
-| ds       | #fecha         |        |          |          |     |
-
-#### Ejemplo de #eti
+**ejemplo:**
 
 `per:20000000168#eti:160`
 
@@ -524,23 +497,20 @@ Aclaraciones:
 
 ### persona.telefonos
 
-#### Estructura de la key #tel
+| subkey | `per:{id}#tel:{orden}` |
+| ------ | ---------------------- |
 
-`per:{id}#tel:{orden}`
+| item   | tipo    | enum |  min |             max |  req  |
+| ------ | ------- | ---- | ---: | --------------: | :---: |
+| orden  | integer |      |    1 |          999999 |   x   |
+| pais   | integer |      |    1 |            9999 |       |
+| area   | integer |      |    1 |            9999 |       |
+| numero | integer |      |    1 | 999999999999999 |   x   |
+| tipo   | integer |      |    1 |              99 |       |
+| linea  | integer |      |    1 |             999 |       |
+| ds     | #fecha  |      |      |                 |       |
 
-#### Estructura de #tel
-
-| nombre | tipo    | enum | min | max             | req |
-| ------ | ------- | ---- | --- | --------------- | --- |
-| orden  | integer |      | 1   | 999999          | x   |
-| pais   | integer |      | 1   | 9999            |     |
-| area   | integer |      | 1   | 9999            |     |
-| numero | integer |      | 1   | 999999999999999 | x   |
-| tipo   | integer |      | 1   | 99              |     |
-| linea  | integer |      | 1   | 999             |     |
-| ds     | #fecha  |      |     |                 |     |
-
-#### Ejemplo de #tel
+**ejemplo:**
 
 `per:20000000168#tel:1`
 
@@ -560,21 +530,18 @@ Aclaraciones:
 
 ### persona.emails
 
-#### Estructura de la key #ema
+| subkey | `per:{id}#ema:{orden}` |
+| ------ | ---------------------- |
 
-`per:{id}#ema:{orden}`
+| item      | tipo    | enum |  min |  max |  req  |
+| --------- | ------- | ---- | ---: | ---: | :---: |
+| orden     | integer |      |    1 |  999 |   x   |
+| direccion | string  |      |      |  100 |   x   |
+| tipo      | integer |      |    1 |   99 |       |
+| estado    | integer |      |    1 |   99 |       |
+| ds        | #fecha  |      |      |      |       |
 
-#### Estructura de #ema
-
-| nombre    | tipo    | enum | min | max | req |
-| --------- | ------- | ---- | --- | --- | --- |
-| orden     | integer |      | 1   | 999 | x   |
-| direccion | string  |      |     | 100 | x   |
-| tipo      | integer |      | 1   | 99  |     |
-| estado    | integer |      | 1   | 99  |     |
-| ds        | #fecha  |      |     |     |     |
-
-#### Ejemplo de #ema
+**ejemplo:**
 
 `per:20000000168#ema:1`
 
@@ -592,26 +559,23 @@ Aclaraciones:
 
 ### persona.relaciones
 
-#### Estructura de la key #rel
+| subkey | `per:{id}#rel:{persona}.{tipo}.{subtipo}` |
+| ------ | ----------------------------------------- |
 
-`per:{id}#rel:{persona}.{tipo}.{subtipo}`
+| item    | tipo    | enum |  min | max |  req  |
+| ------- | ------- | ---- | ---: | --- | :---: |
+| persona | #cuit   |      |      |     |   x   |
+| tipo    | integer |      |    1 | 999 |   x   |
+| subtipo | integer |      |    0 | 999 |   x   |
+| desde   | #fecha  |      |      |     |   x   |
+| ds      | #fecha  |      |      |     |       |
 
-#### Estructura de #rel
+- **`tipo 3`**: relaciones societarias.
+- **`tipo 18`**: administrador de relaciones.
 
-| nombre  | tipo    | enum | min | max | req |
-| ------- | ------- | ---- | --- | --- | --- |
-| persona | #cuit   |      |     |     | x   |
-| tipo    | integer |      | 1   | 999 | x   |
-| subtipo | integer |      | 0   | 999 | x   |
-| desde   | #fecha  |      |     |     | x   |
-| ds      | #fecha  |      |     |     |     |
+**ejemplo:**
 
-Aclaraciones:
-
-- **`tipo: 3`**: relaciones societarias.
-- **`tipo: 18`**: administrador de relaciones.
-
-#### Ejemplo: Administrador de Relaciones de una Sociedad
+Administrador de Relaciones de una Sociedad:
 
 `per:30120013439#rel:20012531001.18.0`
 
@@ -629,21 +593,18 @@ Aclaraciones:
 
 ### persona.jurisdicciones
 
-#### Estructura de la key #jur
+| subkey | `per:{id}#jur:{org}.{provincia}` |
+| ------ | -------------------------------- |
 
-`per:{id}#jur:{org}.{provincia}`
+| item      | tipo          | enum |  min |  max |  req  |
+| --------- | ------------- | ---- | ---: | ---: | :---: |
+| org       | #organización |      |      |      |   x   |
+| provincia | integer       |      |    0 |   24 |   x   |
+| desde     | #fecha        |      |      |      |   x   |
+| hasta     | #fecha        |      |      |      |       |
+| ds        | #fecha        |      |      |      |       |
 
-#### Estructura de #jur
-
-| nombre    | tipo          | enum | min | max | req |
-| --------- | ------------- | ---- | --- | --- | --- |
-| org       | #organización |      |     |     | x   |
-| provincia | integer       |      | 0   | 24  | x   |
-| desde     | #fecha        |      |     |     | x   |
-| hasta     | #fecha        |      |     |     |     |
-| ds        | #fecha        |      |     |     |     |
-
-#### Ejemplo: Jurisdicción CABA informada por COMARB
+**ejemplo:** Jurisdicción CABA informada por COMARB:
 
 `per:30120013439#jur:900.0`
 
@@ -660,21 +621,18 @@ Aclaraciones:
 
 ### persona.cmsedes
 
-#### Estructura de la key #cms
+| subkey | `per:{id}#cms:{org}.{provincia}` |
+| ------ | -------------------------------- |
 
-`per:{id}#cms:{org}.{provincia}`
+| item      | tipo    | enum   |  min |  max |  req  |
+| --------- | ------- | ------ | ---: | ---: | :---: |
+| org       | integer | 1, 900 |      |      |   x   |
+| provincia | integer |        |    0 |   24 |   x   |
+| desde     | #fecha  |        |      |      |   x   |
+| hasta     | #fecha  |        |      |      |       |
+| ds        | #fecha  |        |      |      |       |
 
-#### Estructura de #cms
-
-| nombre    | tipo    | enum   | min | max | req |
-| --------- | ------- | ----   | --- | --- | --- |
-| org       | integer | 1, 900 |     |     | x   |
-| provincia | integer |        | 0   | 24  | x   |
-| desde     | #fecha  |        |     |     | x   |
-| hasta     | #fecha  |        |     |     |     |
-| ds        | #fecha  |        |     |     |     |
-
-#### Ejemplo de #cms
+**ejemplo:**
 
 `per:30120013439#cms:900.3`
 
@@ -692,46 +650,45 @@ Aclaraciones:
 
 ### persona.archivos
 
-#### Estructura de la key #arc
+| subkey | `per:{id}#arc:{orden}` |
+| ------ | ---------------------- |
 
-`per:{id}#arc:{orden}`
+| item  | tipo    | enum |  min |  max |  req  |
+| ----- | ------- | ---- | ---: | ---: | :---: |
+| orden | integer |      |    1 |  999 |   x   |
+| tipo  | integer |      |    1 |   99 |   x   |
+| ds    | #fecha  |      |      |      |       |
 
-#### Estructura de #arc
+- **`tipo`**:
 
-| nombre    | tipo    | enum | min | max | req |
-| --------- | ------- | ---- | --- | --- | --- |
-| orden     | integer |      | 1   | 999 | x   |
-| tipo      | integer |      | 1   | 99  | x   |
-| ds        | #fecha  |      |     |     |     |
+| tipo | desc                                                       |
+| ---- | ---------------------------------------------------------- |
+| 1    | CIE - Contrato Idioma Original                             |
+| 2    | CIE - Contrato Traducido Español                           |
+| 3    | CIE - Autorización del AR                                  |
+| 4    | CIE - Integrantes                                          |
+| 5    | SAS - Estatutos                                            |
+| 6    | PERSONA FISICA - DNI FRENTE                                |
+| 7    | PERSONA FISICA - DNI CONTRAFRENTE                          |
+| 8    | PERSONA FISICA - COMPROBANTE DOMICILIO                     |
+| 9    | FORMULARIO INSCRIPCION                                     |
+| 10   | CIE - Datos Administrador de la Sucesión                   |
+| 11   | CIE - Copia del Certificado de Defunción Idioma Origen     |
+| 12   | CIE - Copia del Certificado de Defunción Idioma Español    |
+| 13   | CIE - Copia de Carátula del Juicio Sucesorio               |
+| 14   | CIE - Documento de Identidad del Exterior                  |
+| 15   | CIE - Integrantes Sociedad del País                        |
+| 16   | RESIDENCIA FISCAL - Certificado de Residencia              |
+| 17   | RESIDENCIA FISCAL - Certificado de Residencia              |
+| 18   | PERSONA FISICA - FOTO CARNET                               |
+| 19   | PERSONA FISICA - Corrección Datos Formulario Cuit Digital  |
+| 20   | PERSONA JURIDICA - Estatuto                                |
+| 21   | PERSONA JURIDICA – Estatuto con Aprobación Org. de Control |
+| 22   | PERSONA JURIDICA – Inst. de aprobación del Org. de Control |
+| 23   | PERSONA JURIDICA - Acta Asamblea por Mod. de datos         |
+| 24   | PERSONA JURIDICA – Acta de Directorio por Mod. de datos    |
 
-tipo | descripción |
---- | ---
- 1|CIE - Contrato Idioma Original                           |
- 2|CIE - Contrato Traducido Español                         |
- 3|CIE - Autorización del AR                                |
- 4|CIE - Integrantes                                        |
- 5|SAS - Estatutos                                          |
- 6|PERSONA FISICA - DNI FRENTE                              |
- 7|PERSONA FISICA - DNI CONTRAFRENTE                        |
- 8|PERSONA FISICA - COMPROBANTE DOMICILIO                   |
- 9|FORMULARIO INSCRIPCION                                   |
-10|CIE - Datos Administrador de la Sucesión                 |
-11|CIE - Copia del Certificado de Defunción Idioma Origen   |
-12|CIE - Copia del Certificado de Defunción Idioma Español  |
-13|CIE - Copia de Carátula del Juicio Sucesorio             |
-14|CIE - Documento de Identidad del Exterior                |
-15|CIE - Integrantes Sociedad del País                      |
-16|RESIDENCIA FISCAL - Certificado de Residencia            |
-17|RESIDENCIA FISCAL - Certificado de Residencia                                               |
-18|PERSONA FISICA - FOTO CARNET                             |
-19|PERSONA FISICA - Corrección Datos Formulario Cuit Digital|
-20|PERSONA JURIDICA - Estatuto                            |
-21|PERSONA JURIDICA – Estatuto con Aprobación Org. de Control |
-22|PERSONA JURIDICA – Inst. de aprobación del Org. de Control |
-23|PERSONA JURIDICA - Acta Asamblea por Mod. de datos       |
-24|PERSONA JURIDICA – Acta de Directorio por Mod. de datos  |
-
-#### Ejemplo de #arc
+**ejemplo:**
 
 `per:30120013439#arc:1`
 
@@ -749,26 +706,26 @@ tipo | descripción |
 
 Cada punto de venta tiene un determinado sistema de facturacion (`sistema`) y corresponde a un domicilio referenciado por `domitipo` y `domiorden`. Los domicilios referenciados son siempre del organismo AFIP (`org: 1`).
 
-subkey | `pve:{domitipo}.{domiorden}.{numero}`
---- | ---
+| subkey | `pve:{domitipo}.{domiorden}.{numero}` |
+| ------ | ------------------------------------- |
 
-| prop   | desc    |tipo    | minLen | maxLen | min | max   | req |
-| :--- | :--- | --- | ---: | ---: | ---: | ---:   | :---: |
-| domitipo  | tipo de domicilio | integer |     |     | 1   | 3     | x   |
-| domiorden | orden de domicilio | integer |     |     | 1   | 9999  | x   |
-| numero    | número de punto de venta | integer |     |     | 1   | 99999 | x   |
-| sistema   |  sistema de facturación [csv](csv/puntoventa.sistema.csv) | string  | 1   | 10  |     |       | x   |
-| uso       | día en que se comenzó a usar | #fecha
-| bloqueo   | día en que fue bloqueado | #fecha
-| baja      | día en que fue dado de baja | #fecha
-| ds        | | #fecha
+| item      | desc                                                     | tipo    | minLen | maxLen |  min |   max |  req  |
+| :-------- | :------------------------------------------------------- | ------- | -----: | -----: | ---: | ----: | :---: |
+| domitipo  | tipo de domicilio                                        | integer |        |        |    1 |     3 |   x   |
+| domiorden | orden de domicilio                                       | integer |        |        |    1 |  9999 |   x   |
+| numero    | número de punto de venta                                 | integer |        |        |    1 | 99999 |   x   |
+| sistema   | sistema de facturación [csv](csv/puntoventa.sistema.csv) | string  |      1 |     10 |      |       |   x   |
+| uso       | día en que se comenzó a usar                             | #fecha  |
+| bloqueo   | día en que fue bloqueado                                 | #fecha  |
+| baja      | día en que fue dado de baja                              | #fecha  |
+| ds        |                                                          | #fecha  |
 
 **ejemplo:**
 
 La persona `30120013439` tiene un punto de venta con el sistema de facturación "Comprobantes de Exportacion - Web Services". Lo está utilizando desde `2020-11-07`.
 
-key | `per:30120013439#pve:1.1.14`
---- | ---
+| key | `per:30120013439#pve:1.1.14` |
+| --- | ---------------------------- |
 
 ```json
 {
@@ -803,7 +760,7 @@ key | `per:30120013439#pve:1.1.14`
 
 ---
 
-## Ejemplo completo
+**ejemplo completo:**
 
 `30643202812`
 
@@ -813,7 +770,7 @@ key | `per:30120013439#pve:1.1.14`
 | `per:30643202812#per`                  | `{"tipo":"J","id":30643202812,"tipoid":"C","estado":"A","ds":"2013-11-29","razonsocial":"XXXXX XX XXXXXXXX XXXX","formajuridica":86,"mescierre":12,"contratosocial":"1976-08-21"}`           |
 | `per:30643202812#act:1.883-702091`     | `{"org":1,"actividad":"883-702091","orden":1,"desde":"2002-01-01","ds":"2019-06-03"}`                                                                                                        |
 | `per:30643202812#act:900.900-949100`   | `{"org":900,"actividad":"900-949100","orden":1,"articulo":2,"desde":"2002-01-01","ds":"2019-06-03"}`                                                                                         |
-| `per:30643202812#cms:900.1`            | `{"org":900,"provincia":1,"desde":"2002-01-01","ds":"2019-06-03"}`                                                                                                                      |
+| `per:30643202812#cms:900.1`            | `{"org":900,"provincia":1,"desde":"2002-01-01","ds":"2019-06-03"}`                                                                                                                           |
 | `per:30643202812#dom:1.1.1`            | `{"orden":1,"org":1,"tipo":1,"estado":6,"calle":"XX XXXXXX","numero":3371,"provincia":1,"localidad":"VILLA LYNCH","cp":"1672","nomenclador":"104","ds":"2007-10-31"}`                        |
 | `per:30643202812#dom:1.2.1`            | `{"orden":1,"org":1,"tipo":2,"estado":6,"calle":"XX XXXXXX","numero":1097,"provincia":1,"localidad":"VILLA LYNCH","cp":"1672","nomenclador":"104","ds":"2007-10-31"}`                        |
 | `per:30643202812#dom:900.3.1`          | `{"orden":1,"org":900,"tipo":3,"estado":6,"calle":"14","numero":4745,"piso":"1","unidad":"B","provincia":1,"localidad":"VILLA LYNCH (PDO. GRAL. SAN MARTIN)","cp":"1672","ds":"2019-06-03"}` |
@@ -838,12 +795,14 @@ key | `per:30120013439#pve:1.1.14`
 | `per:30643202812#jur:900.5`            | `{"provincia":5,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`                                                                                                                           |
 | `per:30643202812#jur:900.6`            | `{"provincia":6,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`                                                                                                                           |
 | `per:30643202812#jur:900.7`            | `{"provincia":7,"desde":"2002-01-01","org":900,"ds":"2019-06-03"}`                                                                                                                           |
-| `per:30643202812#rel:20083309424.18.0` | `{"persona":20083309424,"tipo":18,"subtipo":0,"desde":"2007-09-24","ds":"2007-09-24"}` |
-| `per:30643202812#arc:1`                | `{"orden":1,"tipo":16,"ds":"2007-09-24"}` |
+| `per:30643202812#rel:20083309424.18.0` | `{"persona":20083309424,"tipo":18,"subtipo":0,"desde":"2007-09-24","ds":"2007-09-24"}`                                                                                                       |
+| `per:30643202812#arc:1`                | `{"orden":1,"tipo":16,"ds":"2007-09-24"}`                                                                                                                                                    |
 
-## Atributo organización
+---
 
-**#organización** conforma los registros de tipo:
+## #organizacion
+
+**#organizacion** conforma los registros de tipo:
 
 - [domicilios](#personadomicilios)
 - [domisroles](#personadomisroles)
@@ -855,31 +814,31 @@ En todos los caso, un valor mayor que 1(uno) indica que los datos del registro p
 
 Las organizaciones son:
 
-| código  | nombre                    | provincia | MSP-id
-| :-----: | ------------------------- | --------: | ---
-|    1    | AFIP                      |           | AFIP
-|   900   | COMISION ARBITRAL         |           | COMARB
-|   901   | AGIP - CABA               |         0 | org901
-|   902   | ARBA - BUENOS AIRES       |         1 | ARBA
-|   903   | AGR - CATAMARCA           |         2 | org903
-|   904   | RENTAS CORDOBA            |         3 | CBA
-|   905   | DGR - CORRIENTES          |         4 | org905
-|   906   | DGR - CHACO               |        16 | org906
-|   907   | DGR - CHUBUT              |        17 | org907
-|   908   | ATER - ENTRE RIOS         |         5 | org908
-|   909   | DGR - FORMOSA             |        18 | org909
-|   910   | DPR - JUJUY               |         6 | org910
-|   911   | DGR - LA PAMPA            |        21 | org911
-|   912   | DGIP - LA RIOJA           |         8 | org912
-|   913   | ATM - MENDOZA             |         7 | org913
-|   914   | DGR - MISIONES            |        19 | org914
-|   915   | DPR - NEUQUEN             |        20 | org915
-|   916   | DGR - RIO NEGRO           |        22 | org916
-|   917   | DGR - SALTA               |         9 | org917
-|   918   | DGR - SAN JUAN            |        10 | org918
-|   919   | DPIP - SAN LUIS           |        11 | org919
-|   920   | ASIP - SANTA CRUZ         |        23 | org920
-|   921   | API - SANTA FE            |        12 | org921
-|   922   | DGR - SANTIAGO DEL ESTERO |        13 | org922
-|   923   | DGR - TIERRA DEL FUEGO    |        24 | org923
-|   924   | DGR - TUCUMAN             |        14 | org924
+| código | nombre                    | provincia | MSP-id |
+| :----: | ------------------------- | --------: | ------ |
+|   1    | AFIP                      |           | AFIP   |
+|  900   | COMISION ARBITRAL         |           | COMARB |
+|  901   | AGIP - CABA               |         0 | org901 |
+|  902   | ARBA - BUENOS AIRES       |         1 | ARBA   |
+|  903   | AGR - CATAMARCA           |         2 | org903 |
+|  904   | RENTAS CORDOBA            |         3 | CBA    |
+|  905   | DGR - CORRIENTES          |         4 | org905 |
+|  906   | DGR - CHACO               |        16 | org906 |
+|  907   | DGR - CHUBUT              |        17 | org907 |
+|  908   | ATER - ENTRE RIOS         |         5 | org908 |
+|  909   | DGR - FORMOSA             |        18 | org909 |
+|  910   | DPR - JUJUY               |         6 | org910 |
+|  911   | DGR - LA PAMPA            |        21 | org911 |
+|  912   | DGIP - LA RIOJA           |         8 | org912 |
+|  913   | ATM - MENDOZA             |         7 | org913 |
+|  914   | DGR - MISIONES            |        19 | org914 |
+|  915   | DPR - NEUQUEN             |        20 | org915 |
+|  916   | DGR - RIO NEGRO           |        22 | org916 |
+|  917   | DGR - SALTA               |         9 | org917 |
+|  918   | DGR - SAN JUAN            |        10 | org918 |
+|  919   | DPIP - SAN LUIS           |        11 | org919 |
+|  920   | ASIP - SANTA CRUZ         |        23 | org920 |
+|  921   | API - SANTA FE            |        12 | org921 |
+|  922   | DGR - SANTIAGO DEL ESTERO |        13 | org922 |
+|  923   | DGR - TIERRA DEL FUEGO    |        24 | org923 |
+|  924   | DGR - TUCUMAN             |        14 | org924 |
