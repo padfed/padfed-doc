@@ -427,7 +427,7 @@ docker run --log-driver json-file \
 
 Cuando arranca se conecta a la Blockchain y queda atendiendo en el port indicado en la option `-p` del `docker run`.
 
-Para ambientes de homologación ofrece una interface swagger que atiene en `/swagger`.
+Para ambientes de homologación ofrece una interfaz swagger que atiende en `/swagger`.
 
 ### application.conf
 
