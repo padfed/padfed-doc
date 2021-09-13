@@ -70,8 +70,8 @@ Total: 16.200.000
 - Personas jurídicas: 1.5 millones
 ```
 
-| subkey | `per:{id}#per` |
-| ------ | -------------- |
+| key | `per:{id}#per` |
+| --- | -------------- |
 
 **Items comunes**:
 
@@ -171,8 +171,8 @@ Total: 16.200.000
 
 ### persona.impuestos
 
-| subkey | `per:{id}#imp:{impuesto}` |
-| ------ | ------------------------- |
+| key | `per:{id}#imp:{impuesto}` |
+| --- | ------------------------- |
 
 | item         | tipo            | enum           |  min |    max |  req  |
 | ------------ | --------------- | -------------- | ---: | -----: | :---: |
@@ -317,8 +317,8 @@ Total: 16.200.000
 
 ### persona.domisroles
 
-| subkey | `per:{id}#dor:{org}.{tipo}.{orden}.{rol}` |
-| ------ | ----------------------------------------- |
+| key | `per:{id}#dor:{org}.{tipo}.{orden}.{rol}` |
+| --- | ----------------------------------------- |
 
 | nombre | tipo          | enum |  min |  max |  req  |
 | ------ | ------------- | ---- | ---: | ---: | :---: |
@@ -358,8 +358,8 @@ Total: 16.200.000
 
 ### persona.categorias
 
-| subkey | `per:{id}#cat:{impuesto}.{categoria}` |
-| ------ | ------------------------------------- |
+| key | `per:{id}#cat:{impuesto}.{categoria}` |
+| --- | ------------------------------------- |
 
 | item      | tipo            | enum   |    min |    max |  req  |
 | --------- | --------------- | ------ | -----: | -----: | :---: |
@@ -388,8 +388,8 @@ Total: 16.200.000
 
 ### persona.contribmunis
 
-| subkey | `per:{id}#con:{impuesto}.{municipio}` |
-| ------ | ------------------------------------- |
+| key | `per:{id}#con:{impuesto}.{municipio}` |
+| --- | ------------------------------------- |
 
 | ítem      | tipo    | enum |  min |  max |  req  |
 | --------- | ------- | ---- | ---: | ---: | :---: |
@@ -419,8 +419,8 @@ Total: 16.200.000
 
 ### persona.actividades
 
-| subkey | `per:{id}#act:{org}.{actividad}[.{articulo}]` |
-| ------ | --------------------------------------------- |
+| key | `per:{id}#act:{org}.{actividad}[.{articulo}]` |
+| --- | --------------------------------------------- |
 
 | item      | tipo          | regexp pattern            |  min |  max |  req  |
 | --------- | ------------- | ------------------------- | ---: | ---: | :---: |
@@ -470,8 +470,8 @@ Actividad secundaria (orden > 1) para COMARB
 
 ### persona.etiquetas
 
-| subkey | `per:{id}#eti:{etiqueta}` |
-| ------ | ------------------------- |
+| key | `per:{id}#eti:{etiqueta}` |
+| --- | ------------------------- |
 
 | item     | tipo           | enum   |      min |      max |  req  |
 | -------- | -------------- | ------ | -------: | -------: | :---: |
@@ -497,8 +497,8 @@ Actividad secundaria (orden > 1) para COMARB
 
 ### persona.telefonos
 
-| subkey | `per:{id}#tel:{orden}` |
-| ------ | ---------------------- |
+| key | `per:{id}#tel:{orden}` |
+| --- | ---------------------- |
 
 | item   | tipo    | enum |  min |             max |  req  |
 | ------ | ------- | ---- | ---: | --------------: | :---: |
@@ -530,8 +530,8 @@ Actividad secundaria (orden > 1) para COMARB
 
 ### persona.emails
 
-| subkey | `per:{id}#ema:{orden}` |
-| ------ | ---------------------- |
+| key | `per:{id}#ema:{orden}` |
+| --- | ---------------------- |
 
 | item      | tipo    | enum |  min |  max |  req  |
 | --------- | ------- | ---- | ---: | ---: | :---: |
@@ -559,8 +559,8 @@ Actividad secundaria (orden > 1) para COMARB
 
 ### persona.relaciones
 
-| subkey | `per:{id}#rel:{persona}.{tipo}.{subtipo}` |
-| ------ | ----------------------------------------- |
+| key | `per:{id}#rel:{persona}.{tipo}.{subtipo}` |
+| --- | ----------------------------------------- |
 
 | item    | tipo    | enum |  min | max |  req  |
 | ------- | ------- | ---- | ---: | --- | :---: |
@@ -593,8 +593,8 @@ Administrador de Relaciones de una Sociedad:
 
 ### persona.jurisdicciones
 
-| subkey | `per:{id}#jur:{org}.{provincia}` |
-| ------ | -------------------------------- |
+| key | `per:{id}#jur:{org}.{provincia}` |
+| --- | -------------------------------- |
 
 | item      | tipo          | enum |  min |  max |  req  |
 | --------- | ------------- | ---- | ---: | ---: | :---: |
@@ -621,8 +621,8 @@ Administrador de Relaciones de una Sociedad:
 
 ### persona.cmsedes
 
-| subkey | `per:{id}#cms:{org}.{provincia}` |
-| ------ | -------------------------------- |
+| key | `per:{id}#cms:{org}.{provincia}` |
+| --- | -------------------------------- |
 
 | item      | tipo    | enum   |  min |  max |  req  |
 | --------- | ------- | ------ | ---: | ---: | :---: |
@@ -650,8 +650,8 @@ Administrador de Relaciones de una Sociedad:
 
 ### persona.archivos
 
-| subkey | `per:{id}#arc:{orden}` |
-| ------ | ---------------------- |
+| key | `per:{id}#arc:{orden}` |
+| --- | ---------------------- |
 
 | item  | tipo    | enum |  min |  max |  req  |
 | ----- | ------- | ---- | ---: | ---: | :---: |
@@ -706,8 +706,8 @@ Administrador de Relaciones de una Sociedad:
 
 Cada punto de venta tiene un determinado sistema de facturacion (`sistema`) y corresponde a un domicilio referenciado por `domitipo` y `domiorden`. Los domicilios referenciados son siempre del organismo AFIP (`org: 1`).
 
-| subkey | `pve:{domitipo}.{domiorden}.{numero}` |
-| ------ | ------------------------------------- |
+| key | `per:{id}#pve:{domitipo}.{domiorden}.{numero}` |
+| --- | ---------------------------------------------- |
 
 | item      | desc                                                     | tipo    | minLen | maxLen |  min |   max |  req  |
 | :-------- | :------------------------------------------------------- | ------- | -----: | -----: | ---: | ----: | :---: |
