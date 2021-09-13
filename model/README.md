@@ -174,22 +174,18 @@ Total: 16.200.000
 | key | `per:{id}#imp:{impuesto}` |
 | --- | ------------------------- |
 
-| item         | tipo            | enum           |  min |    max |  req  |
-| ------------ | --------------- | -------------- | ---: | -----: | :---: |
-| impuesto     | integer         |                |    1 |   9999 |   x   |
-| estado       | string          | AC, NA, BD, EX |      |        |   x   |
-| periodo      | #periodomensual |                |      |        |   x   |
-| dia          | integer         |                |    1 |     31 |       |
-| motivo       | object          |                |      |        |       |
-| motivo.id    | integer         |                |    1 | 999999 |   x   |
-| motivo.desde | #fecha          |                |      |        |       |
-| motivo.hasta | #fecha          |                |      |        |       |
-| inscripcion  | #fecha          |                |      |        |       |
-| ds           | #fecha          |                |      |        |       |
-
-- **`impuesto`**: [descripciones - csv](csv/impuesto.csv)
-- **`estado`**: AC: Activo, NA: No alcanzado, BD: Baja definitiva, EX: Exento
-- **`motivo.desde/hasta`**: Solamente los impuestos provinciales correspondientes regimenes simplificado de IIBB tienen valores en estos campos
+| item         | desc                                                                        | tipo            |  min |    max |  req  |
+| ------------ | --------------------------------------------------------------------------- | --------------- | ---: | -----: | :---: |
+| impuesto     | [csv](csv/impuesto.csv)                                                     | integer         |    1 |   9999 |   x   |
+| estado       | `AC`: Activo, `NA`: No alcanzado, `BD`: Baja definitiva, `EX`: Exento       | string          |      |        |   x   |
+| periodo      |                                                                             | #periodomensual |      |        |   x   |
+| dia          |                                                                             | integer         |    1 |     31 |       |
+| motivo       |                                                                             | object          |      |        |       |
+| motivo.id    |                                                                             | integer         |    1 | 999999 |   x   |
+| motivo.desde | Unicamente los impuestos reg simplificado IIBB tienen valores en este campo | #fecha          |      |        |       |
+| motivo.hasta | Idem anterior                                                               | #fecha          |      |        |       |
+| inscripcion  |                                                                             | #fecha          |      |        |       |
+| ds           |                                                                             | #fecha          |      |        |       |
 
 **ejemplo de impuesto activo (estado AC):**
 
