@@ -289,7 +289,7 @@ Total: 16.200.000
 | key | `per:{id}#dor:{org}.{tipo}.{orden}.{rol}` |
 | --- | ----------------------------------------- |
 
-| nombre | tipo          | enum |  min |  max |  req  |
+| item | tipo          | enum |  min |  max |  req  |
 | ------ | ------------- | ---- | ---: | ---: | :---: |
 | org    | #organización |      |    1 |  924 |   x   |
 | tipo   | integer       |      |    1 |    3 |   x   |
