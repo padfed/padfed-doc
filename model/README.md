@@ -231,31 +231,31 @@ Total: 16.200.000
 | key | `per:{id}#dom:{org}.{tipo}.{orden}` |
 | --- | ----------------------------------- |
 
-| item           | desc | tipo          |  min |     max |  req  |
-| -------------- | ---- | ------------- | ---: | ------: | :---: |
-| org            |      | #organización |      |         |   x   |
-| tipo           | Una persona puede tener un único domicilio `tipo 1` (Fiscal para AFIP), un único domicilio `tipo 2` (Real para AFIP) y 0 a N domicilios `tipo 3`. Los domicilios migrados por las jurisdicciones (`org > 1`) siempre tienen `tipo 3`.     | integer       |    1 |       3 |   x   |
-| orden          | Número secuencial comenzando desde `1` para cada `org` y `tipo`     | integer       |    1 |    9999 |   x   |
-| estado         | [csv](csv/domicilio.estado.csv)      | integer       |    1 |      99 |       |
-| calle          |      | string        |      |     200 |       |
-| numero         |      | integer       |    1 |  999999 |       |
-| piso           |      | string        |      |       5 |       |
-| sector         |      | string        |      |     200 |       |
-| manzana        |      | string        |      |     200 |       |
-| torre          |      | string        |      |     200 |       |
-| unidad         | Oficina, Departamento o Local     | string        |      |       5 |       |
-| provincia      |      | integer       |    0 |      24 |       |
-| localidad      |      | string        |      |     200 |       |
-| cp             |      | string        |      |       8 |       |
-| nomenclador    |      | string        |      |       9 |       |
-| nombre         | Nombre de fantasia     | string        |      |     200 |       |
-| adicional      |      | object        |      |         |       |
-| adicional.tipo |      | integer       |    1 |      99 |   x   |
-| adicional.dato |      | string        |      |     200 |   x   |
-| baja           |      | #fecha        |      |         |       |
-| partido        | Codigo de partido     | integer       |    1 |     999 |       |
-| partida        | Número de partida inmobiliaria     | integer       |    1 | 9999999 |       |
-| ds             |      | #fecha        |      |         |       |
+| item           | desc                                                                                                                                                                                                                                  | tipo          |  min |     max |  req  |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ---: | ------: | :---: |
+| org            |                                                                                                                                                                                                                                       | #organización |      |         |   x   |
+| tipo           | Una persona puede tener un único domicilio `tipo 1` (Fiscal para AFIP), un único domicilio `tipo 2` (Real para AFIP) y 0 a N domicilios `tipo 3`. Los domicilios migrados por las jurisdicciones (`org > 1`) siempre tienen `tipo 3`. | integer       |    1 |       3 |   x   |
+| orden          | Número secuencial comenzando desde `1` para cada `org` y `tipo`                                                                                                                                                                       | integer       |    1 |    9999 |   x   |
+| estado         | [csv](csv/domicilio.estado.csv)                                                                                                                                                                                                       | integer       |    1 |      99 |       |
+| calle          |                                                                                                                                                                                                                                       | string        |      |     200 |       |
+| numero         |                                                                                                                                                                                                                                       | integer       |    1 |  999999 |       |
+| piso           |                                                                                                                                                                                                                                       | string        |      |       5 |       |
+| sector         |                                                                                                                                                                                                                                       | string        |      |     200 |       |
+| manzana        |                                                                                                                                                                                                                                       | string        |      |     200 |       |
+| torre          |                                                                                                                                                                                                                                       | string        |      |     200 |       |
+| unidad         | Oficina, Departamento o Local                                                                                                                                                                                                         | string        |      |       5 |       |
+| provincia      |                                                                                                                                                                                                                                       | integer       |    0 |      24 |       |
+| localidad      |                                                                                                                                                                                                                                       | string        |      |     200 |       |
+| cp             |                                                                                                                                                                                                                                       | string        |      |       8 |       |
+| nomenclador    |                                                                                                                                                                                                                                       | string        |      |       9 |       |
+| nombre         | Nombre de fantasia                                                                                                                                                                                                                    | string        |      |     200 |       |
+| adicional      |                                                                                                                                                                                                                                       | object        |      |         |       |
+| adicional.tipo |                                                                                                                                                                                                                                       | integer       |    1 |      99 |   x   |
+| adicional.dato |                                                                                                                                                                                                                                       | string        |      |     200 |   x   |
+| baja           |                                                                                                                                                                                                                                       | #fecha        |      |         |       |
+| partido        | Codigo de partido                                                                                                                                                                                                                     | integer       |    1 |     999 |       |
+| partida        | Número de partida inmobiliaria                                                                                                                                                                                                        | integer       |    1 | 9999999 |       |
+| ds             |                                                                                                                                                                                                                                       | #fecha        |      |         |       |
 
 **ejemplo: Domicilio fiscal para AFIP:**
 
