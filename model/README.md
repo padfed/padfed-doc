@@ -228,63 +228,36 @@ Total: 16.200.000
 
 ### persona.domicilios
 
-#### Estructura de la key #dom
+| key | `per:{id}#dom:{org}.{tipo}.{orden}` |
+| --- | ----------------------------------- |
 
-`per:{id}#dom:{org}.{tipo}.{orden}`
+| item           | desc | tipo          |  min |     max |  req  |
+| -------------- | ---- | ------------- | ---: | ------: | :---: |
+| org            |      | #organización |      |         |   x   |
+| tipo           | Una persona puede tener un único domicilio `tipo 1` (Fiscal para AFIP), un único domicilio `tipo 2` (Real para AFIP) y 0 a N domicilios `tipo 3`. Los domicilios migrados por las jurisdicciones (`org > 1`) siempre tienen `tipo 3`.     | integer       |    1 |       3 |   x   |
+| orden          | Número secuencial comenzando desde `1` para cada `org` y `tipo`     | integer       |    1 |    9999 |   x   |
+| estado         | [csv](csv/domicilio.estado.csv)      | integer       |    1 |      99 |       |
+| calle          |      | string        |      |     200 |       |
+| numero         |      | integer       |    1 |  999999 |       |
+| piso           |      | string        |      |       5 |       |
+| sector         |      | string        |      |     200 |       |
+| manzana        |      | string        |      |     200 |       |
+| torre          |      | string        |      |     200 |       |
+| unidad         | Oficina, Departamento o Local     | string        |      |       5 |       |
+| provincia      |      | integer       |    0 |      24 |       |
+| localidad      |      | string        |      |     200 |       |
+| cp             |      | string        |      |       8 |       |
+| nomenclador    |      | string        |      |       9 |       |
+| nombre         | Nombre de fantasia     | string        |      |     200 |       |
+| adicional      |      | object        |      |         |       |
+| adicional.tipo |      | integer       |    1 |      99 |   x   |
+| adicional.dato |      | string        |      |     200 |   x   |
+| baja           |      | #fecha        |      |         |       |
+| partido        | Codigo de partido     | integer       |    1 |     999 |       |
+| partida        | Número de partida inmobiliaria     | integer       |    1 | 9999999 |       |
+| ds             |      | #fecha        |      |         |       |
 
-#### Estructura de #dom
-
-| nombre         | tipo          | enum |  min |     max |  req  |
-| -------------- | ------------- | ---- | ---: | ------: | :---: |
-| org            | #organización |      |      |         |   x   |
-| tipo           | integer       |      |    1 |       3 |   x   |
-| orden          | integer       |      |    1 |    9999 |   x   |
-| estado         | integer       |      |    1 |      99 |       |
-| calle          | string        |      |      |     200 |       |
-| numero         | integer       |      |    1 |  999999 |       |
-| piso           | string        |      |      |       5 |       |
-| sector         | string        |      |      |     200 |       |
-| manzana        | string        |      |      |     200 |       |
-| torre          | string        |      |      |     200 |       |
-| unidad         | string        |      |      |       5 |       |
-| provincia      | integer       |      |    0 |      24 |       |
-| localidad      | string        |      |      |     200 |       |
-| cp             | string        |      |      |       8 |       |
-| nomenclador    | string        |      |      |       9 |       |
-| nombre         | string        |      |      |     200 |       |
-| adicional      | object        |      |      |         |       |
-| adicional.tipo | integer       |      |    1 |      99 |   x   |
-| adicional.dato | string        |      |      |     200 |   x   |
-| baja           | #fecha        |      |      |         |       |
-| partido        | integer       |      |    1 |     999 |       |
-| partida        | integer       |      |    1 | 9999999 |       |
-| ds             | #fecha        |      |      |         |       |
-
-- **`unidad`**: "Oficina, Departamento o Local"
-- **`nombre`**: "Nombre de Fantasia"
-- **`partido`**: código del partido provincial
-- **`partida`**: número de partida inmobiliaria
-- **`tipo`**: tipo de domicilio para AFIP. Una persona puede tener un único domicilio `tipo 1` (Fiscal para AFIP), un único domicilio `tipo 2` (Real para AFIP) y 0 a N domicilios `tipo 3`; Los domicilios informados por las jurisdiccionales (`org > 1`) siempre tienen `tipo 3`
-- **`orden`**: número secuencial comenzando desde `1` para cada `org` y `tipo`
-- **`estado`**:
-
-| estado | desc                       |
-| -----: | -------------------------- |
-|      1 | CONFIRMADO                 |
-|      2 | NO CONFIRMADO              |
-|      3 | ERRONEO                    |
-|      4 | INACTIVO                   |
-|      5 | INEXISTENTE - DESCONOCIDO  |
-|      6 | DECLARADO                  |
-|      7 | CONSTITUIDO DE OFICIO      |
-|      8 | SIN CORRESP TIPO DOMICILIO |
-|      9 | NO DENUNCIADO              |
-|     10 | NO NOTIFICADO              |
-|     11 | DECLARADO POR INTERNET     |
-|     12 | ARCHIVADO                  |
-|     13 | MIGRADO POR COMARB/ATL     |
-
-#### Ejemplo: Domicilio fiscal para AFIP
+**ejemplo: Domicilio fiscal para AFIP:**
 
 `per:20000000168#dom:1.1.1`
 
