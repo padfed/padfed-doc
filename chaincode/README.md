@@ -6,7 +6,7 @@
 
 ### v1.0.5 - 2021 diciembre
 
-- **GetStatesHistory**, por compatibiliad con Fabric 2.2 (actual LTS) se eliminó la obtención del número de bloque. Para obtenerlo desde `padfedcc` invocabamos al `qscc`, pero desde Fabric 2.0 la invocar a un chaincode desde otro quedó bloqueada y produce el error: `Rejecting invoke of QSCC from another chaincode because of potential for deadlocks`
+- **GetStatesHistory**, por compatibiliad con Fabric 2.2 (actual versión LTS) se eliminó la obtención del número de bloque. Para obtenerlo desde `padfedcc` invocabamos al `qscc`, pero desde Fabric 2.0 la invocación a un chaincode desde otro quedó bloqueada y produce el error: `Rejecting invoke of QSCC from another chaincode because of potential for deadlocks`
 - el nombre del package ahora es: `gitlab.cloudint.afip.gob.ar/padfed-bc-chaincode/padfed-bc-chaincode.git`.
 
 ---
