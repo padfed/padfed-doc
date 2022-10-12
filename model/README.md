@@ -540,6 +540,7 @@ Actividad secundaria (orden > 1) para COMARB
 | ds      | #fecha  |      |      |     |       |
 
 - **`tipo 3`**: relaciones societarias.
+- **`tipo 7`**: cooporativa asociada.
 - **`tipo 18`**: administrador de relaciones.
 
 **ejemplo:**
