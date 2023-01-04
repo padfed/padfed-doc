@@ -83,6 +83,10 @@ Total: 16.200.000
 | estado   | string   | A, I       |     |     |   x   |
 | pais     | integer  |            | 100 | 999 |       |
 | activoid | #cuit    |            |     |     |       |
+| dfe      | object   |            |     |     |       |
+| dfe.direccion | string |         |     |  60 |   x   |
+| dfe.tipo | integer  |            |     |  99 |   x   |
+| dfe.ds   | #fecha   |            |     |     |       |
 | ch       | []string |            |     |     |       |
 | ds       | #fecha   |            |     |     |       |
 
@@ -97,7 +101,7 @@ Total: 16.200.000
 | apellido         | string  |      |    1 |  200 |   x   |
 | nombre           | string  |      |    1 |  200 |       |
 | materno          | string  |      |    1 |  200 |       |
-| sexo             | string  | M, F |      |      |       |
+| sexo             | string  | M, F, X |   |      |       |
 | documento        | object  |      |      |      |       |
 | documento.tipo   | integer |      |    1 |   99 |   x   |
 | documento.numero | string  |      |      |      |   x   |
