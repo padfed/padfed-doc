@@ -1,0 +1,327 @@
+ID,DESCRIPCION,FECHA_VIGENCIA_DESDE,FECHA_VIGENCIA_HASTA,FECHA_ACTUALIZACION,EXPLICACION,TIPO_MOTIVO
+1,Alta de parámetros,03/08/2011 00:00,,06/12/2021 13:53,,1
+2,Es responsable por,03/08/2011 00:00,,03/08/2011 18:55,,2
+3,Vinculación por nota,03/08/2011 00:00,,06/12/2021 13:53,,3
+4,Vinculación por f 598,03/08/2011 00:00,,06/12/2021 13:53,,3
+5,Cese de actividades,03/08/2011 00:00,,03/08/2011 18:55,,4
+6,Sin personal,03/08/2011 00:00,,03/08/2011 18:55,,4
+7,CUIL paso a CUIL por opción,03/08/2011 00:00,,06/12/2021 13:53,,5
+8,CUIT presento opción,03/08/2011 00:00,,06/12/2021 13:53,,5
+9,Potencial con opción,03/08/2011 00:00,,06/12/2021 13:53,,5
+10,Empresa promovida por Ley 19000,03/08/2011 00:00,,03/08/2011 18:55,,6
+11,Empresa promovida por Ley 19000 Pesca,03/08/2011 00:00,,03/08/2011 18:55,,6
+12,"Empresa promovida por Ley 19640, 20560 y 21608",03/08/2011 00:00,,03/08/2011 18:55,,6
+13,"Empresa promovida por Ley 19640, 20560 y 22702",03/08/2011 00:00,,03/08/2011 18:55,,6
+14,Empresa promovida por Ley 19640 y 22095,03/08/2011 00:00,,03/08/2011 18:55,,6
+15,Empresa promovida por Ley 19640 y 22702,03/08/2011 00:00,,03/08/2011 18:55,,6
+16,Empresa promovida por Ley 20551 y 22095 Pesca,03/08/2011 00:00,,03/08/2011 18:55,,6
+17,Empresa promovida por Ley 20560 y 21608,03/08/2011 00:00,,03/08/2011 18:55,,6
+18,Empresa promovida por Ley 20560 y 22021,03/08/2011 00:00,,03/08/2011 18:55,,6
+19,Empresa promovida por Ley 20560,03/08/2011 00:00,,03/08/2011 18:55,,6
+20,Empresa promovida por Ley 21608 y 19640,03/08/2011 00:00,,03/08/2011 18:55,,6
+21,Empresa promovida por Ley 21608 y 22095,03/08/2011 00:00,,03/08/2011 18:55,,6
+22,Empresa promovida por Ley 21608,03/08/2011 00:00,,03/08/2011 18:55,,6
+23,Empresa promovida por Ley 22021,03/08/2011 00:00,,03/08/2011 18:55,,6
+24,Empresa promovida por Ley 22702 Catamarca,03/08/2011 00:00,,03/08/2011 18:55,,6
+25,Empresa promovida por Ley 20560 San Luis,03/08/2011 00:00,,03/08/2011 18:55,,6
+26,Empresa promovida por Ley 22793,03/08/2011 00:00,,03/08/2011 18:55,,6
+27,Empresa promovida por otras leyes,03/08/2011 00:00,,03/08/2011 18:55,,6
+28,Demás actos,04/10/2006 00:00,,06/12/2021 13:53,,7
+29,Escrituras,04/10/2006 00:00,,04/10/2006 15:32,,7
+30,Ley cheques,04/10/2006 00:00,,04/10/2006 15:32,,7
+31,Servicios financieros.,04/10/2006 00:00,,04/10/2006 15:32,,7
+32,Alta por CUIL Padrón Electoral,28/11/2006 00:00,,10/12/2021 15:15,,7
+33,Alta por presentación,03/11/2006 00:00,,06/12/2021 13:53,,7
+34,Alta de oficio,03/11/2006 00:00,,03/11/2006 17:31,,7
+35,Convenio migratorio,03/11/2006 00:00,,03/11/2006 17:31,,7
+36,Baja por erróneo o provisorio,03/08/2011 00:00,,06/12/2021 13:53,,8
+37,Alta preactiva,03/08/2011 00:00,,03/08/2011 18:55,,9
+38,Inscripción tramitada en agencia,03/08/2011 00:00,,06/12/2021 13:53,,10
+39,Inscripción de oficio,03/08/2011 00:00,,06/12/2021 13:53,,10
+40,Inscripción no tramitada en agencia,12/02/2003 00:00,,06/12/2021 13:53,,11
+41,Alta por baja denegada,12/02/2003 00:00,,12/02/2003 20:10,,11
+42,Exención denegada,10/05/2005 00:00,,06/12/2021 13:53,,11
+43,Exención vencida sin renovacion,10/05/2005 00:00,,06/12/2021 13:53,,11
+44,Inscripción tramitada en agencia,12/02/2003 00:00,,06/12/2021 13:53,,11
+45,Exención vencida sin renovación,03/07/2006 00:00,,06/12/2021 13:53,,11
+46,Inscripción de oficio,12/02/2003 00:00,,06/12/2021 13:53,,11
+47,Aporte a cajas provinciales,12/02/2003 00:00,,12/02/2003 20:10,,12
+48,Cese de actividades,12/02/2003 00:00,,12/02/2003 20:10,,12
+49,Cese de aporte voluntario,12/02/2003 00:00,,12/02/2003 20:10,,12
+50,Cese de comercialización,12/02/2003 00:00,,06/12/2021 13:53,,12
+51,Cese por disposición del Estado,12/02/2003 00:00,,06/12/2021 13:53,,12
+52,Cese de elaboración por  terceros,12/02/2003 00:00,,06/12/2021 13:53,,12
+53,Cese fabricación,12/02/2003 00:00,,06/12/2021 13:53,,12
+54,Cese de importación,12/02/2003 00:00,,06/12/2021 13:53,,12
+55,Impuesto derogado,12/02/2003 00:00,,12/02/2003 20:10,,12
+56,Disolución,12/02/2003 00:00,,06/12/2021 13:53,,12
+57,Edad avanzada,12/02/2003 00:00,,12/02/2003 20:10,,12
+58,Error de inscripción,12/02/2003 00:00,,06/12/2021 13:53,,12
+59,Exclusión,12/02/2003 00:00,,06/12/2021 13:53,,12
+60,Fallecimiento,12/02/2003 00:00,,17/12/2019 15:39,Baja del impuesto porque la CUIT pertenece a una persona fallecida o existe presunción de fallecimiento.,12
+61,Inexistente,12/02/2003 00:00,,12/02/2003 20:10,,12
+62,Jubilación,12/02/2003 00:00,,06/12/2021 13:53,,12
+63,Jubilación por invalidez,12/02/2003 00:00,,06/12/2021 13:53,,12
+64,Monotributo,12/02/2003 00:00,,12/02/2003 20:10,,12
+65,Moratoria saldada,12/02/2003 00:00,,12/02/2003 20:10,,12
+66,Motivo no informado,12/02/2003 00:00,,12/02/2003 20:10,,12
+67,Presentación formulario 436/437,12/02/2003 00:00,,06/12/2021 13:53,,12
+68,Recategorización,12/02/2003 00:00,,06/12/2021 13:53,,12
+69,Reconocimiento de servicios,12/02/2003 00:00,,12/02/2003 20:10,,12
+70,Relación de dependencia,12/02/2003 00:00,,06/12/2021 13:53,,12
+71,Renuncia,12/02/2003 00:00,,12/02/2003 20:10,,12
+72,Renuncia tácita,12/02/2003 00:00,,10/12/2021 15:15,,12
+73,Reorganización,12/02/2003 00:00,,06/12/2021 13:53,,12
+74,Sin personal,12/02/2003 00:00,,12/02/2003 20:10,,12
+75,Suspensión matrícula,12/02/2003 00:00,,06/12/2021 13:53,,12
+76,Transferencia de fondo de comercio,12/02/2003 00:00,,12/02/2003 20:10,,12
+77,Aporte a cajas provinciales,03/08/2011 00:00,,03/08/2011 18:55,,13
+78,Cese de actividades,03/08/2011 00:00,,03/08/2011 18:55,,13
+79,Cese de aporte voluntario,03/08/2011 00:00,,03/08/2011 18:55,,13
+80,Cese de comercialización,03/08/2011 00:00,,06/12/2021 13:53,,13
+81,Cese por disposición del estado,03/08/2011 00:00,,06/12/2021 13:53,,13
+82,Cese de elaboración por  terceros,03/08/2011 00:00,,06/12/2021 13:53,,13
+83,Cese fabricación,03/08/2011 00:00,,06/12/2021 13:53,,13
+84,Cese de importación,03/08/2011 00:00,,06/12/2021 13:53,,13
+85,Impuesto derogado,03/08/2011 00:00,,03/08/2011 18:55,,13
+86,Disolución,03/08/2011 00:00,,06/12/2021 13:53,,13
+87,Edad avanzada,03/08/2011 00:00,,03/08/2011 18:55,,13
+88,Error de inscripción,03/08/2011 00:00,,06/12/2021 13:53,,13
+89,Exclusión,03/08/2011 00:00,,06/12/2021 13:53,,13
+90,Fallecimiento,03/08/2011 00:00,,03/08/2011 18:55,,13
+91,Inexistente,03/08/2011 00:00,,03/08/2011 18:55,,13
+92,Jubilación,03/08/2011 00:00,,06/12/2021 13:53,,13
+93,Jubilación por invalidez,03/08/2011 00:00,,06/12/2021 13:53,,13
+94,Monotributo,03/08/2011 00:00,,03/08/2011 18:55,,13
+95,Moratoria saldada,03/08/2011 00:00,,03/08/2011 18:55,,13
+96,Motivo no informado,03/08/2011 00:00,,03/08/2011 18:55,,13
+97,Presentación formulario 436/437,03/08/2011 00:00,,06/12/2021 13:53,,13
+98,Recategorización,03/08/2011 00:00,,06/12/2021 13:53,,13
+99,Reconocimiento de servicios,03/08/2011 00:00,,03/08/2011 18:55,,13
+100,Relación de dependencia,03/08/2011 00:00,,06/12/2021 13:53,,13
+101,Renuncia,03/08/2011 00:00,,03/08/2011 18:55,,13
+102,Renuncia tácita,03/08/2011 00:00,,06/12/2021 13:53,,13
+103,Reorganización,03/08/2011 00:00,,06/12/2021 13:53,,13
+104,Sin personal,03/08/2011 00:00,,03/08/2011 18:55,,13
+105,Suspensión matrícula,03/08/2011 00:00,,06/12/2021 13:53,,13
+106,Transferencia de fondo de comercio,03/08/2011 00:00,,03/08/2011 18:55,,13
+107,Exento en tramite,03/08/2011 00:00,,03/08/2011 18:55,,14
+108,Exento,12/02/2003 00:00,,12/02/2003 20:10,,15
+109,No aportante,03/08/2011 00:00,,03/08/2011 18:55,,16
+110,Inscripción de establecimiento,03/08/2011 00:00,,06/12/2021 13:53,,17
+111,Alta de persona física con CDI,03/08/2011 00:00,,06/12/2021 13:53,,18
+112,Alta de persona física con CUIL,03/08/2011 00:00,,06/12/2021 13:53,,18
+113,Alta de persona física con CUIT,03/08/2011 00:00,,06/12/2021 13:53,,18
+114,Alta de persona física monotributista,03/08/2011 00:00,,06/12/2021 13:53,,18
+115,Alta de persona física potencial monotributista,03/08/2011 00:00,,06/12/2021 13:53,,18
+116,Alta de persona física sin datos de AFIP,03/08/2011 00:00,,06/12/2021 13:53,,18
+117,Alta de persona jurídica con CDI,03/08/2011 00:00,,06/12/2021 13:53,,19
+118,Alta de persona jurídica con CUIT,03/08/2011 00:00,,06/12/2021 13:53,,19
+119,Alta de persona jurídica monotributista,03/08/2011 00:00,,06/12/2021 13:53,,19
+120,Alta de persona jurídica potencial monotributista,03/08/2011 00:00,,06/12/2021 13:53,,19
+121,Modificación de establecimiento,03/08/2011 00:00,,06/12/2021 13:53,,20
+122,Modificación de persona física con CDI,03/08/2011 00:00,,06/12/2021 13:53,,21
+123,Modificación de persona física con CUIL,03/08/2011 00:00,,06/12/2021 13:53,,21
+124,Modificación de persona física con CUIT,03/08/2011 00:00,,06/12/2021 13:53,,21
+125,Modificación de persona física monotributista,03/08/2011 00:00,,06/12/2021 13:53,,21
+126,Modificación de persona física potencial monotributista,03/08/2011 00:00,,06/12/2021 13:53,,21
+127,Modificación de persona física sin datos de AFIP,03/08/2011 00:00,,06/12/2021 13:53,,21
+128,Modificación de persona jurídica con CDI,03/08/2011 00:00,,06/12/2021 13:53,,22
+129,Modificación de persona jurídica con CUIT,03/08/2011 00:00,,06/12/2021 13:53,,22
+130,Modificación de persona jurídica monotributista,03/08/2011 00:00,,06/12/2021 13:53,,22
+131,Modificación de persona jurídica potencial monotributista,03/08/2011 00:00,,06/12/2021 13:53,,22
+132,Sin Motivo,01/01/2011 00:00,,31/03/2011 00:00,,23
+133,No supera mínimo imponible,12/02/2003 00:00,,06/12/2021 13:53,,12
+134,Mod. IVA por cambio actividad,12/02/2003 00:00,,12/02/2003 20:10,,12
+135,Mod. IVA no supera mínimo imponible,12/02/2003 00:00,,06/12/2021 13:53,,12
+136,Mod. IVA supera mínimo imponible,12/02/2003 00:00,,06/12/2021 13:53,,12
+137,Mod. IVA exento cambio actividad,12/02/2003 00:00,,12/02/2003 20:10,,12
+138,Susp.mom. prof. medida cautelar,03/08/2011 00:00,,03/08/2011 18:55,,13
+139,Decreto 1299/98,03/08/2011 00:00,,03/08/2011 18:55,,25
+140,Inscripcion o actualización de datos,03/08/2011 00:00,,06/12/2021 13:53,,24
+141,Pérdida o robo,03/08/2011 00:00,,06/12/2021 13:53,,24
+142,Deterioro total,03/08/2011 00:00,,03/08/2011 18:55,,24
+143,Adicionales,03/08/2011 00:00,,03/08/2011 18:55,,24
+144,No recibida,03/08/2011 00:00,,03/08/2011 18:55,,24
+145,Renovación,03/08/2011 00:00,,06/12/2021 13:53,,24
+146,Inscripción,03/08/2011 00:00,,06/12/2021 13:53,,26
+147,Pérdida de la anterior,03/08/2011 00:00,,06/12/2021 13:53,,26
+148,Deterioro de la anterior,03/08/2011 00:00,,03/08/2011 18:55,,26
+149,Modificación de su denominación,03/08/2011 00:00,,06/12/2021 13:53,,26
+150,Modificación de su actividad,03/08/2011 00:00,,06/12/2021 13:53,,26
+151,Modificación de su domicilio,03/08/2011 00:00,,06/12/2021 13:53,,26
+152,Modificación de su categoría,03/08/2011 00:00,,06/12/2021 13:53,,26
+153,No haber recibido la anterior,03/08/2011 00:00,,03/08/2011 18:55,,26
+154,Quiebra,12/02/2003 00:00,,12/02/2003 20:10,,12
+155,Quiebra,03/08/2011 00:00,,03/08/2011 18:55,,13
+156,Impresión,03/08/2011 00:00,,06/12/2021 13:53,,24
+157,Impresión,03/08/2011 00:00,,06/12/2021 13:53,,26
+158,Inscripción de condominio-RG Nro 1032,12/02/2003 00:00,,06/12/2021 13:53,,12
+159,Inscripción de condominio-RG Nro 1032,03/08/2011 00:00,,06/12/2021 13:53,,13
+160,Cuentas en Entidades Bancarias,04/10/2006 00:00,,04/10/2006 15:32,,18
+161,Segmentación del universo De regionales,03/08/2011 00:00,,06/12/2021 13:53,,23
+162,Baja por conversión de impuesto,12/02/2003 00:00,,06/12/2021 13:53,,12
+163,Baja de oficio decreto 1299/98,28/02/2007 00:00,,28/02/2007 18:32,Omisión presentación DDJJ. Decreto 1299,13
+164,Responsable Sustituido no residente en el pais,04/10/2006 00:00,,04/10/2006 15:32,,7
+165,Plan de pagos,28/02/2007 00:00,,28/02/2007 18:32,,13
+166,Baja por alta automática como RI por presentación de DDJJ,03/08/2011 00:00,,06/12/2021 13:53,,12
+167,No se reempadrono,07/07/2004 00:00,,07/07/2004 00:00,Falta reempadronamiento,12
+168,Baja de Caracterización por no ser IVA Anual Agropecuario,03/08/2011 00:00,,06/12/2021 13:53,,23
+169,Ley 25865,09/02/2005 00:00,,09/02/2005 00:00,,12
+170,Ley 25321,09/02/2005 00:00,,09/02/2005 00:00,,12
+171,DDJJ sin empleados,19/04/2005 00:00,,19/04/2005 00:00,,12
+172,Se extendió F.709,10/05/2005 00:00,,06/12/2021 13:53,,15
+173,Se extendió F.709 nuevo modelo,10/05/2005 00:00,,06/12/2021 13:53,,15
+174,Se extendió F.409,10/05/2005 00:00,,06/12/2021 13:53,,15
+175,Presentó F.373-Renovación en trámite,10/05/2005 00:00,,06/12/2021 13:53,,15
+176,Se extendió F.411,10/05/2005 00:00,,06/12/2021 13:53,,15
+177,Solicitud de exención en trámite,10/05/2005 00:00,,06/12/2021 13:53,,11
+178,Exención suspendida-Art.31,10/05/2005 00:00,,10/12/2021 15:15,,11
+179,Exención dejada sin efecto,10/05/2005 00:00,,06/12/2021 13:53,,11
+180,Exención archivada,10/05/2005 00:00,,06/12/2021 13:53,,11
+181,Presenta disconformidad,12/08/2005 00:00,,12/08/2005 00:00,,11
+182,Presenta recurso Art. 74,12/08/2005 00:00,,12/08/2005 00:00,,11
+183,Solicitud de exención trámite F699,16/09/2005 00:00,,06/12/2021 13:53,,15
+184,Solicitud de exención trámite F366,16/09/2005 00:00,,06/12/2021 13:53,,15
+185,Ley 24476,12/04/2006 00:00,,12/04/2006 00:00,,12
+186,Baja de caracterización por baja impuesto,03/08/2011 00:00,,06/12/2021 13:53,,23
+187,Baja caracterización importador/exportador R.G. 2238,03/08/2011 00:00,,06/12/2021 13:53,,23
+188,Baja automática Dto. 806 Art.32,16/08/2007 00:00,,06/12/2021 13:53,Falta de pago por 10 meses consecutivos,12
+200,Plan de pagos,30/08/2006 00:00,,30/08/2006 13:37,,12
+201,Exclusión de oficio,30/08/2006 00:00,,06/12/2021 13:53,,12
+202,Ejercicio no habitual de la profesión,30/08/2006 00:00,,06/12/2021 13:53,,12
+203,Baja de oficio Decreto 1299/98,30/08/2006 00:00,,30/08/2006 13:37,,12
+204,Declaratoria de herederos,30/08/2006 00:00,,30/08/2006 13:37,,12
+205,Cese de actividades. Disolución y Liquidación,04/10/2006 00:00,,06/12/2021 13:53,,12
+206,Cese de actividades. Transferencia Fondo Comercio,04/10/2006 00:00,,04/10/2006 15:32,,12
+207,Impuesto dado de alta,04/10/2006 00:00,,04/10/2006 15:32,,12
+208,Impuesto dado de baja,04/10/2006 00:00,,04/10/2006 15:32,,12
+209,Error - Impuesto ya dado de alta,04/10/2006 00:00,,13/03/2007 17:58,,12
+210,Error - Impuesto ya dado de baja,04/10/2006 00:00,,13/03/2007 17:58,,12
+211,Error - Contribuyente no inscripto en el impuesto,04/10/2006 00:00,,13/03/2007 17:58,,12
+212,Error - El periodo ingresado es menor al periodo actual,03/11/2006 00:00,,13/03/2007 17:58,,12
+213,Cese de actividades. Por Internet,28/11/2006 00:00,,17/12/2019 15:39,"Baja del impuesto, por finalizar con mis actividades",12
+214,Cese de actividades. Disolución y Liquidación. Por Internet,28/11/2006 00:00,,06/12/2021 13:53,,12
+215,Cese de actividades. Transferencia Fondo Comercio. Por Internet,28/11/2006 00:00,,17/12/2019 15:39,Baja del impuesto por haber cedido o vendido el fondo de comercio y finalizar así con todas sus actividades,12
+216,Jubilación. Por Internet,28/11/2006 00:00,,06/12/2021 13:53,,12
+217,Relación de dependencia. Por Internet,28/11/2006 00:00,,06/12/2021 13:53,,12
+218,Categoría modificada,29/01/2007 00:00,,06/12/2021 13:53,,12
+219,Error - Datos inválidos ingresados,19/03/2007 00:00,,06/12/2021 13:53,,12
+220,Transacción anulada por el contribuyente,17/04/2007 00:00,,06/12/2021 13:53,,12
+221,Renuncia. Por Internet,16/07/2007 00:00,,17/12/2019 15:39,"Baja del impuesto, porque estoy por superar los parámetros permitidos en Monotributo, o decido inscribirme en el Régimen General. Tené en cuenta que en este caso, no podrás volver a adherirte a Monotributo hasta después de transcurridos 3 años completos posteriores al de la renuncia. Una vez dado de baja tenés que inscribirte en el Régimen General",12
+222,Exclusión. Por Internet,16/07/2007 00:00,,06/12/2021 13:53,Baja del impuesto por haber sido excluido por AFIP o por detectar haber superado los parámetros permitidos en Monotributo. Tené en cuenta que no podrás volver a adherirte a este Régimen hasta después de transcurridos 3 años completos posteriores al de la exclusión. Una vez excluido tenés que inscribirte en el Régimen General,12
+223,No supera mínimo imponible. Por Internet,16/07/2007 00:00,,06/12/2021 13:53,"Baja del impuesto porque la valuación de mis bienes, no supera el mínimo no imponible establecido para el impuesto",12
+224,Sin personal. Por Internet,16/07/2007 00:00,,17/12/2019 15:39,"Baja del impuesto, porque no tengo más empleados en relación de dependencia.",12
+225,Aporte a cajas provinciales. Por Internet,16/07/2007 00:00,,16/07/2007 12:09,,12
+226,Cese de aporte voluntario. Por Internet,16/07/2007 00:00,,16/07/2007 12:09,,12
+227,Cese de actividades. Reorganización. Por Internet,16/07/2007 00:00,,06/12/2021 13:53,Baja del impuesto por haber reorganizado la sociedad y finalizado así con todas las actividades de la empresa/asociación,12
+228,Cese de actividades. Disposiciones emanadas del Estado. Por Internet,16/07/2007 00:00,,17/12/2019 15:39,Baja del impuesto por disposición del Estado.,12
+229,Cese de fabricación. Por Internet,16/07/2007 00:00,,06/12/2021 13:53,,12
+230,Cese de importación. Por Internet,16/07/2007 00:00,,06/12/2021 13:53,,12
+231,Cese de elaboración por cuenta de terceros. Por Internet,16/07/2007 00:00,,06/12/2021 13:53,,12
+232,Cese de comercialización. Por Internet,16/07/2007 00:00,,06/12/2021 13:53,,12
+233,Monotributo. Por Internet,01/01/2009 00:00,,13/01/2010 00:00,,12
+235,Exento RG 2681,01/01/2009 00:00,,28/01/2010 00:00,,15
+236,Baja de Oficio. RG 3402,20/12/2012 00:00,,06/12/2021 13:53,Falta de presentación de DDJJ F931,12
+237,Falta de adhesión/empadronamiento,27/02/2013 17:05,,27/02/2013 17:05,Inscripción incompleta por omisión de categoría,12
+238,Baja de Regimenes de Información,01/01/2003 00:00,,06/12/2021 13:53,,12
+239,Exclusión de pleno derecho RG 4309,01/07/2014 00:00,,06/12/2021 13:53,,12
+240,Exclusión Monotributo Pleno Derecho,01/07/2014 00:00,,06/12/2021 13:53,,12
+241,Baja de Oficio,01/10/2014 13:19,,01/10/2014 13:19,,12
+242,Baja por adquisición de residencia en materia migratoria en otra jurisdicción,20/11/2014 00:00,,06/12/2021 13:53,Baja del impuesto por adquirir la condición de residente permanente en otro país,12
+243,Baja por pérdida de residencia por permanencia en el exterior por un período de 12 meses,20/11/2014 00:00,,06/12/2021 13:53,"Baja del impuesto por permanecer de forma continuada en otro país durante un período de doce (12) meses y a su vez mis visitas al país no superaron los 90 días totales, de forma continua o alternada",12
+244,Baja por no poseer domicilio en el país,20/11/2014 00:00,,06/12/2021 13:53,Baja del impuesto por no tener más domicilio fiscal en el país.,12
+245,Impuesto Derogado,19/05/2015 00:00,,17/12/2019 15:39,"Baja del impuesto, por haber sido derogado el impuesto",12
+246,Baja por recepción de respuesta,02/11/2015 00:00,,16/03/2021 15:10,,23
+247,Calificación por Disconformidad,24/08/2016 00:00,,06/12/2021 13:53,,23
+248,Calificación Inicial,24/08/2016 00:00,,06/12/2021 13:53,,23
+249,Calificación solicitada por Reconsideración,24/08/2016 00:00,,06/12/2021 13:53,,23
+250,Calificación por Recurso,24/08/2016 00:00,,06/12/2021 13:53,,23
+251,Calificación por proceso Mensual,24/08/2016 00:00,,06/12/2021 13:53,,23
+252,Calificación por proceso de nuevos inscriptos,24/08/2016 00:00,,06/12/2021 13:53,,23
+253,Exclusión Ley 27264,01/08/2016 00:00,,06/12/2021 13:53,,12
+254,No alcanzado para ser Categorizado - RG 3985/2017,01/08/2016 00:00,,07/03/2017 12:30,,23
+300,PyME - Alta por Recategorización,01/04/2017 00:00,,06/12/2021 13:53,,23
+301,PyME - Baja por Recategorización,01/04/2017 00:00,,06/12/2021 13:53,,23
+302,PyME - Baja por vencimiento del Certificado,01/04/2017 00:00,,11/05/2017 10:06,,23
+303,PyME - Baja por detección de inconsistencias o Sanción,01/04/2017 00:00,,06/12/2021 13:53,,23
+304,PyME - Baja voluntaria del contribuyente del beneficio,03/01/2018 00:00,,06/11/2018 15:06,,23
+320,Recategorización de Oficio - RG 4309/2018 - Por Ventas con Tarjeta de Crédito/Débito,07/08/2017 00:00,,12/01/2023 09:20,,11
+321,Recategorización de Oficio - RG 4309/2018 - Por Comisiones cobradas Juegos de Azar,07/08/2017 00:00,,12/01/2023 09:20,,11
+322,Recategorización de Oficio - RG 4309/2018 - Por Comisiones cobradas por Productores de Seguros,07/08/2017 00:00,,12/01/2023 09:20,,11
+323,Recategorización de Oficio - RG 4309/2018 - Por Factura Electrónica Emisor,07/08/2017 00:00,,12/01/2023 09:20,,11
+324,Recategorización de Oficio - RG 4309/2018 - Por Recibos Electrónicos Emisor,07/08/2017 00:00,,12/01/2023 09:20,,11
+325,Alta Persona Física Precarga,17/10/2017 00:00,,06/12/2021 13:53,,21
+326,Alta Persona Física por Internet,01/10/2018 00:00,,06/12/2021 13:53,,21
+327,Categorización solicitada - Art 15 - Ley 27618,22/05/2021 00:00,,10/06/2021 17:25,,11
+328,Categorización por AFIP - Art 15 Ley 27618,22/05/2021 00:00,,10/06/2021 17:25,,11
+329,Categorización por AFIP - Art 3 Ley 27618,22/05/2021 00:00,,10/08/2021 17:16,,11
+330,Conversión de Categoría Jul 2021,22/07/2021 00:00,,22/07/2021 12:33,,11
+500,Domicilio erróneo difiere del domicilio fiscal,11/05/2005 00:00,,06/12/2021 13:53,,27
+501,Domicilio erróneo actualizado antes que el domicilio fiscal,11/05/2005 00:00,,06/12/2021 13:53,,27
+502,Estado Domicilio fiscal marcado como INEXISTENTE,08/08/2005 00:00,,08/08/2005 16:58,,90
+503,Estado Domicilio fiscal marcado como NO NOTIFICADO,08/08/2005 00:00,,08/08/2005 16:58,,90
+504,Domicilio erróneo con calle y dirección nulos,08/08/2005 00:00,,06/12/2021 13:53,,90
+505,Domicilio Fiscal ya marcado como INEXISTENTE,08/08/2005 00:00,,08/08/2005 16:58,,90
+506,Domicilio Fiscal ya marcado como NO NOTIFICADO,08/08/2005 00:00,,08/08/2005 16:58,,90
+507,Estado Domicilio fiscal marcado como INEXISTENTE y estaba como NO NOTIFICADO,08/08/2005 00:00,,08/08/2005 16:58,,90
+508,Error - Cuit inactiva,08/08/2005 00:00,,13/03/2007 17:58,,90
+509,Error - No es cuit,08/08/2005 00:00,,13/03/2007 17:58,,90
+510,No tiene domicilio fiscal,08/08/2005 00:00,,08/08/2005 16:58,,90
+511,Cuit inexistente,08/08/2005 00:00,,08/08/2005 16:58,,90
+512,Estado Domicilio fiscal marcado como INEXISTENTE por superar cantidad notif. erróneas,15/11/2005 00:00,,06/12/2021 13:53,,27
+513,Estado Domicilio fiscal ya marcado como INEXISTENTE al evaluar cantidad notif. erróneas,15/11/2005 00:00,,06/12/2021 13:53,,27
+514,Estado Dom.fiscal marcado con estado distinto de NO NOTIF. o INEX. al evaluar cant.notif.err.,15/11/2005 00:00,,30/08/2006 13:37,,27
+515,Devolución correo con errores,12/01/2006 00:00,,06/12/2021 13:53,,27
+516,Devolución correo sin errores - domicilio nomenclado,12/01/2006 00:00,,06/12/2021 13:53,,27
+517,Devolución correo sin errores - domicilio no nomenclado,12/01/2006 00:00,,06/12/2021 13:53,,27
+518,Trámite archivado por falta de confirmación de alta (Art.22 R.G. 2570),16/10/2008 00:00,,06/12/2021 13:53,,27
+519,Dado de baja por sistemas de Aduana,20/11/2008 00:00,,20/11/2008 17:17,,27
+520,Dado de baja por ABM Operador,18/03/2009 00:00,,18/03/2009 14:34,,27
+521,Dado de alta por sistemas de Aduana,08/04/2009 00:00,,08/04/2009 13:11,,27
+522,Baja Por Falta de Inscripción,10/10/2012 10:25,,10/10/2012 10:25,,27
+523,Baja por Sinceramiento Fiscal Art.36 Ley 27.260,01/08/2016 00:00,,13/12/2016 12:23,,23
+524,ALTA CIE - SERVICIOS DIGITALES,01/02/2018 00:00,,29/01/2018 15:43,,19
+525,ALTA CIE - ESCRIBANOS,01/02/2018 00:00,,10/04/2018 12:07,,19
+526,ALTA CIE - INVERSORES DEL EXTERIOR,01/02/2018 00:00,,10/04/2018 12:07,,19
+527,Aceptación de designación,01/05/2018 00:00,,18/05/2018 11:11,,2
+528,Declaración espontánea del responsable sustituto,01/05/2018 00:00,,18/05/2018 11:11,,2
+551,Inscripción de oficio,01/05/2018 00:00,,29/06/2018 14:32,,27
+552,Exento actividad,01/05/2018 00:00,,29/06/2018 14:32,,27
+553,No alcanzado por Exclusión por trámite,01/05/2018 00:00,,08/09/2021 14:09,,27
+554,Por Convenio Multilateral Nro 188/77,01/05/2018 00:00,,29/06/2018 14:32,,27
+555,Jurisdicción no adherida,01/05/2018 00:00,,29/06/2018 14:32,,27
+556,Jurisdicción no nomenclada,01/05/2018 00:00,,29/06/2018 14:32,,27
+557,Cambio de jurisdicción,01/05/2018 00:00,,29/06/2018 14:32,,27
+558,Cambio de actividad,01/05/2018 00:00,,29/06/2018 14:32,,27
+559,Categoría no alcanzada,01/05/2018 00:00,,29/06/2018 14:32,,27
+560,Categoría Exenta,01/05/2018 00:00,,29/06/2018 14:32,,27
+561,Presentación Espontánea,01/05/2018 00:00,,08/08/2018 15:44,,27
+562,Asociado a Cooperativa,01/05/2018 00:00,,29/06/2018 14:32,,27
+563,exento por trámite en atl,01/05/2018 00:00,,06/11/2018 15:06,,27
+564,No alcanzado en trámite en la jurisdicción,01/10/2018 00:00,,16/01/2019 10:30,,27
+565,REVOCACION POR VENCIMIENTO DE AUTORIZACION,01/12/2018 00:00,,06/12/2018 12:29,,2
+566,REVOCACION POR FALLECIMIENTO,01/12/2018 00:00,,06/12/2018 12:29,,2
+567,REVOCACION EFECTUADA POR EL AUTORIZANTE / REPRESENTADO (ACCION EFECTUADA POR EL O DEPENDENCIA),01/12/2018 00:00,,06/12/2018 12:29,,2
+568,REVOCACION EFECTUADA POR EL AUTORIZADO / REPRESENTANTE (ACCION EFECTUADA POR EL O DEPENDENCIA),01/12/2018 00:00,,06/12/2018 12:29,,2
+569,Designació n APODERADO / REPRESENTANTE,01/12/2018 00:00,,06/12/2021 13:53,,2
+570,ANULACION efectuada por parte del AUTORIZANTE / REPRESENTADO,01/12/2018 00:00,,16/01/2019 10:30,,2
+571,Activo por trámite,27/03/2019 00:00,,30/05/2019 17:05,,27
+572,NO ALCANZADO por Actividad,01/05/2019 00:00,,07/05/2020 11:47,,11
+573,Baja por Vencimiento,01/06/2019 00:00,,19/06/2019 10:14,,23
+574,Alta persona jurídica sin convenio.,29/10/2019 00:00,,06/12/2021 13:53,,7
+575,Baja de oficio,15/11/2019 00:00,,15/11/2019 15:51,,19
+576,Cambio de condición,15/11/2019 00:00,,06/12/2021 13:53,"Baja del impuesto por cambiar de condición, ya sea de exento a gravado o de gravado a exento",12
+577,Activación automática por presentación de DD.JJ,01/05/2019 00:00,,07/05/2020 11:47,,11
+578,Activo en Padrón Web,15/10/2020 00:00,,10/12/2021 15:15,,12
+579,Alta persona jurídica a través de WS,01/09/2017 00:00,,06/12/2021 13:53,,7
+580,Baja por excepción ejercida según RG 4.597-art. 2,10/12/2021 00:00,,10/12/2021 15:15,,23
+581,Alta de oficio según RG 4.597 - art. 23,10/12/2021 00:00,,10/12/2021 15:15,,23
+582,Baja por excepción ejercida según RG 4.597-art. 2 - Internet,10/12/2021 00:00,,10/12/2021 16:10,,23
+583,CAMBIO DE MES DE CIERRE,01/05/2022 00:00,,27/04/2022 15:15,,23
+584,ERROR DE INSCRIPCION,01/05/2022 00:00,,27/04/2022 15:15,,23
+585,MODIFICADO POR OTROS SISTEMAS,01/05/2022 00:00,,27/04/2022 15:15,,23
+586,Incluye Solicitud de Exención en Trámite Simplificado,01/05/2022 00:00,,09/05/2022 14:29,,12
+587,Exclusion de pleno derecho REM F1304,01/05/2022 00:00,,04/07/2022 13:42,,12
+588,Recategorizacion de Oficio Monotributo,30/06/2022 00:00,,04/07/2022 13:42,,28
+589,Contribuyente verificado (para caracterización 540),01/08/2022 00:00,,01/09/2022 13:13,,23
