@@ -635,32 +635,37 @@ Administrador de Relaciones de una Sociedad:
 
 - **`tipo`**:
 
-| tipo | desc                                                       |
-| ---- | ---------------------------------------------------------- |
-| 1    | CIE - Contrato Idioma Original                             |
-| 2    | CIE - Contrato Traducido Español                           |
-| 3    | CIE - Autorización del AR                                  |
-| 4    | CIE - Integrantes                                          |
-| 5    | SAS - Estatutos                                            |
-| 6    | PERSONA FISICA - DNI FRENTE                                |
-| 7    | PERSONA FISICA - DNI CONTRAFRENTE                          |
-| 8    | PERSONA FISICA - COMPROBANTE DOMICILIO                     |
-| 9    | FORMULARIO INSCRIPCION                                     |
-| 10   | CIE - Datos Administrador de la Sucesión                   |
-| 11   | CIE - Copia del Certificado de Defunción Idioma Origen     |
-| 12   | CIE - Copia del Certificado de Defunción Idioma Español    |
-| 13   | CIE - Copia de Carátula del Juicio Sucesorio               |
-| 14   | CIE - Documento de Identidad del Exterior                  |
-| 15   | CIE - Integrantes Sociedad del País                        |
-| 16   | RESIDENCIA FISCAL - Certificado de Residencia              |
-| 17   | RESIDENCIA FISCAL - Certificado de Residencia              |
-| 18   | PERSONA FISICA - FOTO CARNET                               |
-| 19   | PERSONA FISICA - Corrección Datos Formulario Cuit Digital  |
-| 20   | PERSONA JURIDICA - Estatuto                                |
-| 21   | PERSONA JURIDICA – Estatuto con Aprobación Org. de Control |
-| 22   | PERSONA JURIDICA – Inst. de aprobación del Org. de Control |
-| 23   | PERSONA JURIDICA - Acta Asamblea por Mod. de datos         |
-| 24   | PERSONA JURIDICA – Acta de Directorio por Mod. de datos    |
+| tipo | desc                                                          |
+| ---- | --------------------------------------------------------------|
+| 1    | CIE - Contrato Idioma Original                                |
+| 2    | CIE - Contrato Traducido Español                              |
+| 3    | CIE - Autorización del AR                                     |
+| 4    | CIE - Integrantes                                             |
+| 5    | SAS - Estatutos                                               |
+| 6    | PERSONA FISICA - DNI FRENTE                                   |
+| 7    | PERSONA FISICA - DNI CONTRAFRENTE                             |
+| 8    | PERSONA FISICA - COMPROBANTE DOMICILIO                        |
+| 9    | FORMULARIO INSCRIPCION                                        |
+| 10   | CIE - Datos Administrador de la Sucesión                      |
+| 11   | CIE - Copia del Certificado de Defunción Idioma Origen        |
+| 12   | CIE - Copia del Certificado de Defunción Idioma Español       |
+| 13   | CIE - Copia de Carátula del Juicio Sucesorio                  |
+| 14   | CIE - Documento de Identidad del Exterior                     |
+| 15   | CIE - Integrantes Sociedad del País                           |
+| 16   | RESIDENCIA FISCAL - Certificado de Residencia                 |
+| 17   | RESIDENCIA FISCAL - Certificado de Residencia                 |
+| 18   | PERSONA FISICA - FOTO CARNET                                  |
+| 19   | PERSONA FISICA - Corrección Datos Formulario Cuit Digital     |
+| 20   | PERSONA JURIDICA - Estatuto                                   |
+| 21   | PERSONA JURIDICA – Estatuto con Aprobación Org. de Control    |
+| 22   | PERSONA JURIDICA – Inst. de aprobación del Org. de Control    |
+| 23   | PERSONA JURIDICA - Acta Asamblea por Mod. de datos            |
+| 24   | PERSONA JURIDICA – Acta de Directorio por Mod. de datos       |
+| 25   | PERSONA JURIDICA - Pedido de Prórroga. Nota                   |
+| 26   | PERSONA JURIDICA - Pedido de Prórroga. Documentación          |
+| 27   | PERSONA JURIDICA - Pedido de Activación de Clave. Nota        |
+| 28   | PERSONA JURIDICA - Nota de Excepción del Organismo de Control |
+| 39   | PERSONA JURIDICA - Documentación complementaria               |   
 
 **ejemplo:**
 
