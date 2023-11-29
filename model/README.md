@@ -121,9 +121,10 @@ Total: 16.200.000
 | duracion             | integer |      |    1 |          999 |       |
 | inscripcion          | object  |      |      |              |       |
 | inscripcion.registro | integer |      |    1 |           99 |       |
-| inscripcion.numero   | integer |      |    1 | 999999999999 |   x   |
+| inscripcion.numero   | integer |      |      | 999999999999 |       |
+| inscripcion.alfanum  | string  |      |      |          200 |       |
 
-- **`inscripcion`** puede ser en IGJ (`registro: 1`) o en otro registro público de sociedades
+- **`inscripcion`** puede ser en IGJ (`registro: 1`) o en otro registro público de sociedades. Al menos uno de los campos `numero` o `alfanum` debe estar presente.
 
 **ejemplo de persona física:**
 
